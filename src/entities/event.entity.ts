@@ -1,19 +1,19 @@
-import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, ManyToOne } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from './user.entity';
 
 @Entity()
 export class Event {
   constructor() {
-    this.id = uuidv4(); // Generate a UUID v4 for the id property
+    this.id = uuidv4(); 
   }
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @Column()
+  @ManyToOne(()=>User)
   owner: User;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

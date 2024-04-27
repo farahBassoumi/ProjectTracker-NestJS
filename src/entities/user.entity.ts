@@ -4,9 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 @Entity()
 export class User {
   constructor() {
-    this.id = uuidv4(); // Generate a UUID v4 for the id property
+    this.id = uuidv4(); 
   }
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()

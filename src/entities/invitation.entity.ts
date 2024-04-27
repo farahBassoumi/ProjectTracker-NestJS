@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, ManyToOne } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from './user.entity';
 import { Project } from './project.entity';
@@ -7,17 +7,17 @@ import { Team } from './team.entity';
 @Entity()
 export class Invitation {
   constructor() {
-    this.id = uuidv4(); // Generate a UUID v4 for the id property
+    this.id = uuidv4(); 
   }
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @ManyToOne(()=>User)
   sender: User;
 
-  @Column()
+  @ManyToOne(()=>User)
   reciever: User;
 
-  @Column()
-  team: Team;// not sur if i should add a project or team here
+  @ManyToOne(()=>Team)
+  team: Team; // not sure whether the invi should be sent to join a team or a project
 }

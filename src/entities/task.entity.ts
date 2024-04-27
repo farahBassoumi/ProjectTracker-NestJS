@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, OneToMany, ManyToOne } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import {Comment} from './comment.entity';
 import { TaskStatus } from './taskStatus.enum';
@@ -7,9 +7,9 @@ import { Project } from './project.entity';
 @Entity()
 export class Task {
   constructor() {
-    this.id = uuidv4(); // Generate a UUID v4 for the id property
+    this.id = uuidv4(); 
   }
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -18,17 +18,17 @@ export class Task {
   @Column()
   description: string;
 
-  @Column()
+  @OneToMany(()=>Comment,comment=>comment.task)
   comments: Comment[];
 
   @Column()
   status: TaskStatus;
 
-  @Column()
+  @ManyToOne(()=>Project,project=>project.tasks)
     project: Project;
 
   @Column()
-  assignor: User[];
+  assignor: User;
 
   @Column()
   assignees: User[];

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, OneToMany, ManyToOne } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from './user.entity';
 import { Project } from './project.entity';
@@ -6,15 +6,13 @@ import { Project } from './project.entity';
 @Entity()
 export class Team {
   constructor() {
-    this.id = uuidv4(); // Generate a UUID v4 for the id property
+    this.id = uuidv4(); 
   }
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
- 
-
-  @Column()
-  projects: Project[];
+  @ManyToOne(()=>Project)
+  project: Project;
 
   @Column()
   teamLeader: User;
@@ -24,6 +22,7 @@ export class Team {
 
   @Column()
   members: User[];
+  
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   creationDate: Date;
 }
