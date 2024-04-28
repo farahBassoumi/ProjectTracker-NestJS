@@ -1,24 +1,57 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "../../users/entities/user.entity";
-import { Project } from "../../projects/entities/project.entity";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from '../../users/entities/user.entity';
+import { Project } from '../../projects/entities/project.entity';
 
-@Entity()
+@Entity('team')
 export class Team {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ManyToOne(() => Project)
   project: Project;
 
-  @Column()
+  @ManyToOne(() => User)
   teamLeader: User;
 
-  @Column()
+  @ManyToMany(() => User)
+  @JoinTable({
+    name: 'team_sub_leader',
+    joinColumn: {
+      name: 'team',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'user',
+      referencedColumnName: 'id',
+    },
+  })
   subLeaders: User[];
 
-  @Column()
+  @ManyToMany(() => User)
+  @JoinTable({
+    name: 'team_member',
+    joinColumn: {
+      name: 'team',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'user',
+      referencedColumnName: 'id',
+    },
+  })
   members: User[];
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  creationDate: Date;
+  @Column({
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 }

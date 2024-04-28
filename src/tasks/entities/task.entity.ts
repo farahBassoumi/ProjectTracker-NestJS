@@ -1,18 +1,20 @@
 import {
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-} from "typeorm";
-import { Comment } from "../../comments/entities/comment.entity";
-import { TaskStatus } from "../enums/task-status.enum";
-import { Project } from "../../projects/entities/project.entity";
-import { User } from "../../users/entities/user.entity";
+} from 'typeorm';
+import { Comment } from '../../comments/entities/comment.entity';
+import { TaskStatus } from '../enums/task-status.enum';
+import { Project } from '../../projects/entities/project.entity';
+import { User } from '../../users/entities/user.entity';
 
-@Entity()
+@Entity('task')
 export class Task {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -30,12 +32,27 @@ export class Task {
   @ManyToOne(() => Project, (project) => project.tasks)
   project: Project;
 
-  @Column()
+  @ManyToOne(() => User)
   assignor: User;
 
-  @Column()
+  @ManyToMany(() => User)
+  @JoinTable({
+    name: 'task_user',
+    joinColumn: {
+      name: 'task',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'user',
+      referencedColumnName: 'id',
+    },
+  })
   assignees: User[];
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  creationDate: Date;
+  @Column({
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 }
