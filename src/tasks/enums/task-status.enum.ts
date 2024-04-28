@@ -4,5 +4,5 @@ export enum TaskStatus {
   IN_PROGRESS,
   CANCELLED,
   REJECTED,
-  APPROVED
+  APPROVED,
 }
