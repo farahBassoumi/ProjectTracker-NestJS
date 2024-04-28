@@ -4,13 +4,13 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-} from "typeorm";
-import { User } from "../../users/entities/user.entity";
-import { Task } from "../../tasks/entities/task.entity";
+} from 'typeorm';
+import { User } from '../../users/entities/user.entity';
+import { Task } from '../../tasks/entities/task.entity';
 
-@Entity()
+@Entity('comment')
 export class Comment {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ManyToOne(() => User)
@@ -22,8 +22,12 @@ export class Comment {
   @Column()
   content: string;
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  creationDate: Date;
+  @Column({
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 
   @OneToMany(() => Comment, (comment) => comment.replies)
   replies: Comment[];

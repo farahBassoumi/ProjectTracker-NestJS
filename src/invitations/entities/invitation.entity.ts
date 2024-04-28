@@ -1,10 +1,10 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "../../users/entities/user.entity";
-import { Team } from "../../teams/entities/team.entity";
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from '../../users/entities/user.entity';
+import { Team } from '../../teams/entities/team.entity';
 
-@Entity()
+@Entity('invitation')
 export class Invitation {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ManyToOne(() => User)

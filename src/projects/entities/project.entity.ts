@@ -4,14 +4,14 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
-} from "typeorm";
-import { Task } from "../../tasks/entities/task.entity";
-import { Progress } from "../../progress/entities/progress.entity";
-import { Team } from "../../teams/entities/team.entity";
+} from 'typeorm';
+import { Task } from '../../tasks/entities/task.entity';
+import { Progress } from '../../progress/entities/progress.entity';
+import { Team } from '../../teams/entities/team.entity';
 
-@Entity()
+@Entity('project')
 export class Project {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -26,13 +26,18 @@ export class Project {
   @OneToMany(() => Team, (team) => team.project)
   teams: Team[];
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  creationDate: Date;
+  @Column({
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 
   @Column({
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP",
-    onUpdate: "CURRENT_TIMESTAMP",
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
   })
-  lastModifiedDate: Date;
+  updatedAt: Date;
 }
