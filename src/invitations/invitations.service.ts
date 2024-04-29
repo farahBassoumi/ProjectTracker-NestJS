@@ -1,26 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { CreateInvitationDto } from './dto/create-invitation.dto';
-import { UpdateInvitationDto } from './dto/update-invitation.dto';
+import { CrudService } from '../common/crud/crud.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Invitation } from './entities/invitation.entity';
 
 @Injectable()
-export class InvitationsService {
-  create(createInvitationDto: CreateInvitationDto) {
-    return 'This action adds a new invitation';
-  }
-
-  findAll() {
-    return `This action returns all invitations`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} invitation`;
-  }
-
-  update(id: number, updateInvitationDto: UpdateInvitationDto) {
-    return `This action updates a #${id} invitation`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} invitation`;
+export class InvitationsService extends CrudService<Invitation> {
+  constructor(
+    @InjectRepository(Invitation)
+    invitationsRepository: Repository<Invitation>,
+  ) {
+    super(invitationsRepository);
   }
 }
