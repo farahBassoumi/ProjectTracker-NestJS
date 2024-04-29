@@ -2,25 +2,41 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { UserController } from './controllers/user.controller';
-
+import { UsersModule } from './users/users.module';
+import { ProjectsModule } from './projects/projects.module';
+import { TeamsModule } from './teams/teams.module';
+import { TasksModule } from './tasks/tasks.module';
+import { ProgressModule } from './progress/progress.module';
+import { InvitationsModule } from './invitations/invitations.module';
+import { EventsModule } from './events/events.module';
+import { CommentsModule } from './comments/comments.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'Farah',
-      database: 'postgres',
-      entities: [User],
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      entities: [
+        __dirname + '/**/*.entity{.ts,.js}',
+      ],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User]),
+    UsersModule,
+    ProjectsModule,
+    TeamsModule,
+    TasksModule,
+    ProgressModule,
+    InvitationsModule,
+    EventsModule,
+    CommentsModule,
   ],
-  controllers: [AppController,UserController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
