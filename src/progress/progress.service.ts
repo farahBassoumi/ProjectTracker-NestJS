@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { Progress } from './entities/progress.entity';
 
 @Injectable()
-export class EventsService extends CrudService<Progress> {
+export class ProgressService extends CrudService<Progress> {
   constructor(
     @InjectRepository(Progress)
     progressesRepository: Repository<Progress>,
