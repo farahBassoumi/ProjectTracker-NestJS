@@ -27,7 +27,7 @@ export class ProgressController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.progressService.findOne(+id);
+    return this.progressService.findOne(id);
   }
 
   @Patch(':id')
@@ -35,11 +35,11 @@ export class ProgressController {
     @Param('id') id: string,
     @Body() updateProgressDto: UpdateProgressDto,
   ) {
-    return this.progressService.update(+id, updateProgressDto);
+    return this.progressService.update(id, updateProgressDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.progressService.remove(+id);
+    return this.progressService.remove(id);
   }
 }

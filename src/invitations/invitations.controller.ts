@@ -27,7 +27,7 @@ export class InvitationsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.invitationsService.findOne(+id);
+    return this.invitationsService.findOne(id);
   }
 
   @Patch(':id')
@@ -35,11 +35,11 @@ export class InvitationsController {
     @Param('id') id: string,
     @Body() updateInvitationDto: UpdateInvitationDto,
   ) {
-    return this.invitationsService.update(+id, updateInvitationDto);
+    return this.invitationsService.update(id, updateInvitationDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.invitationsService.remove(+id);
+    return this.invitationsService.remove(id);
   }
 }
