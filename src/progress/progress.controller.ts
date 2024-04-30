@@ -6,10 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ProgressService } from './progress.service';
 import { CreateProgressDto } from './dto/create-progress.dto';
 import { UpdateProgressDto } from './dto/update-progress.dto';
+import { SearchDto } from '../common/dto/search.dto';
 
 @Controller('progress')
 export class ProgressController {
@@ -21,8 +23,8 @@ export class ProgressController {
   }
 
   @Get()
-  findAll() {
-    return this.progressService.findAll();
+  findAll(@Query() searchDto: SearchDto) {
+    return this.progressService.findAll(searchDto);
   }
 
   @Get(':id')

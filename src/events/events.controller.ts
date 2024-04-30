@@ -6,10 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { SearchDto } from '../common/dto/search.dto';
 
 @Controller('events')
 export class EventsController {
@@ -21,8 +23,8 @@ export class EventsController {
   }
 
   @Get()
-  findAll() {
-    return this.eventsService.findAll();
+  findAll(@Query() searchDto: SearchDto) {
+    return this.eventsService.findAll(searchDto);
   }
 
   @Get(':id')

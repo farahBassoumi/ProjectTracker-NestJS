@@ -6,10 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { SearchDto } from '../common/dto/search.dto';
 
 @Controller('users')
 export class UsersController {
@@ -23,6 +25,8 @@ export class UsersController {
   @Get()
   findAll() {
     return this.usersService.findAll();
+  findAll(@Query() searchDto: SearchDto) {
+    return this.usersService.findAll(searchDto);
   }
 
   @Get(':id')

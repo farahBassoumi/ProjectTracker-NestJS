@@ -6,10 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { SearchDto } from 'src/common/dto/search.dto';
 
 @Controller('comments')
 export class CommentsController {
@@ -21,8 +23,8 @@ export class CommentsController {
   }
 
   @Get()
-  findAll() {
-    return this.commentsService.findAll();
+  findAll(@Query() searchDto: SearchDto) {
+    return this.commentsService.findAll(searchDto);
   }
 
   @Get(':id')

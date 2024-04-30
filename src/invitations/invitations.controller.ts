@@ -6,10 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { InvitationsService } from './invitations.service';
 import { CreateInvitationDto } from './dto/create-invitation.dto';
 import { UpdateInvitationDto } from './dto/update-invitation.dto';
+import { SearchDto } from '../common/dto/search.dto';
 
 @Controller('invitations')
 export class InvitationsController {
@@ -21,8 +23,8 @@ export class InvitationsController {
   }
 
   @Get()
-  findAll() {
-    return this.invitationsService.findAll();
+  findAll(@Query() searchDto: SearchDto) {
+    return this.invitationsService.findAll(searchDto);
   }
 
   @Get(':id')

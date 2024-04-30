@@ -6,10 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { TeamsService } from './teams.service';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
+import { SearchDto } from '../common/dto/search.dto';
 
 @Controller('teams')
 export class TeamsController {
@@ -21,8 +23,8 @@ export class TeamsController {
   }
 
   @Get()
-  findAll() {
-    return this.teamsService.findAll();
+  findAll(@Query() searchDto: SearchDto) {
+    return this.teamsService.findAll(searchDto);
   }
 
   @Get(':id')
