@@ -3,7 +3,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { DeepPartial, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -21,14 +21,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private async hashPassword(password?: string): Promise<string | undefined> {
-    if (password == undefined) {
-      return undefined;
-    }
-
-    const passwordHash = await hash(password);
-
-    return passwordHash;
+  private async hashPassword(password: string): Promise<string> {
+    return await hash(password);
   }
 
   async register(registerUserDto: RegisterUserDto): Promise<User> {
@@ -36,10 +30,10 @@ export class AuthService {
 
     const passwordHash = await this.hashPassword(password);
 
-    const user: DeepPartial<User> = {
+    const user: User = this.usersRepository.create({
       ...data,
       password: passwordHash,
-    };
+    });
 
     return this.usersRepository.save(user);
   }
@@ -64,7 +58,10 @@ export class AuthService {
     };
   }
 
-  async updateLogin(id: string, { password }: UpdateUserLoginDto) {
+  async updateLogin(
+    id: string,
+    { password }: UpdateUserLoginDto,
+  ): Promise<User> {
     const passwordHash = await this.hashPassword(password);
 
     const user = await this.usersRepository.preload({
