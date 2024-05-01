@@ -21,7 +21,7 @@ export abstract class CrudService<TEntity extends Entity> {
     searchDto: SearchDto,
     where?: FindOptionsWhere<TEntity> | FindOptionsWhere<TEntity>[],
   ): Promise<Pagination<TEntity>> {
-    const { take, skip } = { take: 10, skip: 0, ...searchDto };
+    const { take = 10, skip = 0 } = searchDto;
 
     const [data, count] = await this.repository.findAndCount({
       where,
