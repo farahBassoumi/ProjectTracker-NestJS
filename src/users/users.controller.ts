@@ -23,8 +23,6 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
   findAll(@Query() searchDto: SearchDto) {
     return this.usersService.findAll(searchDto);
   }
