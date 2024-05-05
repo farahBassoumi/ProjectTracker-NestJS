@@ -28,6 +28,7 @@ import Projects from "layouts/projects";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import Tasks from "layouts/tasks";
 
 // Soft UI Dashboard React icons
 import Shop from "examples/Icons/Shop";
@@ -53,6 +54,15 @@ const routes = [
     route: "/projects",
     icon: <Office size="12px" />,
     component: <Projects />,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Tasks",
+    key: "tasks",
+    route: "/tasks",
+    icon: <Office size="12px" />,
+    component: <Tasks />,
     noCollapse: true,
   },
   { type: "title", title: "Account Pages", key: "account-pages" },
