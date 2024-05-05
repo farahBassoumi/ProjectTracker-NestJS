@@ -12,14 +12,12 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
-import SoftInput from "components/SoftInput";
 
-// Data a22
-import tasksTableData from "layouts/tasks/data/tasksTableData";
-import { Grid } from "@mui/material";
+// Data
+import projectsTableData from "layouts/projects/data/projectsTableData";
 
-function Tasks() {
-  const { columns: prCols, rows: prRows } = tasksTableData;
+function Tables() {
+  const { columns: prCols, rows: prRows } = projectsTableData;
 
   return (
     <DashboardLayout>
@@ -28,17 +26,9 @@ function Tasks() {
         <SoftBox mb={3}>
         </SoftBox>
         <Card>
-            <Grid container display="flex" justifyContent="space-between" alignItems="center">
           <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-            <SoftTypography variant="h6">Tasks</SoftTypography>
+            <SoftTypography variant="h6">Projects table</SoftTypography>
           </SoftBox>
-          <SoftBox pr={1}>
-              <SoftInput
-                placeholder="Task ID"
-                icon={{ component: "search", direction: "left" }}
-              />
-            </SoftBox>
-            </Grid>
           <SoftBox
             sx={{
               "& .MuiTableRow-root:not(:last-child)": {
@@ -58,4 +48,4 @@ function Tasks() {
   );
 }
 
-export default Tasks;
+export default Tables;
