@@ -14,7 +14,9 @@ export abstract class CrudService<TEntity extends Entity> {
   constructor(protected readonly repository: Repository<TEntity>) {}
 
   create(createEntityDto: DeepPartial<TEntity>): Promise<TEntity> {
-    return this.repository.save(createEntityDto);
+    const entity: TEntity = this.repository.create(createEntityDto);
+
+    return this.repository.save(entity);
   }
 
   async findAll(

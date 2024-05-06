@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegisterUserDto } from './dto/register-user.dto';
@@ -12,36 +8,33 @@ import { AuthDto } from './dto/auth.dto';
 import { User } from '../users/entities/user.entity';
 import { hash, verify } from 'argon2';
 import { UpdateUserLoginDto } from './dto/update-user-login.dto';
+import { CrudService } from '../common/crud/crud.service';
 
 @Injectable()
-export class AuthService {
+export class AuthService extends CrudService<User> {
   constructor(
     @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    usersRepository: Repository<User>,
     private readonly jwtService: JwtService,
-  ) {}
+  ) {
+    super(usersRepository);
+  }
 
   private async hashPassword(password: string): Promise<string> {
     return await hash(password);
   }
 
   async register(registerUserDto: RegisterUserDto): Promise<User> {
-    const { password, ...data } = registerUserDto;
+    const { password } = registerUserDto;
+    registerUserDto.password = await this.hashPassword(password);
 
-    const passwordHash = await this.hashPassword(password);
-
-    const user: User = this.usersRepository.create({
-      ...data,
-      password: passwordHash,
-    });
-
-    return this.usersRepository.save(user);
+    return super.create(registerUserDto);
   }
 
   async login(loginUserDto: LoginUserDto): Promise<AuthDto> {
     const { email, password } = loginUserDto;
 
-    const user = await this.usersRepository.findOneBy({ email });
+    const user = await this.repository.findOneBy({ email });
 
     if (!user || !(await verify(user.password, password))) {
       throw new UnauthorizedException();
@@ -60,19 +53,11 @@ export class AuthService {
 
   async updateLogin(
     id: string,
-    { password }: UpdateUserLoginDto,
+    updateUserLoginDto: UpdateUserLoginDto,
   ): Promise<User> {
-    const passwordHash = await this.hashPassword(password);
+    const { password } = updateUserLoginDto;
+    updateUserLoginDto.password = await this.hashPassword(password);
 
-    const user = await this.usersRepository.preload({
-      id,
-      password: passwordHash,
-    });
-
-    if (!user) {
-      throw new NotFoundException();
-    }
-
-    return this.usersRepository.save(user);
+    return super.update(id, updateUserLoginDto);
   }
 }
