@@ -10,7 +10,7 @@ import Switch from "@mui/material/Switch";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 
-function PlatformSettings() {
+function Platformsettings() {
   const [followsMe, setFollowsMe] = useState(true);
   const [answersPost, setAnswersPost] = useState(false);
   const [mentionsMe, setMentionsMe] = useState(true);
@@ -104,4 +104,4 @@ function PlatformSettings() {
   );
 }
 
-export default PlatformSettings;
+export default Platformsettings;

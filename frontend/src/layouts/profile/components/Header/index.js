@@ -56,7 +56,7 @@ function Header() {
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
 
   return (
-    <SoftBox position="relative">
+    <SoftBox className="header" position="relative">
       <DashboardNavbar absolute light />
       <SoftBox
         display="flex"
