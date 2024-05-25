@@ -1,6 +1,5 @@
 // @mui material components
 import Card from '@mui/material/Card';
-import axios from 'axios';
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
 import SoftTypography from 'components/SoftTypography';
@@ -18,6 +17,7 @@ import SoftButton from 'components/SoftButton';
 import { useState } from 'react';
 import SoftInput from 'components/SoftInput';
 import { TaskStatus } from 'interfaces/TaskStatus';
+import { axios } from 'utils';
 
 function Tables() {
   const { columns: prCols, rows: prRows } = projectsTableData;
@@ -43,7 +43,7 @@ function Tables() {
 
     // Send POST request to backend
     axios
-      .post('http://localhost:3000/projects/', newProject)
+      .post('/projects/', newProject)
       .then((response) => {
         console.log('Project created successfully:', response.data);
         // Reset form fields and hide the form

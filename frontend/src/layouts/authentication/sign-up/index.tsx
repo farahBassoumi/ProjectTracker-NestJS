@@ -18,7 +18,7 @@ import BasicLayout from 'layouts/authentication/components/BasicLayout';
 
 // Images
 import curved6 from 'assets/images/curved-images/curved14.jpg';
-import AxiosInstance from 'utils/axiosInstance';
+import { axios } from 'utils';
 
 function SignUp() {
   const [agreement, setAgremment] = useState(true);
@@ -33,7 +33,7 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     try {
-      const { data } = await AxiosInstance.post('/auth/register', formData);
+      const { data } = await axios.post('/auth/register', formData);
       localStorage.setItem('auth', JSON.stringify(data));
     } catch (error) {
       console.error(error);
