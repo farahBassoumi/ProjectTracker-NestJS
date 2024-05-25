@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-// @mui material components
+import { useEffect, useState } from "react";
 import Icon from "@mui/material/Icon";
-
+import AxiosInstance from "utils/axiosInstance";
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
@@ -20,45 +20,45 @@ function Completion({ value, color }) {
   );
 }
 
-// Assuming you have components for Icon, SoftBox, SoftTypography, SoftProgress
-
-const projectData = [
-  {
-    projectName: "Spotift",
-    status: "working",
-    completion: 60, // Adjust completion values as needed
-  },
-  {
-    projectName: "Invesion",
-    status: "done",
-    completion: 100,
-  },
-  // Add more project objects here
-];
-
-const formatCompletionColor = (completion) => {
-  if (completion >= 100) {
-    return "success";
-  } else if (completion < 40) {
-    return "error";
-  } else {
-    return "info";
-  }
-};
-
 const Action = () => {
-  // Assuming you have logic for the action icon, replace with your implementation
   return <Icon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small">more_vert</Icon>;
 };
 
-const projectsTableData = {
-  columns: [
+const ProjectsTableData = () => {
+  const [projectData, setProjectData] = useState([]);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const userId = "your-user-id"; // Replace with the actual user ID
+        const response = await AxiosInstance.get(`/findProjectsByUserId/${userId}`);
+        setProjectData(response.data);
+      } catch (error) {
+        console.error('Error fetching user projects:', error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  const formatCompletionColor = (completion) => {
+    if (completion >= 100) {
+      return "success";
+    } else if (completion < 40) {
+      return "error";
+    } else {
+      return "info";
+    }
+  };
+
+  const columns = [
     { name: "project", align: "left" },
     { name: "status", align: "left" },
     { name: "completion", align: "center" },
     { name: "action", align: "center" },
-  ],
-  rows: projectData.map((project) => ({
+  ];
+
+  const rows = projectData.map((project) => ({
     project: [project.projectName],
     status: (
       <SoftTypography variant="caption" color="text" fontWeight="medium">
@@ -67,8 +67,9 @@ const projectsTableData = {
     ),
     completion: <Completion value={project.completion} color={formatCompletionColor(project.completion)} />,
     action: <Action />,
-  })),
+  }));
+
+  return { columns, rows };
 };
 
-export default projectsTableData;
-
+export default ProjectsTableData;
