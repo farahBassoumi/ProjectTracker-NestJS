@@ -1,5 +1,3 @@
-
-
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -32,23 +30,54 @@ import team1 from "assets/images/team-1.jpg";
 import team2 from "assets/images/team-2.jpg";
 import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
-
+import Project from "layouts/profile/project.model.js";
+import axios from 'axios';
+import { useEffect, useState } from "react";
 function Overview() {
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    axios.get( process.env.BASE_URL+'projects')
+      .then(response => {
+        setProjects(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the projects!', error);
+      });
+  }, []);
+  const projectsTest = [
+    new Project(1, "Project One", "Description for project one", new Date(2023, 0, 1)),
+    new Project(2, "Project Two", "Description for project two", new Date(2023, 1, 15)),
+    new Project(3, "Project Three", "Description for project three", new Date(2023, 2, 20)),
+  ];
+  const images = [homeDecor1, homeDecor2, homeDecor3];
+  const authorsList = [
+    [
+      { image: team1, name: "farah" },
+      { image: team2, name: "farah2" },
+      { image: team3, name: "Nick Daniel" },
+      { image: team4, name: "Peterson" },
+    ],
+    [
+      { image: team3, name: "Nick Daniel" },
+      { image: team4, name: "Peterson" },
+      { image: team1, name: "Elena Morison" },
+      { image: team2, name: "Ryan Milly" },
+    ],
+    [
+      { image: team4, name: "Peterson" },
+      { image: team3, name: "Nick Daniel" },
+      { image: team2, name: "Ryan Milly" },
+      { image: team1, name: "Elena Morison" },
+    ],
+  ];
+  //get data from back 
+  
   return (
     <DashboardLayout>
       <Header />
+    
       <SoftBox mt={5} mb={3}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6} xl={4}>
-          </Grid>
-          <Grid item xs={12} md={6} xl={4}>
-           
-          </Grid>
-          <Grid item xs={12} xl={4}>
-          </Grid>
-        </Grid>
-      </SoftBox>
-      <SoftBox mb={3}>
         <Card>
           <SoftBox pt={2} px={2}>
             <SoftBox mb={0.5}>
@@ -64,6 +93,24 @@ function Overview() {
           </SoftBox>
           <SoftBox p={2}>
             <Grid container spacing={3}>
+              {projectsTest.map((project, index) => (
+                <Grid item xs={12} md={6} xl={4} key={project.id}>
+                  <DefaultProjectCard
+                    image={images[index % images.length]}
+                    title={project.name}
+                    description={project.description}
+                    action={{
+                      type: "internal",
+                      route: "/pages/profile/profile-overview",
+                      color: "info",
+                      label: "view project",
+                    }}
+                    authors={authorsList[index % authorsList.length]}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+            {/* <Grid container spacing={3}>
               <Grid item xs={12} md={6} xl={4}>
                 <DefaultProjectCard
                   image={homeDecor1}
@@ -125,7 +172,7 @@ function Overview() {
                 />
               </Grid>
          
-            </Grid>
+            </Grid> */}
           </SoftBox>
         </Card>
       </SoftBox>
