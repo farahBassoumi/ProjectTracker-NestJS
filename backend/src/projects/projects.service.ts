@@ -12,4 +12,17 @@ export class ProjectsService extends CrudService<Project> {
   ) {
     super(projectsRepository);
   }
+
+  async findProjectsByUserId(userId: string): Promise<Project[]> {
+    const projects = await this.repository.find({
+      relations: ['teams', 'teams.members'],
+    });
+
+    // Filter projects where the user is a member of any team
+    const projectsWithUser = projects.filter((project) =>
+      project.team.members.some((member) => member.userId === userId),
+    );
+
+    return projectsWithUser;
+  }
 }
