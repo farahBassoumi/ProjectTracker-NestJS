@@ -27,8 +27,8 @@ export class User {
   @Exclude({ toPlainOnly: true })
   password: string;
 
-  @Column({ name: 'phone_number' })
-  phoneNumber: string;
+  @Column({ name: 'profile_picture' })
+  profilePicture: string;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -22,7 +22,5 @@ export class RegisterUserDto {
   @IsNotEmpty()
   password: string;
 
-  @IsString()
-  @IsNotEmpty()
-  phoneNumber: string;
+  profilePicture?: string;
 }
