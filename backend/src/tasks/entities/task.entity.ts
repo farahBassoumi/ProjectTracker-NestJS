@@ -37,17 +37,7 @@ export class Task {
   assignor: User;
 
   @ManyToMany(() => User)
-  @JoinTable({
-    name: 'task_user',
-    joinColumn: {
-      name: 'task',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'user',
-      referencedColumnName: 'id',
-    },
-  })
+  @JoinTable()
   assignees: User[];
 
   @CreateDateColumn()

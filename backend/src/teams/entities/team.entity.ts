@@ -22,31 +22,11 @@ export class Team {
   teamLeader: User;
 
   @ManyToMany(() => User)
-  @JoinTable({
-    name: 'team_sub_leader',
-    joinColumn: {
-      name: 'team',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'user',
-      referencedColumnName: 'id',
-    },
-  })
+  @JoinTable()
   subLeaders: User[];
 
   @ManyToMany(() => User)
-  @JoinTable({
-    name: 'team_member',
-    joinColumn: {
-      name: 'team',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'user',
-      referencedColumnName: 'id',
-    },
-  })
+  @JoinTable()
   members: User[];
 
   @CreateDateColumn()
