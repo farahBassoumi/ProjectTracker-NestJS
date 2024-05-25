@@ -19,6 +19,7 @@ import SoftButton from "components/SoftButton";
 
 import { useState } from "react";
 import SoftInput from "components/SoftInput";
+import { TaskStatus } from "interfaces/TaskStatus";
 
 function Tables() {
   const { columns: prCols, rows: prRows } = projectsTableData;
@@ -27,6 +28,7 @@ function Tables() {
   const [projectDescription, setProjectDescription] = useState("");
 
   const handleAddProject = () => {
+    console.log(TaskStatus.DONE)
     setShowForm(true);
   };
 
