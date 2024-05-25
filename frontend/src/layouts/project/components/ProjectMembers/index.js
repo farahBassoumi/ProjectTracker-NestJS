@@ -11,7 +11,9 @@ import SoftTypography from "components/SoftTypography";
 import done from "assets/images/small-logos/done.svg";
 import SoftAvatar from "components/SoftAvatar";
 
-function ProjectMembers() {
+
+
+function ProjectMembers({team}) {
   return (
     <Card sx={{ height: "100%" }}>
       <SoftBox height="100%" p={2}>

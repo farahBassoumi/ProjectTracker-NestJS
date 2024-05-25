@@ -26,9 +26,35 @@ import Events from "layouts/project/components/Events";
 import reportsBarChartData from "layouts/project/data/reportsBarChartData";
 import gradientLineChartData from "layouts/project/data/gradientLineChartData";
 
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import AxiosInstance from "utils/axiosInstance";
+
 function Dashboard() {
   const { size } = typography;
   const { chart, items } = reportsBarChartData;
+  const { projectId } = useParams(); // Get the project ID from the URL params
+  const [project, setProject] = useState(null);
+
+
+  useEffect(() => {
+    // Fetch project data from the backend
+    const fetchProject = async () => {
+      try {
+        const response = await AxiosInstance.get(`/projects/${projectId}`);
+        setProject(response.data);
+      } catch (error) {
+        console.error("Error fetching project:", error);
+      }
+    };
+
+    fetchProject();
+  }, [projectId]); // Fetch project data whenever the project ID changes
+
+  if (!project) {
+    // Render loading state or return null if no project data is available
+    return null;
+  }
 
   return (
     <DashboardLayout>
@@ -69,10 +95,10 @@ function Dashboard() {
         <SoftBox mb={3}>
           <Grid container spacing={3}>
             <Grid item xs={12} lg={7}>
-              <ProjectDescription />
+              <ProjectDescription title={project.name} description={project.description}/>
             </Grid>
             <Grid item xs={12} lg={5}>
-              <ProjectMembers />
+              <ProjectMembers team={project.team} />
             </Grid>
           </Grid>
         </SoftBox>

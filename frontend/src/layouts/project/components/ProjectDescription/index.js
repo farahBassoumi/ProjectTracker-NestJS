@@ -12,7 +12,7 @@ import SoftTypography from "components/SoftTypography";
 import wavesWhite from "assets/images/shapes/waves-white.svg";
 import rocketWhite from "assets/images/illustrations/rocket-white.png";
 
-function ProjectDescription() {
+function ProjectDescription({ title, description }) {
   return (
     <Card>
       <SoftBox p={2}>
@@ -20,12 +20,11 @@ function ProjectDescription() {
           <Grid item xs={12} lg={6}>
             <SoftBox display="flex" flexDirection="column" height="100%">
               <SoftTypography variant="h5" fontWeight="bold" gutterBottom>
-                Project Title
+                {title}
               </SoftTypography>
               <SoftBox mb={6}>
                 <SoftTypography variant="body2" color="text">
-                  Description blablablabla blablablab lablablablablablablablablablabla
-                  blablablablablablablablablablablablablablablablablablablablablabla
+                  {description}
                 </SoftTypography>
               </SoftBox>
             </SoftBox>

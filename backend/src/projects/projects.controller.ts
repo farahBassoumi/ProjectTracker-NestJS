@@ -61,4 +61,9 @@ export class ProjectsController {
   remove(@Param('id') id: string) {
     return this.projectsService.remove(id);
   }
+
+  @Get(':id')
+  computeProjectDetails(@Param('id') id: string) {
+    return this.projectsService.computeProjectDetails(id);
+  }
 }

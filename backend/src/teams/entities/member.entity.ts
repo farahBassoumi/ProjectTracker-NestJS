@@ -5,6 +5,7 @@ import {
   ManyToOne,
   PrimaryColumn,
 } from 'typeorm';
+
 import { User } from '../../users/entities/user.entity';
 import { Role } from '../enum/role.enum';
 import { Team } from './team.entity';
