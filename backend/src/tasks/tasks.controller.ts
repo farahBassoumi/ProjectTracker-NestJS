@@ -12,14 +12,16 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { SearchDto } from '../common/dto/search.dto';
+import { User as UserDecorator } from '../auth/user.decorator';
+import { User } from '../users/entities/user.entity';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    return this.tasksService.create(createTaskDto);
+  create(@Body() createTaskDto: CreateTaskDto, @UserDecorator() user: User) {
+    return this.tasksService.create({ ...createTaskDto, creator: user });
   }
 
   @Get()

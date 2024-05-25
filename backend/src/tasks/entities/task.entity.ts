@@ -2,8 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -27,18 +25,17 @@ export class Task {
   @OneToMany(() => Comment, (comment) => comment.task)
   comments: Comment[];
 
-  @Column()
+  @Column({ default: TaskStatus.IN_PROGRESS })
   status: TaskStatus;
 
   @ManyToOne(() => Project, (project) => project.tasks)
   project: Project;
 
   @ManyToOne(() => User)
-  assignor: User;
+  creator: User;
 
-  @ManyToMany(() => User)
-  @JoinTable()
-  assignees: User[];
+  @ManyToOne(() => User)
+  assignedTo?: User;
 
   @CreateDateColumn()
   createdAt: Date;
