@@ -1,33 +1,27 @@
 import {
-  Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
 } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
 import { Project } from '../../projects/entities/project.entity';
+import { Member } from './member.entity';
 
 @Entity('team')
 export class Team {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Project)
+  @OneToOne(() => Project)
+  @JoinColumn({ name: 'id' })
   project: Project;
 
-  @ManyToOne(() => User)
-  teamLeader: User;
-
-  @ManyToMany(() => User)
-  @JoinTable()
-  subLeaders: User[];
-
-  @ManyToMany(() => User)
-  @JoinTable()
-  members: User[];
+  @OneToMany(() => Member, (member) => member.team, {
+    cascade: ['insert'],
+  })
+  members: Member[];
 
   @CreateDateColumn()
   createdAt: Date;

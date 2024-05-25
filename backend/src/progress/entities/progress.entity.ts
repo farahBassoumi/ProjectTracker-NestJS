@@ -1,11 +1,12 @@
-import { Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { Project } from '../../projects/entities/project.entity';
 
 @Entity('progress')
 export class Progress {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   id: string;
 
   @OneToOne(() => Project)
+  @JoinColumn({ name: 'id' })
   project: Project;
 }

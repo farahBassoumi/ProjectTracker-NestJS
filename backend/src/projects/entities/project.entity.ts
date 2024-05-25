@@ -19,14 +19,19 @@ export class Project {
   @Column()
   name: string;
 
+  @Column()
+  description: string;
+
+  @OneToOne(() => Team, (team) => team.project, { cascade: ['insert'] })
+  team: Team;
+
   @OneToMany(() => Task, (task) => task.project)
   tasks: Task[];
 
-  @OneToOne(() => Progress)
+  @OneToOne(() => Progress, (progress) => progress.project, {
+    cascade: ['insert'],
+  })
   progress: Progress;
-
-  @OneToMany(() => Team, (team) => team.project)
-  teams: Team[];
 
   @CreateDateColumn()
   createdAt: Date;
