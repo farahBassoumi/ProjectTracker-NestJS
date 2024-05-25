@@ -29,12 +29,12 @@ function Completion({ value, color }) {
 const projectData = [
   {
     projectLogo: logoSpotify,
-    projectName: "Spotift",
+    projectName: "Spotify",
     status: "working",
     completion: 60, // Adjust completion values as needed
   },
   {
-    projectLogo: logoInvesion,
+    projectLogo: null,
     projectName: "Invesion",
     status: "done",
     completion: 100,
@@ -65,7 +65,7 @@ const projectsTableData = {
     { name: "action", align: "center" },
   ],
   rows: projectData.map((project) => ({
-    project: [project.projectLogo, project.projectName],
+    project: [project.projectName],
     status: (
       <SoftTypography variant="caption" color="text" fontWeight="medium">
         {project.status}
