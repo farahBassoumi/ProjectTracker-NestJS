@@ -62,10 +62,10 @@ const ProjectsTableData = () => {
     project: [project.projectName],
     status: (
       <SoftTypography variant="caption" color="text" fontWeight="medium">
-        {project.status}
+        {project.progress.status}
       </SoftTypography>
     ),
-    completion: <Completion value={project.completion} color={formatCompletionColor(project.completion)} />,
+    completion: <Completion value={project.progress.completion} color={formatCompletionColor(project.progress.completion)} />,
     action: <Action />,
   }));
 
