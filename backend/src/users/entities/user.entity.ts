@@ -27,7 +27,7 @@
     @Exclude({ toPlainOnly: true })
     password: string;
 
-  @Column({ name: 'profile_picture' })
+  @Column({ name: 'profile_picture', nullable: true })
   profilePicture: string;
 
     @CreateDateColumn()
