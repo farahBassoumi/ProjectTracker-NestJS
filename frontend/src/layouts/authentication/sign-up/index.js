@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 
 // react-router-dom components
@@ -17,17 +15,30 @@ import SoftButton from "components/SoftButton";
 
 // Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
-import Socials from "layouts/authentication/components/Socials";
-import Separator from "layouts/authentication/components/Separator";
 
 // Images
 import curved6 from "assets/images/curved-images/curved14.jpg";
+import AxiosInstance from "utils/axiosInstance";
 
 function SignUp() {
   const [agreement, setAgremment] = useState(true);
-
+  const [formData, setFormData] = useState({
+    password: "",
+    email: "",
+    username: "",
+    firstName: "",
+    lastName: "",
+  });
+  console.log(formData);
   const handleSetAgremment = () => setAgremment(!agreement);
-
+  const handleSubmit = async (e) => {
+    const res = await AxiosInstance.post("/auth/register", formData);
+  };
+  const handleChange = (e) => {
+    setFormData((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
   return (
     <BasicLayout
       title="Welcome!"
@@ -35,7 +46,7 @@ function SignUp() {
       image={curved6}
     >
       <Card>
-        <SoftBox p={3} mb={1} textAlign="center">
+        {/*<SoftBox p={3} mb={1} textAlign="center">
           <SoftTypography variant="h5" fontWeight="medium">
             Register with
           </SoftTypography>
@@ -44,16 +55,29 @@ function SignUp() {
           <Socials />
         </SoftBox>
         <Separator />
+        */}
+
         <SoftBox pt={2} pb={3} px={3}>
           <SoftBox component="form" role="form">
             <SoftBox mb={2}>
-              <SoftInput placeholder="Name" />
+              <SoftInput name="firstName" placeholder="First Name" onChange={handleChange} />
             </SoftBox>
             <SoftBox mb={2}>
-              <SoftInput type="email" placeholder="Email" />
+              <SoftInput name="lastName" placeholder="Last Name" onChange={handleChange} />
             </SoftBox>
             <SoftBox mb={2}>
-              <SoftInput type="password" placeholder="Password" />
+              <SoftInput name="username" placeholder="Username" onChange={handleChange} />
+            </SoftBox>
+            <SoftBox mb={2}>
+              <SoftInput name="email" type="email" placeholder="Email" onChange={handleChange} />
+            </SoftBox>
+            <SoftBox mb={2}>
+              <SoftInput
+                name="password"
+                type="password"
+                placeholder="Password"
+                onChange={handleChange}
+              />
             </SoftBox>
             <SoftBox display="flex" alignItems="center">
               <Checkbox checked={agreement} onChange={handleSetAgremment} />
@@ -76,7 +100,7 @@ function SignUp() {
               </SoftTypography>
             </SoftBox>
             <SoftBox mt={4} mb={1}>
-              <SoftButton variant="gradient" color="dark" fullWidth>
+              <SoftButton variant="gradient" color="dark" fullWidth onClick={handleSubmit}>
                 sign up
               </SoftButton>
             </SoftBox>

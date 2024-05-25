@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 
 // react-router-dom components
@@ -19,12 +17,21 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 
 // Images
 import curved9 from "assets/images/curved-images/curved-6.jpg";
+import AxiosInstance from "utils/axiosInstance";
 
 function SignIn() {
   const [rememberMe, setRememberMe] = useState(true);
-
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  const handleChange = (e) => {
+    setFormData((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
 
+  const handleSubmit = async (e) => {
+    const res = await AxiosInstance.post("/auth/login", formData);
+  };
   return (
     <CoverLayout
       title="Welcome back"
@@ -38,7 +45,7 @@ function SignIn() {
               Email
             </SoftTypography>
           </SoftBox>
-          <SoftInput type="email" placeholder="Email" />
+          <SoftInput name="email" type="email" placeholder="Email" onChange={handleChange} />
         </SoftBox>
         <SoftBox mb={2}>
           <SoftBox mb={1} ml={0.5}>
@@ -46,7 +53,12 @@ function SignIn() {
               Password
             </SoftTypography>
           </SoftBox>
-          <SoftInput type="password" placeholder="Password" />
+          <SoftInput
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+          />
         </SoftBox>
         <SoftBox display="flex" alignItems="center">
           <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -60,7 +72,7 @@ function SignIn() {
           </SoftTypography>
         </SoftBox>
         <SoftBox mt={4} mb={1}>
-          <SoftButton variant="gradient" color="info" fullWidth>
+          <SoftButton variant="gradient" color="info" fullWidth onClick={handleSubmit}>
             sign in
           </SoftButton>
         </SoftBox>
