@@ -6,11 +6,11 @@ import {
   FindOptionsWhere,
   Repository,
 } from 'typeorm';
-import { Entity } from '../interfaces/entity.interface';
+import { EntityDto } from '../dto/entity.dto';
 import { SearchDto } from '../dto/search.dto';
 import { Pagination } from '../dto/pagination.dto';
 
-export abstract class CrudService<TEntity extends Entity> {
+export abstract class CrudService<TEntity extends EntityDto> {
   constructor(protected readonly repository: Repository<TEntity>) {}
 
   create(createEntityDto: DeepPartial<TEntity>): Promise<TEntity> {
