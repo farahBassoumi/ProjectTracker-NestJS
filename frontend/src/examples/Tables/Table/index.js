@@ -72,41 +72,23 @@ function Table({ columns, rows }) {
       let template;
 
       if (Array.isArray(row[name])) {
-        if (row[name].length === 2){
-          template = (
-            <SoftBox
-              key={uuidv4()}
-              component="td"
-              p={1}
-              borderBottom={row.hasBorder ? `${borderWidth[1]} solid ${light.main}` : null}
-            >
-              <SoftBox display="flex" alignItems="center" py={0.5} px={1}>
-                <SoftBox mr={2}>
-                  <SoftAvatar src={row[name][0]} name={row[name][1]} variant="rounded" size="sm" />
-                </SoftBox>
-                <SoftTypography variant="button" fontWeight="medium" sx={{ width: "max-content" }}>
-                  {row[name][1]}
-                </SoftTypography>
+        template = (
+          <SoftBox
+            key={uuidv4()}
+            component="td"
+            p={1}
+            borderBottom={row.hasBorder ? `${borderWidth[1]} solid ${light.main}` : null}
+          >
+            <SoftBox display="flex" alignItems="center" py={0.5} px={1}>
+              <SoftBox mr={2}>
+                <SoftAvatar src={row[name][0]} name={row[name][1]} variant="rounded" size="sm" />
               </SoftBox>
+              <SoftTypography variant="button" fontWeight="medium" sx={{ width: "max-content" }}>
+                {row[name][1]}
+              </SoftTypography>
             </SoftBox>
-          );
-        }
-        else if (row[name].length === 1){
-          template = (
-            <SoftBox
-              key={uuidv4()}
-              component="td"
-              p={1}
-              borderBottom={row.hasBorder ? `${borderWidth[1]} solid ${light.main}` : null}
-            >
-              <SoftBox display="flex" alignItems="center" py={0.5} px={2}>
-                <SoftTypography variant="button" fontWeight="medium" sx={{ width: "max-content" }}>
-                  {row[name][0]}
-                </SoftTypography>
-              </SoftBox>
-            </SoftBox>
-          );
-        }
+          </SoftBox>
+        );
       } else {
         template = (
           <SoftBox
