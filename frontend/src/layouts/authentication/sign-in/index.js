@@ -30,7 +30,12 @@ function SignIn() {
   };
 
   const handleSubmit = async (e) => {
-    const res = await AxiosInstance.post("/auth/login", formData);
+    try {
+      const {data} = await AxiosInstance.post("/auth/login", formData);
+      localStorage.setItem("auth", JSON.stringify(data));
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <CoverLayout

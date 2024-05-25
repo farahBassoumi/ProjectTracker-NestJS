@@ -29,11 +29,17 @@ function SignUp() {
     firstName: "",
     lastName: "",
   });
-  console.log(formData);
   const handleSetAgremment = () => setAgremment(!agreement);
+
   const handleSubmit = async (e) => {
-    const res = await AxiosInstance.post("/auth/register", formData);
+    try {
+      const {data} = await AxiosInstance.post("/auth/register", formData);
+      localStorage.setItem("auth", JSON.stringify(data));
+    } catch (error) {
+      console.error(error);
+    }
   };
+
   const handleChange = (e) => {
     setFormData((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
