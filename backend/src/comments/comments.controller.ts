@@ -11,7 +11,7 @@ import {
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
-import { SearchDto } from 'src/common/dto/search.dto';
+import { SearchDto } from '../common/dto/search.dto';
 
 @Controller('comments')
 export class CommentsController {
