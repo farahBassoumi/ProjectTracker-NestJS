@@ -7,10 +7,6 @@ import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftProgress from "components/SoftProgress";
 
-// Images
-import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
-import logoInvesion from "assets/images/small-logos/logo-invision.svg";
-
 function Completion({ value, color }) {
   return (
     <SoftBox display="flex" alignItems="center">
@@ -28,13 +24,11 @@ function Completion({ value, color }) {
 
 const projectData = [
   {
-    projectLogo: logoSpotify,
     projectName: "Spotift",
     status: "working",
     completion: 60, // Adjust completion values as needed
   },
   {
-    projectLogo: logoInvesion,
     projectName: "Invesion",
     status: "done",
     completion: 100,
@@ -65,7 +59,7 @@ const projectsTableData = {
     { name: "action", align: "center" },
   ],
   rows: projectData.map((project) => ({
-    project: [project.projectLogo, project.projectName],
+    project: [project.projectName],
     status: (
       <SoftTypography variant="caption" color="text" fontWeight="medium">
         {project.status}
