@@ -63,16 +63,7 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
         />
       </SoftBox>
       <SoftBox pt={3} px={0.5}>
-        <SoftBox mb={1}>
-          <SoftTypography
-            variant="button"
-            fontWeight="regular"
-            textTransform="capitalize"
-            textGradient
-          >
-            {label}
-          </SoftTypography>
-        </SoftBox>
+       
         <SoftBox mb={1}>
           {action.type === "internal" ? (
             <SoftTypography
