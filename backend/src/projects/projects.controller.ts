@@ -26,7 +26,7 @@ export class ProjectsController {
     createProjectDto.team.members = [
       {
         user,
-        role: Role.leader,
+        role: Role.Leader,
       } as Member,
     ];
 
