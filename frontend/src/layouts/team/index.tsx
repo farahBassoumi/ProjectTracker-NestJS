@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 //@ts-nocheck
 // @mui material components
 import Grid from '@mui/material/Grid';
@@ -31,11 +33,18 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { axios } from 'utils';
 import TeamTable from './components/TeamTable';
+import { teams } from './components/data/exampleTeam';
+
+const exampleProjects = teams;
 
 export default function Team() {
-  const { size } = typography;
-  const { chart, items } = reportsBarChartData;
-  const teams = ['yo', 'dos'];
+  // const { size } = typography;
+  // const { chart, items } = reportsBarChartData;
+  const [teams, setTeams] = useState([]);
+
+  useEffect(() => {
+    setTeams(exampleProjects);
+  }, []);
 
   return (
     <DashboardLayout>
@@ -89,10 +98,10 @@ export default function Team() {
           </Grid>
         </SoftBox> */}
         {teams.map((team) => (
-          <SoftBox mb={3} key={team}>
+          <SoftBox mb={3} key={team.projectId}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={10} lg={12}>
-                <TeamTable name={team} />
+                <TeamTable name={team.projectName} projectId={team.projectId} />
               </Grid>
             </Grid>
           </SoftBox>

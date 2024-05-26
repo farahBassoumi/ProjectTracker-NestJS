@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 //@ts-nocheck
 import { useEffect, useState } from 'react';
 
 // @mui material components
 import Card from '@mui/material/Card';
-import Icon from '@mui/material/Icon';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+// import Icon from '@mui/material/Icon';
+// import Menu from '@mui/material/Menu';
+// import MenuItem from '@mui/material/MenuItem';
 
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
@@ -17,41 +18,19 @@ import Table from 'examples/Tables/Table';
 // Data
 import fetchTeamData from './data';
 import members from './data/exampleTeam';
+import ContextMenu from './ContextMenu';
+// import { useNavigate } from 'react-router-dom';
+// import InviteMemberDialog from './InviteMemberDialog';
 
-function TeamsTable({ name }) {
-  const [menu, setMenu] = useState(null);
+function TeamsTable({ name, projectId }) {
   const [rows, setRows] = useState();
   const columns = [
-    { name: 'firstName', align: 'left' },
+    { name: 'email', align: 'left' },
+    { name: 'firstName', align: 'center' },
     { name: 'lastName', align: 'center' },
-    { name: 'email', align: 'center' },
     { name: 'role', align: 'center' },
     { name: 'kick', align: 'center' },
   ];
-
-  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
-  const closeMenu = () => setMenu(null);
-
-  const renderMenu = (
-    <Menu
-      id="simple-menu"
-      anchorEl={menu}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'left',
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={Boolean(menu)}
-      onClose={closeMenu}
-    >
-      <MenuItem onClick={closeMenu}>Action</MenuItem>
-      <MenuItem onClick={closeMenu}>Another action</MenuItem>
-      <MenuItem onClick={closeMenu}>Something else</MenuItem>
-    </Menu>
-  );
 
   useEffect(() => {
     // replace members with api call
@@ -73,16 +52,7 @@ function TeamsTable({ name }) {
             {name}
           </SoftTypography>
         </SoftBox>
-        <SoftBox color="text" px={2}>
-          <Icon
-            sx={{ cursor: 'pointer', fontWeight: 'bold' }}
-            fontSize="small"
-            onClick={openMenu}
-          >
-            more_vert
-          </Icon>
-        </SoftBox>
-        {renderMenu}
+        <ContextMenu projectId={projectId} />
       </SoftBox>
       <SoftBox
         sx={{

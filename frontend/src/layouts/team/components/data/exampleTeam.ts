@@ -1,7 +1,3 @@
-import bug from 'assets/images/small-logos/bug.svg';
-import inprogress from 'assets/images/small-logos/inprogress.svg';
-import done from 'assets/images/small-logos/done.svg';
-
 const members = [
   {
     firstName: 'one',
@@ -14,6 +10,23 @@ const members = [
     lastName: 'name2',
     email: 'email2',
     role: 'member',
+  },
+];
+
+export const teams = [
+  {
+    projectId: 'project.id',
+    projectName: 'uno',
+    completion: '',
+    status: '',
+    members: members,
+  },
+  {
+    projectId: 'project.id',
+    projectName: 'dos',
+    completion: '',
+    status: '',
+    members: members,
   },
 ];
 
