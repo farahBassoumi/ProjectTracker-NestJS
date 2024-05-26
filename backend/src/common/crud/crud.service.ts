@@ -22,11 +22,13 @@ export abstract class CrudService<TEntity extends EntityDto> {
   async findAll(
     searchDto: SearchDto,
     where?: FindOptionsWhere<TEntity> | FindOptionsWhere<TEntity>[],
+    relations?: FindOptionsRelations<TEntity>,
   ): Promise<Pagination<TEntity>> {
     const { take = 10, skip = 0 } = searchDto;
 
     const [data, count] = await this.repository.findAndCount({
       where,
+      relations,
       take,
       skip,
     });

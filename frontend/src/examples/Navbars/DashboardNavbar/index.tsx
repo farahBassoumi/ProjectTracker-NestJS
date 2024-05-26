@@ -150,24 +150,38 @@ function DashboardNavbar({ absolute, light, isMini }) {
         {isMini ? null : (
           <SoftBox sx={(theme) => navbarRow(theme, { isMini })}>
             <SoftBox color={light ? 'white' : 'inherit'}>
-              <Link to="/authentication/sign-in">
-                <IconButton sx={navbarIconButton} size="small">
-                  <Icon
-                    sx={({ palette: { dark, white } }) => ({
-                      color: light ? white.main : dark.main,
-                    })}
-                  >
-                    account_circle
-                  </Icon>
-                  <SoftTypography
-                    variant="button"
-                    fontWeight="medium"
-                    color={light ? 'white' : 'dark'}
-                  >
-                    Sign in
-                  </SoftTypography>
-                </IconButton>
-              </Link>
+              {localStorage.getItem('auth') == null ? (
+                <Link to="/authentication/sign-in">
+                  <IconButton sx={navbarIconButton} size="small">
+                    <Icon
+                      sx={({ palette: { dark, white } }) => ({
+                        color: light ? white.main : dark.main,
+                      })}
+                    >
+                      account_circle
+                    </Icon>
+                    <SoftTypography
+                      variant="button"
+                      fontWeight="medium"
+                      color={light ? 'white' : 'dark'}
+                    >
+                      Sign in
+                    </SoftTypography>
+                  </IconButton>
+                </Link>
+              ) : (
+                <Link to="/profile">
+                  <IconButton sx={navbarIconButton} size="small">
+                    <Icon
+                      sx={({ palette: { dark, white } }) => ({
+                        color: light ? white.main : dark.main,
+                      })}
+                    >
+                      account_circle
+                    </Icon>
+                  </IconButton>
+                </Link>
+              )}
               <IconButton
                 size="small"
                 color="inherit"

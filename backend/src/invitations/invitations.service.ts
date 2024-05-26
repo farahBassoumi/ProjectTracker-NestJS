@@ -7,6 +7,8 @@ import { UpdateInvitationDto } from './dto/update-invitation.dto';
 import { Member } from 'src/teams/entities/member.entity';
 import { InvitationStatus } from './enum/invitation-status.enum';
 import { CreateInvitationDto } from './dto/create-invitation.dto';
+import { Pagination } from 'src/common/dto/pagination.dto';
+import { SearchDto } from 'src/common/dto/search.dto';
 
 @Injectable()
 export class InvitationsService extends CrudService<Invitation> {
@@ -15,6 +17,23 @@ export class InvitationsService extends CrudService<Invitation> {
     invitationsRepository: Repository<Invitation>,
   ) {
     super(invitationsRepository);
+  }
+
+  findAllByUser(
+    searchDto: SearchDto,
+    userId: string,
+  ): Promise<Pagination<Invitation>> {
+    return super.findAll(
+      searchDto,
+      {
+        receiver: { id: userId },
+      },
+      {
+        receiver: true,
+        sender: true,
+        team: true,
+      },
+    );
   }
 
   create(createInvitationDto: CreateInvitationDto): Promise<Invitation> {

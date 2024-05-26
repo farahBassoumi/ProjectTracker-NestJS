@@ -31,8 +31,8 @@ export class InvitationsController {
   }
 
   @Get()
-  findAll(@Query() searchDto: SearchDto) {
-    return this.invitationsService.findAll(searchDto);
+  findAllByUser(@Query() searchDto: SearchDto, @User() user: UserEntity) {
+    return this.invitationsService.findAllByUser(searchDto, user.id);
   }
 
   @Get(':id')
@@ -79,7 +79,3 @@ export class InvitationsController {
     return this.invitationsService.remove(id);
   }
 }
-function userInvitation(arg0: any, id: any, string: any) {
-  throw new Error('Function not implemented.');
-}
-

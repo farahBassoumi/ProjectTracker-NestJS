@@ -16,13 +16,7 @@ import SoftTypography from 'components/SoftTypography';
 import SoftButton from 'components/SoftButton';
 import SoftAvatar from 'components/SoftAvatar';
 
-function DefaultProjectCard({
-  image,
-  title,
-  description,
-  action,
-  authors,
-}) {
+function DefaultProjectCard({ image, title, description, action, authors }) {
   const renderAuthors = authors.map(({ image: media, name }) => (
     <Tooltip key={name} title={name} placement="bottom">
       <SoftAvatar
@@ -106,7 +100,6 @@ function DefaultProjectCard({
           justifyContent="space-between"
           alignItems="center"
         >
-       
           <SoftBox display="flex">{renderAuthors}</SoftBox>
         </SoftBox>
       </SoftBox>

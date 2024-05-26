@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { EventType } from '../enums/event-type-enum';
 
 @Entity('event')
 export class Event {
@@ -14,6 +15,9 @@ export class Event {
 
   @Column()
   name: string;
+
+  @Column()
+  type: EventType;
 
   @ManyToOne(() => User)
   owner: User;

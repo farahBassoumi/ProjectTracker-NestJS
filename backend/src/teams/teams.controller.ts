@@ -13,6 +13,11 @@ export class TeamsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.teamsService.findOne(id);
+    return this.teamsService.findOne(id, { members: true, project: true });
+  }
+
+  @Get(':id/invitations')
+  findAllInvitaions(@Param('id') id: string, @Query() searchDto: SearchDto) {
+    return this.teamsService.findAllInvitations(id, searchDto);
   }
 }

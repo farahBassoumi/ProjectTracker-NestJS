@@ -17,7 +17,7 @@ import CoverLayout from 'layouts/authentication/components/CoverLayout';
 
 // Images
 import curved9 from 'assets/images/curved-images/curved-6.jpg';
-import { AxiosInstance } from 'utils';
+import { axiosInstance } from 'utils';
 
 function SignIn() {
   const [rememberMe, setRememberMe] = useState(true);
@@ -34,8 +34,13 @@ function SignIn() {
 
   const handleSubmit = async (e) => {
     try {
-      const { data } = await AxiosInstance.post('/auth/login', formData);
-      localStorage.setItem('auth', JSON.stringify(data));
+      const {
+        data: { user, auth },
+      } = await axiosInstance.post('/auth/login', formData);
+
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('auth', JSON.stringify(auth));
+
       navigate('/projects');
     } catch (error) {
       console.error(error);
