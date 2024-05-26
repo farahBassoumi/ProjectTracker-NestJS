@@ -1,3 +1,4 @@
+//@ts-nocheck
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import Icon from '@mui/material/Icon';
@@ -7,6 +8,7 @@ import { axios } from 'utils';
 import SoftBox from 'components/SoftBox';
 import SoftTypography from 'components/SoftTypography';
 import SoftProgress from 'components/SoftProgress';
+import React from "react";
 
 function Completion({ value, color }) {
   return (
@@ -68,7 +70,7 @@ const ProjectsTableData = () => {
     { name: 'action', align: 'center' },
   ];
 
-  const rows = projectData.map((project) => ({
+  const rows = projectData.map((project: any) => ({
     project: [project.projectName],
     status: (
       <SoftTypography variant="caption" color="text" fontWeight="medium">
