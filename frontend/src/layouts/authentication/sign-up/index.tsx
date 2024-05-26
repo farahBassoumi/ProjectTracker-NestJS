@@ -23,11 +23,11 @@ import { axios } from 'utils';
 function SignUp() {
   const [agreement, setAgremment] = useState(true);
   const [formData, setFormData] = useState({
-    password: '',
-    email: '',
-    username: '',
     firstName: '',
     lastName: '',
+    email: '',
+    username: '',
+    password: '',
   });
   const handleSetAgremment = () => setAgremment(!agreement);
 

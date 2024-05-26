@@ -16,8 +16,9 @@ import SoftButton from 'components/SoftButton';
 
 import { useState } from 'react';
 import SoftInput from 'components/SoftInput';
-import { TaskStatus } from 'interfaces/TaskStatus';
 import { axios } from 'utils';
+import { Project } from 'interfaces/Project';
+import { TaskStatus } from 'interfaces/TaskStatus';
 
 function Tables() {
   const { columns: prCols, rows: prRows } = projectsTableData;
@@ -36,9 +37,9 @@ function Tables() {
     console.log('Project Description:', projectDescription);
 
     // Create project object
-    const newProject = {
+    const newProject: Project = {
       name: projectTitle,
-      desciption: projectDescription,
+      description: projectDescription,
     };
 
     // Send POST request to backend

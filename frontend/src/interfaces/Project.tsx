@@ -1,11 +1,12 @@
-const Project = {
-  id: undefined,
-  name: '',
-  tasks: [],
-  progress: null,
-  teams: [],
-  createdAt: undefined,
-  updatedAt: undefined,
-};
+import { Task } from './Task';
+import { Team } from './Team';
 
-export default Project;
+export interface Project {
+  id?: string;
+  name: string;
+  description: string;
+  tasks?: Task[];
+  teams?: Team[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}

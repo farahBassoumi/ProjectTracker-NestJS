@@ -1,15 +1,15 @@
-// src/interfaces/Task.js
+import { Project } from './Project';
+import { TaskStatus } from './TaskStatus';
+import { User } from './User';
 
-const Task = {
-  id: undefined,
-  name: '',
-  description: '',
-  comments: [],
-  status: 'To Do',
-  project: null,
-  assignor: null,
-  assignees: [],
-  createdAt: undefined,
-};
-
-export default Task;
+export interface Task {
+  id?: string;
+  name: string;
+  description: string;
+  comments?: Comment[];
+  status: TaskStatus;
+  project: Project;
+  assignor?: User;
+  assignees?: User[];
+  createdAt?: Date;
+}
