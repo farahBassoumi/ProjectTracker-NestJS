@@ -36,14 +36,6 @@ const Action = () => {
   );
 };
 
-export const fetchProjects = async () => {
-  const response = await axiosInstance.get(`/projects`);
-
-  console.log('fetched projects:', response.data.data);
-
-  return response.data.data;
-};
-
 const ProjectsTableData = (projectsData) => {
   console.log(projectsData);
   const formatCompletionColor = (completion) => {

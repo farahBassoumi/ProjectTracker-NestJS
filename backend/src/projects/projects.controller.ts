@@ -16,10 +16,14 @@ import { User } from '../auth/user.decorator';
 import { User as UserEntity } from '../users/entities/user.entity';
 import { Member } from 'src/teams/entities/member.entity';
 import { Role } from 'src/teams/enum/role.enum';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Controller('projects')
 export class ProjectsController {
-  constructor(private readonly projectsService: ProjectsService) {}
+  constructor(
+    private readonly projectsService: ProjectsService,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   @Post()
   create(@Body() createProjectDto: CreateProjectDto, @User() user: UserEntity) {
