@@ -1,3 +1,4 @@
+//@ts-nocheck
 // react-router-dom components
 import { Link } from 'react-router-dom';
 
@@ -17,7 +18,6 @@ import SoftAvatar from 'components/SoftAvatar';
 
 function DefaultProjectCard({
   image,
-  label,
   title,
   description,
   action,
@@ -73,7 +73,6 @@ function DefaultProjectCard({
         />
       </SoftBox>
       <SoftBox pt={3} px={0.5}>
-       
         <SoftBox mb={1}>
           {action.type === 'internal' ? (
             <SoftTypography
@@ -107,29 +106,7 @@ function DefaultProjectCard({
           justifyContent="space-between"
           alignItems="center"
         >
-          {action.type === 'internal' ? (
-            <SoftButton
-              component={Link}
-              to={action.route}
-              variant="outlined"
-              size="small"
-              color={action.color}
-            >
-              {action.label}
-            </SoftButton>
-          ) : (
-            <SoftButton
-              component="a"
-              href={action.route}
-              target="_blank"
-              rel="noreferrer"
-              variant="outlined"
-              size="small"
-              color={action.color}
-            >
-              {action.label}
-            </SoftButton>
-          )}
+       
           <SoftBox display="flex">{renderAuthors}</SoftBox>
         </SoftBox>
       </SoftBox>
@@ -145,7 +122,6 @@ DefaultProjectCard.defaultProps = {
 // Typechecking props for the DefaultProjectCard
 DefaultProjectCard.propTypes = {
   image: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   action: PropTypes.shape({
@@ -162,7 +138,6 @@ DefaultProjectCard.propTypes = {
       'dark',
       'white',
     ]).isRequired,
-    label: PropTypes.string.isRequired,
   }).isRequired,
   authors: PropTypes.arrayOf(PropTypes.object),
 };

@@ -1,4 +1,12 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateInvitationDto } from './create-invitation.dto';
+import { InvitationStatus } from '../enum/invitation-status.enum';
+import { Matches } from 'class-validator';
 
-export class UpdateInvitationDto extends PartialType(CreateInvitationDto) {}
+export class UpdateInvitationDto {
+  @Matches(
+    `^${Object.values(InvitationStatus)
+      .filter((value) => value != InvitationStatus.Pending)
+      .join('|')}$`,
+    'i',
+  )
+  status: InvitationStatus;
+}

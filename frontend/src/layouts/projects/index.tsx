@@ -1,5 +1,7 @@
+//@ts-nocheck
 // @mui material components
 import Card from '@mui/material/Card';
+import axios from 'axios';
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
 import SoftTypography from 'components/SoftTypography';
@@ -14,14 +16,16 @@ import Table from 'examples/Tables/Table';
 import projectsTableData from 'layouts/projects/data/projectsTableData';
 import SoftButton from 'components/SoftButton';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SoftInput from 'components/SoftInput';
 import { axios } from 'utils';
 import { Project } from 'interfaces/Project';
 import { TaskStatus } from 'interfaces/TaskStatus';
+import { Padding } from '@mui/icons-material';
 
 function Tables() {
   const { columns: prCols, rows: prRows } = projectsTableData;
+
   const [showForm, setShowForm] = useState(false);
   const [projectTitle, setProjectTitle] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
@@ -31,6 +35,23 @@ function Tables() {
     setShowForm(true);
   };
 
+  useEffect(() => {
+    getInvitations();
+  }, []);
+
+  //get invitations data from backend
+  const [invitations, setInvitations] = useState([]);
+  const getInvitations = () => {
+    axios
+      .get('http://localhost:3000/invitations/')
+      .then((response) => {
+        console.log('Invitations fetched successfully:', response.data);
+        setInvitations(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching invitations:', error);
+      });
+  };
   const handleSubmit = () => {
     // Handle form submission here, e.g., send data to backend
     console.log('Project Title:', projectTitle);
@@ -44,7 +65,7 @@ function Tables() {
 
     // Send POST request to backend
     axios
-      .post('/projects/', newProject)
+      .post('http://localhost:3000/projects/', newProject)
       .then((response) => {
         console.log('Project created successfully:', response.data);
         // Reset form fields and hide the form
@@ -112,6 +133,61 @@ function Tables() {
           </SoftBox>
         </Card>
       </SoftBox>
+
+      <SoftBox mb={3} pb={3}>
+        <Card pb={3}>
+          <SoftBox
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            p={3}
+          >
+            <SoftTypography variant="h6">Invitations</SoftTypography>
+          </SoftBox>
+          <SoftBox>
+            {invitations.map((invitation, index) => (
+              <div>
+                <div
+                  key={invitation.id}
+                  style={{
+                    padding: '10px',
+                    fontSize: '0.9rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginRight: '10%',
+                    marginLeft: '10%',
+                  }}
+                >
+                  <div>{invitation.name}</div>
+
+                  <div>{invitation.sender}</div>
+                </div>
+                <div
+                  style={{
+                    marginRight: '4%',
+                    marginLeft: '4%',
+                  }}
+                >
+                  {' '}
+                  {index !== invitations.length - 1 && (
+                    <hr
+                      style={{
+                        borderWidth: '1px',
+                        borderColor: 'lightgrey',
+                        opacity: 0.5,
+                        margin: '8px 0',
+                      }}
+                    />
+                  )}
+                </div>
+                <div style={{ height: '8px' }}></div>
+              </div>
+            ))}
+          </SoftBox>
+        </Card>
+      </SoftBox>
+
       <Footer />
     </DashboardLayout>
   );

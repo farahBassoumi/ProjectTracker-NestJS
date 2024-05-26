@@ -9,8 +9,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.tsx\" \"src/**/*.ts\"",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.tsx\" --fix"
+    "lint": "eslint \"{src,apps,libs,test}/**/*.tsx\" \"{src,apps,libs,test}/**/*.ts\" --fix"
   },
+  "type": "module",
   "bugs": {
     "url": "https://github.com/creativetimofficial/soft-ui-dashboard-react/issues"
   },
@@ -20,10 +21,10 @@
   },
   "dependencies": {
     "@emotion/cache": "11.11.0",
-    "@emotion/react": "11.11.0",
-    "@emotion/styled": "11.11.0",
-    "@mui/icons-material": "5.11.16",
-    "@mui/material": "5.13.0",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.13.0",
     "@mui/styled-engine": "5.12.3",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
