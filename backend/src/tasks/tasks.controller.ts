@@ -17,6 +17,7 @@ import { User } from '../users/entities/user.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreateNotificationDto } from '../notifications/dto/create-notification.dto';
 import { NotificationType } from 'src/notifications/enum/notification-type.enum';
+import { EventType } from 'src/events/enums/event-type-enum';
 
 @Controller('tasks')
 export class TasksController {
@@ -40,6 +41,11 @@ export class TasksController {
       type: NotificationType.taskAssignment,
       data: JSON.stringify(res),
     } as CreateNotificationDto);
+
+    this.eventEmitter.emit(EventType.TaskCreated, {
+      recipient: createTaskDto.project.id,
+      data: createTaskDto,
+    });
 
     return res;
   }
@@ -84,6 +90,11 @@ export class TasksController {
       type: NotificationType.taskDeletion,
       data: JSON.stringify(task),
     } as CreateNotificationDto);
+
+    this.eventEmitter.emit(EventType.TaskRemoved, {
+      recipient: task.project.id,
+      data: task,
+    });
 
     return this.tasksService.remove(id);
   }

@@ -1,9 +1,9 @@
 export enum EventType {
-  TaskCreated = 'task.created',
-  TaskDone = 'task.done',
-  TaskStarted = 'task.started',
-  TaskRemoved = 'task.removed',
-  Announcment = 'announcment',
-  MemberJoin = 'member.join',
-  MemberLeave = 'member.leave',
+  TaskCreated = 'event.task.created',
+  TaskDone = 'event.task.done',
+  TaskStarted = 'event.task.started',
+  TaskRemoved = 'event.task.removed',
+  Announcment = 'event.announcment',
+  MemberJoin = 'event.member.join',
+  MemberLeave = 'event.member.leave',
 }
