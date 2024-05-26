@@ -22,7 +22,7 @@ export class NotificationsGateway
   server: Server;
 
   @SubscribeMessage('message')
-  handleMessage(client: any, payload: any): string {
+  handleMessage(): string {
     return 'Hello world!';
   }
 
