@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // react-router-dom components
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // @mui material components
 import Card from '@mui/material/Card';
@@ -29,12 +29,15 @@ function SignUp() {
     username: '',
     password: '',
   });
+  const navigate = useNavigate();
+
   const handleSetAgremment = () => setAgremment(!agreement);
 
   const handleSubmit = async (e) => {
     try {
       const { data } = await AxiosInstance.post('/auth/register', formData);
       localStorage.setItem('auth', JSON.stringify(data));
+      navigate('/projects');
     } catch (error) {
       console.error(error);
     }

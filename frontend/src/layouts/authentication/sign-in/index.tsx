@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // react-router-dom components
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // @mui material components
 import Switch from '@mui/material/Switch';
@@ -22,7 +22,10 @@ import { AxiosInstance } from 'utils';
 function SignIn() {
   const [rememberMe, setRememberMe] = useState(true);
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
+
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
   const handleChange = (e) => {
     setFormData((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
@@ -33,6 +36,7 @@ function SignIn() {
     try {
       const { data } = await AxiosInstance.post('/auth/login', formData);
       localStorage.setItem('auth', JSON.stringify(data));
+      navigate('/projects');
     } catch (error) {
       console.error(error);
     }
