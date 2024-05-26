@@ -1,8 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 // @mui material components
 import Card from '@mui/material/Card';
-import { AxiosInstance } from 'utils';
+import { axiosInstance } from 'utils';
+
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
 import SoftTypography from 'components/SoftTypography';
@@ -23,19 +22,29 @@ import { useState, useEffect } from 'react';
 import SoftInput from 'components/SoftInput';
 import { Project } from 'interfaces/Project';
 import { TaskStatus } from 'interfaces/TaskStatus';
+import { Invitation } from 'interfaces/Invitation';
+import { useNavigate } from 'react-router-dom';
+import { UnauthorizedError } from 'errors/UnauthorizedError';
 
 function Tables() {
   const [showForm, setShowForm] = useState(false);
   const [projects, setProjects] = useState([]);
   const [projectTitle, setProjectTitle] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const result = fetchProjects('cd02191e-2ddd-47f2-9777-eb6f8905be2e'); //USERIDREPLACE
+    const result = fetchProjects();
 
-    result.then((result) => {
-      setProjects(result);
-    });
+    result
+      .then((result) => {
+        setProjects(result);
+      })
+      .catch((error) => {
+        if (error instanceof UnauthorizedError) {
+          navigate('/sign-in');
+        }
+      });
   }, []);
 
   const { columns: prCols, rows: prRows } = projectsTableData(projects);
@@ -46,19 +55,23 @@ function Tables() {
   };
 
   useEffect(() => {
-    getInvitations('cd02191e-2ddd-47f2-9777-eb6f8905be2e'); //USERIDREPLACE
+    getInvitations();
   }, []);
 
   //get invitations data from backend
-  const [invitations, setInvitations] = useState([]);
-  const getInvitations = (userId) => {
-    AxiosInstance.get('/invitations/')
+  const [invitations, setInvitations] = useState<Invitation[]>([]);
+
+  const getInvitations = () => {
+    axiosInstance
+      .get('/invitations')
       .then((response) => {
         console.log('Invitations fetched successfully:', response.data.data);
         setInvitations(response.data.data);
       })
       .catch((error) => {
-        console.error('Error fetching invitations:', error);
+        if (error instanceof UnauthorizedError) {
+          navigate('/sign-in');
+        }
       });
   };
   const handleSubmit = () => {
@@ -67,13 +80,14 @@ function Tables() {
     console.log('Project Description:', projectDescription);
 
     // Create project object
-    const newProject: Project = {
+    const newProject: Partial<Project> = {
       name: projectTitle,
       description: projectDescription,
     };
 
     // Send POST request to backend
-    AxiosInstance.post('/projects/', newProject)
+    axiosInstance
+      .post('/projects', newProject)
       .then((response) => {
         console.log('Project created successfully:', response.data);
         // Reset form fields and hide the form
@@ -167,9 +181,7 @@ function Tables() {
                     marginLeft: '10%',
                   }}
                 >
-                  <div>{invitation.name}</div>
-
-                  <div>{invitation.sender}</div>
+                  <div>{`from: ${invitation.sender.firstName} ${invitation.sender.lastName}`}</div>
                 </div>
                 <div
                   style={{

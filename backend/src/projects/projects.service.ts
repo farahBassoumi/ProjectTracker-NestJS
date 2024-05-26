@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CrudService } from '../common/crud/crud.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Project } from './entities/project.entity';
 import { ProjectCalculationDetails } from './dto/project-calculation-details.dto';
 import { TaskStatus } from 'src/tasks/enums/task-status.enum';
+import { Pagination } from 'src/common/dto/pagination.dto';
+import { SearchDto } from 'src/common/dto/search.dto';
+import {
+  ProjectDisplay,
+  ProjectStatus,
+} from './interfaces/project-display.interface';
 
 @Injectable()
 export class ProjectsService extends CrudService<Project> {
@@ -15,47 +21,57 @@ export class ProjectsService extends CrudService<Project> {
     super(projectsRepository);
   }
 
-  async findProjectsByUserId(userId: string): Promise<DeepPartial<object>[]> {
-    // Fetch projects with teams and members
-    const projects = await this.repository.find({
-      relations: ['team', 'team.members', 'tasks'],
-    });
-
-    // Filter projects where the user is a member
-    const projectsWithUser = projects.filter((project) =>
-      project.team.members.some((member) => member.userId === userId),
+  async findAllByUser(
+    searchDto: SearchDto,
+    userId: string,
+  ): Promise<Pagination<ProjectDisplay>> {
+    const { data, count } = await super.findAll(
+      searchDto,
+      {
+        team: { members: { userId } },
+      },
+      {
+        tasks: true,
+      },
     );
 
-    // Map project details with completion ratio and status
-    const projectsWithUserDetails = await Promise.all(
-      projectsWithUser.map(async (project) => {
-        // Calculate completion ratio
-        const totalTasks = project.tasks.length;
-        const tasksDone = project.tasks.filter(
-          (task) => task.status === TaskStatus.DONE,
-        ).length;
-        const completion = totalTasks > 0 ? (tasksDone / totalTasks) * 100 : 0;
+    return {
+      data: data.map(({ tasks, ...data }) => {
+        const [total, done] = tasks.reduce(
+          ([total, done], { status }) => {
+            switch (status) {
+              case TaskStatus.DONE:
+                return [total + 1, done + 1];
 
-        // Determine project status
-        let status;
-        if (tasksDone === 0) {
-          status = 'Not Started';
-        } else if (tasksDone === totalTasks) {
-          status = 'Done';
+              case TaskStatus.REMOVED:
+                return [total, done];
+
+              default:
+                return [total + 1, done];
+            }
+          },
+          [0, 0],
+        );
+
+        let status: ProjectStatus;
+        let completion: number;
+
+        if (done === 0) {
+          status = 'Not started';
+          completion = 0;
         } else {
-          status = 'In Progress';
+          status = total === done ? 'Done' : 'In progreess';
+          completion = (done * 100) / total;
         }
 
         return {
-          projectId: project.id,
-          projectName: project.name,
-          completion,
+          ...data,
           status,
+          completion,
         };
       }),
-    );
-
-    return projectsWithUserDetails;
+      count,
+    };
   }
 
   async computeProjectDetails(
