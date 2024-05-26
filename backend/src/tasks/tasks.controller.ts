@@ -59,18 +59,19 @@ export class TasksController {
     const oldTask = await this.tasksService.findOne(id);
     const res = await this.tasksService.update(id, updateTaskDto);
 
-    this.eventEmitter.emit(NotificationType.taskReassignment, {
-      user: oldTask.assignedTo,
-      type: NotificationType.taskReassignment,
-      data: JSON.stringify(oldTask),
-    } as CreateNotificationDto);
+    if (oldTask.assignedTo != res.assignedTo) {
+      this.eventEmitter.emit(NotificationType.taskReassignment, {
+        user: oldTask.assignedTo,
+        type: NotificationType.taskReassignment,
+        data: JSON.stringify(oldTask),
+      } as CreateNotificationDto);
 
-    this.eventEmitter.emit(NotificationType.taskReassignment, {
-      user: res.assignedTo,
-      type: NotificationType.taskReassignment,
-      data: JSON.stringify(res),
-    } as CreateNotificationDto);
-
+      this.eventEmitter.emit(NotificationType.taskReassignment, {
+        user: res.assignedTo,
+        type: NotificationType.taskReassignment,
+        data: JSON.stringify(res),
+      } as CreateNotificationDto);
+    }
     return res;
   }
 
