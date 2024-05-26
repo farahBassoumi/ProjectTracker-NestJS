@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
@@ -12,13 +14,17 @@ import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { SearchDto } from '../common/dto/search.dto';
+import { User } from 'src/auth/user.decorator';
+import { User as UserEntity } from 'src/users/entities/user.entity';
 
 @Controller('comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
   @Post()
-  create(@Body() createCommentDto: CreateCommentDto) {
+  create(@Body() createCommentDto: CreateCommentDto, @User() user: UserEntity) {
+    createCommentDto.user = user;
+
     return this.commentsService.create(createCommentDto);
   }
 
@@ -33,12 +39,34 @@ export class CommentsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateCommentDto: UpdateCommentDto,
+    @User() user: UserEntity,
+  ) {
+    if (!(await this.isOwner(id, user))) {
+      throw new ForbiddenException();
+    }
+
     return this.commentsService.update(id, updateCommentDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string, @User() user: UserEntity) {
+    if (!(await this.isOwner(id, user))) {
+      throw new ForbiddenException();
+    }
+
     return this.commentsService.remove(id);
+  }
+
+  async isOwner(id: string, user: UserEntity): Promise<boolean> {
+    const comment = await this.commentsService.findOne(id, { user: true });
+
+    if (!comment) {
+      throw new NotFoundException();
+    }
+
+    return comment.user.id == user.id;
   }
 }

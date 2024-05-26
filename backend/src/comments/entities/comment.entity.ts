@@ -15,17 +15,22 @@ export class Comment {
   id: string;
 
   @ManyToOne(() => User)
-  owner: User;
+  user: User;
+
+  @Column()
+  contents: string;
 
   @ManyToOne(() => Task)
   task: Task;
 
-  @Column()
-  content: string;
+  @ManyToOne(() => Comment)
+  repliesTo?: Comment;
+
+  @OneToMany(() => Comment, (comment) => comment.repliesTo, {
+    onDelete: 'CASCADE',
+  })
+  replies: Comment[];
 
   @CreateDateColumn()
   createdAt: Date;
-
-  @OneToMany(() => Comment, (comment) => comment.replies)
-  replies: Comment[];
 }
