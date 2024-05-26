@@ -34,8 +34,6 @@ function Tables() {
 
   const eventSource = new EventSource('http://localhost:3000/events/sse');
 
-  
-
   eventSource.onmessage = function (event) {
     const eventData = JSON.parse(event.data);
 
