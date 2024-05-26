@@ -1,10 +1,12 @@
-
-
 import { useState } from "react";
 import Card from "@mui/material/Card";
 import Icon from "@mui/material/Icon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import SoftInput from 'components/SoftInput';
+import TextField from "@mui/material";
+import Button from "@mui/material/Button";
+
 
 // @mui material components
 import Switch from "@mui/material/Switch";
@@ -14,7 +16,7 @@ import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import { Grid } from "@mui/material";
 
-function PlatformSettings() {
+function Comments() {
   const [followsMe, setFollowsMe] = useState(true);
   const [answersPost, setAnswersPost] = useState(false);
   const [mentionsMe, setMentionsMe] = useState(true);
@@ -49,10 +51,10 @@ function PlatformSettings() {
 
   return (
     <Card>
-        <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+        <SoftBox  display="flex" justifyContent="space-between" alignItems="center" p={3}>
         <SoftBox>
           <SoftTypography variant="h6" gutterBottom>
-            Description
+            Comments
           </SoftTypography>
         </SoftBox>
         <SoftBox color="text" px={2}>
@@ -62,12 +64,15 @@ function PlatformSettings() {
         </SoftBox>
         {renderMenu}
       </SoftBox>
-      <SoftBox><SoftTypography variant="h6" gutterBottom p={3}>
-            qsdqsjdlqkjskldqjsldqjls
-          </SoftTypography>
-      </SoftBox>
+      <SoftBox pd={3}>
+      <SoftInput>
+      </SoftInput>
+        <Button >
+          Add Comment
+        </Button>
+        </SoftBox>
     </Card>
   );
 }
 
-export default PlatformSettings;
+export default Comments;

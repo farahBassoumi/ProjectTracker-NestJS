@@ -24,6 +24,7 @@ import PlaceholderCard from "examples/Cards/PlaceholderCard";
 // Overview page components
 import Header from "layouts/task/components/Header";
 import PlatformSettings from "layouts/task/components/PlatformSettings";
+import Comments from "layouts/task/components/Comments";
 
 // Data
 import profilesListData from "layouts/profile/data/profilesListData";
@@ -42,11 +43,12 @@ function Overview() {
     <DashboardLayout>
       <Header />
       <SoftBox mt={5} mb={1}>
-        <Grid container spacing={1}>
+        <Grid>
           <Grid item >
             <PlatformSettings />
           </Grid>
-          <Grid item >
+          <Grid item mt={6}>
+            <Comments />
           </Grid>
         </Grid>
       </SoftBox>

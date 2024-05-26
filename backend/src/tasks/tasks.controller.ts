@@ -14,6 +14,7 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { SearchDto } from '../common/dto/search.dto';
 import { User as UserDecorator } from '../auth/user.decorator';
 import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CreateNotificationDto } from '../notifications/dto/create-notification.dto';
 import { NotificationType } from 'src/notifications/enum/notification-type.enum';
@@ -22,6 +23,7 @@ import { NotificationType } from 'src/notifications/enum/notification-type.enum'
 export class TasksController {
   constructor(
     private readonly tasksService: TasksService,
+    private readonly UsersService: UsersService,
     private eventEmitter: EventEmitter2,
   ) {}
 
@@ -30,9 +32,17 @@ export class TasksController {
     @Body() createTaskDto: CreateTaskDto,
     @UserDecorator() user: User,
   ) {
+    let assignedToUser: User | undefined;
+  if (createTaskDto.assignedTo && createTaskDto.assignedTo.id) {
+    assignedToUser = await this.UsersService.findById(createTaskDto.assignedTo.id);
+    if (!assignedToUser) {
+      throw new NotFoundException(`User with ID ${createTaskDto.assignedTo.id} not found`);
+    }
+  }
     const res = await this.tasksService.create({
       ...createTaskDto,
       creator: user,
+      assignedTo: ,
     });
 
     this.eventEmitter.emit(NotificationType.taskAssignment, {
