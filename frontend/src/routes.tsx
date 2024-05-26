@@ -27,6 +27,7 @@ import Profile from 'layouts/profile';
 import SignIn from 'layouts/authentication/sign-in';
 import SignUp from 'layouts/authentication/sign-up';
 import Tasks from 'layouts/tasks';
+import Task from 'layouts/task';
 
 // Soft UI Dashboard React icons
 import Shop from 'examples/Icons/Shop';
