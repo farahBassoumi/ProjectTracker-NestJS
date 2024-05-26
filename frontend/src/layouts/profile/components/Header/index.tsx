@@ -28,7 +28,7 @@ import breakpoints from 'assets/theme/base/breakpoints';
 import burceMars from 'assets/images/bruce-mars.jpg';
 import curved0 from 'assets/images/curved-images/curved0.jpg';
 import { jwtDecode } from 'jwt-decode';
-import { AxiosInstance } from 'utils';
+import {axiosInstance} from 'utils';
 
 
 function Header() {
@@ -78,7 +78,7 @@ function Header() {
   const fetchUser = async () => {
 
     try {
-    const response = await AxiosInstance.get(
+    const response = await axiosInstance.get(
       `/users/${userID}`,
     );
     console.log('fetched user:', response.data);
@@ -91,6 +91,7 @@ function Header() {
 
     return response.data;
   } catch (error) {
+    console.log('Failed to fetch user:');
     return null;
   }
   
