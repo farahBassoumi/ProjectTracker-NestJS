@@ -25,6 +25,11 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  @Get(':id/projects')
+  findPublicProjects(@Param('id') id: string, @Query() searchDto: SearchDto) {
+    return this.usersService.findPublicProjects(id, searchDto);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);

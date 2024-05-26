@@ -33,6 +33,9 @@ export class Project {
   })
   progress: Progress;
 
+  @Column({ name: 'is_public', default: false })
+  isPublic: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 
