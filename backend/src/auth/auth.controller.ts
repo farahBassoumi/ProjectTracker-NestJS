@@ -8,6 +8,7 @@ import { User } from './user.decorator';
 import { User as UserEntity } from '../users/entities/user.entity';
 import { AuthDto } from './dto/auth.dto';
 import { RefreshDto } from './dto/refresh.dto';
+import { AccountDto } from './dto/account.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -15,13 +16,13 @@ export class AuthController {
 
   @Post('register')
   @Public()
-  register(@Body() registerUserDto: RegisterUserDto): Promise<AuthDto> {
+  register(@Body() registerUserDto: RegisterUserDto): Promise<AccountDto> {
     return this.authService.register(registerUserDto);
   }
 
   @Post('login')
   @Public()
-  login(@Body() loginUserDto: LoginUserDto): Promise<AuthDto> {
+  login(@Body() loginUserDto: LoginUserDto): Promise<AccountDto> {
     return this.authService.login(loginUserDto);
   }
 

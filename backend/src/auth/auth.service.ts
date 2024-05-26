@@ -18,6 +18,7 @@ import { RefreshDto } from './dto/refresh.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { Auth } from './entities/auth.entity';
 import { UsersService } from 'src/users/users.service';
+import { AccountDto } from './dto/account.dto';
 
 @Injectable()
 export class AuthService extends CrudService<Auth> {
@@ -34,7 +35,7 @@ export class AuthService extends CrudService<Auth> {
     return hash(password);
   }
 
-  async register(registerUserDto: RegisterUserDto): Promise<AuthDto> {
+  async register(registerUserDto: RegisterUserDto): Promise<AccountDto> {
     const { password } = registerUserDto;
     registerUserDto.password = await this.hashPassword(password);
 
@@ -44,10 +45,13 @@ export class AuthService extends CrudService<Auth> {
 
     await super.create({ user, refreshToken: tokens.refreshToken });
 
-    return tokens;
+    return {
+      user,
+      auth: tokens,
+    };
   }
 
-  async login(loginUserDto: LoginUserDto): Promise<AuthDto> {
+  async login(loginUserDto: LoginUserDto): Promise<AccountDto> {
     const { email, password } = loginUserDto;
 
     const user = await this.usersService.findOneByEmail(email);
@@ -60,7 +64,10 @@ export class AuthService extends CrudService<Auth> {
 
     await super.create({ user, refreshToken: tokens.refreshToken });
 
-    return tokens;
+    return {
+      user,
+      auth: tokens,
+    };
   }
 
   async logout({ refreshToken }: RefreshDto) {
@@ -97,18 +104,16 @@ export class AuthService extends CrudService<Auth> {
         throw new BadRequestException();
       }
 
-      let type: TokenType;
       let payload: Omit<JwtPayload, 'type'>;
 
       try {
-        const { type: type_, ...payload_ }: JwtPayload = this.jwtService.verify(
+        const { type: _type, ...payload_ }: JwtPayload = this.jwtService.verify(
           refreshToken,
           {
             ignoreExpiration: false,
           },
         );
 
-        type = type_;
         payload = payload_;
       } catch {
         await super.remove(auth.id);
