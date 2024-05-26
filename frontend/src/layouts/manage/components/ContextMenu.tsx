@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 //@ts-nocheck
-
 import { Icon, Menu, MenuItem } from '@mui/material';
 import SoftBox from 'components/SoftBox';
 import { useState } from 'react';
@@ -17,7 +16,8 @@ const ContextMenu = ({ projectId }) => {
   const handleCloseProject = (projectId) => {
     alert(projectId);
     closeMenu();
-    navigate('/team');
+    //// refresh page after closing project
+    navigate('/manage');
   };
 
   const [open, setOpen] = useState(false);
@@ -26,13 +26,14 @@ const ContextMenu = ({ projectId }) => {
     setOpen(false);
   };
 
-  const handleInvite = () => {
+  const handleInviteDialog = () => {
     setOpen(true);
     closeMenu();
   };
 
   return (
     <>
+      {/* ////////////// Menu icon */}
       <SoftBox color="text" px={2}>
         <Icon
           sx={{ cursor: 'pointer', fontWeight: 'bold' }}
@@ -42,6 +43,7 @@ const ContextMenu = ({ projectId }) => {
           more_vert
         </Icon>
       </SoftBox>
+      {/* ///////////// Menu items */}
       <Menu
         id="simple-menu"
         anchorEl={menu}
@@ -56,11 +58,21 @@ const ContextMenu = ({ projectId }) => {
         open={Boolean(menu)}
         onClose={closeMenu}
       >
-        <MenuItem onClick={handleInvite}>Invite member</MenuItem>
-        <MenuItem onClick={() => handleCloseProject(projectId)}>
+        <MenuItem onClick={handleInviteDialog}>Invite member</MenuItem>
+        <MenuItem
+          onClick={() => handleCloseProject(projectId)}
+          sx={{
+            color: 'red',
+            '&:hover': {
+              color: 'red',
+              background: 'rgba(255,0,0,0.07)',
+            },
+          }}
+        >
           Close project
         </MenuItem>
       </Menu>
+      {/* //////////// pop up to invite member */}
       <InviteMemberDialog
         open={open}
         onClose={handleCloseDialog}

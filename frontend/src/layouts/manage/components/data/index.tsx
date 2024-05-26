@@ -1,37 +1,50 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 //@ts-nocheck
-// Soft UI Dashboard React components
+import { Box, FormControl, IconButton, MenuItem, Select } from '@mui/material';
 import SoftBox from 'components/SoftBox';
-// import SoftTypography from 'components/SoftTypography';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+///////// role select component
 const RoleSelect = ({ id, role }) => {
   const [selectedRole, setRole] = useState(role);
 
   const handleRoleChange = (event) => {
     const role = event.target.value;
+    alert(role);
     setRole(role);
   };
 
   return (
-    <select value={selectedRole} onChange={handleRoleChange}>
-      <option value="member">Member</option>
-      <option value="sub-leader">Sub-Leader</option>
-    </select>
+    <Box sx={{ minWidth: '140px' }}>
+      <FormControl fullWidth>
+        <Select value={selectedRole} onChange={handleRoleChange}>
+          <MenuItem value="member">Member</MenuItem>
+          <MenuItem value="sub-leader">Sub-Leader</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
   );
 };
 
+///////// kick component
 const KickMember = ({ id }) => {
   const navigate = useNavigate();
   const handleClick = () => {
     alert(id);
-    navigate('/team');
+    //// refresh page after kicking member
+    navigate('/manage');
   };
 
-  return <button onClick={handleClick}>kick</button>;
+  return (
+    <IconButton onClick={handleClick}>
+      <LogoutIcon sx={{ color: 'crimson' }} />
+    </IconButton>
+  );
 };
 
+///////// format members array into appropriate rows
 export default function formatTeamData(members) {
   const rows = members.map((member) => ({
     firstName: (
@@ -44,10 +57,7 @@ export default function formatTeamData(members) {
         {member.lastName}
       </SoftBox>
     ),
-    email:
-      // <SoftTypography variant="caption" color="text" fontWeight="medium">
-      member.email,
-    // </SoftTypography>
+    email: member.email,
     role: <RoleSelect id={member.id} role={member.role} />,
     kick: <KickMember id={member.id} />,
   }));

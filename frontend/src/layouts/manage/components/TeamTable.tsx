@@ -1,26 +1,15 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 //@ts-nocheck
 import { useEffect, useState } from 'react';
-
-// @mui material components
 import Card from '@mui/material/Card';
-// import Icon from '@mui/material/Icon';
-// import Menu from '@mui/material/Menu';
-// import MenuItem from '@mui/material/MenuItem';
-
-// Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
 import SoftTypography from 'components/SoftTypography';
-
-// Soft UI Dashboard Materail-UI example components
 import Table from 'examples/Tables/Table';
-
-// Data
-import fetchTeamData from './data';
-import members from './data/exampleTeam';
 import ContextMenu from './ContextMenu';
-// import { useNavigate } from 'react-router-dom';
-// import InviteMemberDialog from './InviteMemberDialog';
+import formatTeamData from './data';
+
+/////// test data
+import members from './data/exampleTeam';
 
 function TeamsTable({ name, projectId }) {
   const [rows, setRows] = useState();
@@ -35,7 +24,7 @@ function TeamsTable({ name, projectId }) {
   useEffect(() => {
     // replace members with api call
     const res = members;
-    const rows = fetchTeamData(res);
+    const rows = formatTeamData(res);
     setRows(rows);
   }, []);
 

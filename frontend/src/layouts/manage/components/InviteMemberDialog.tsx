@@ -7,7 +7,7 @@ import SoftInput from 'components/SoftInput';
 import React, { useState } from 'react';
 
 export default function InviteMemberDialog({ teamId, onClose, open }) {
-  const [email, setEmail] = useState('email');
+  const [email, setEmail] = useState('');
 
   const handleClose = () => {
     onClose();
@@ -23,9 +23,22 @@ export default function InviteMemberDialog({ teamId, onClose, open }) {
   return (
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>Add a new member</DialogTitle>
-      <Box sx={{ padding: '20px' }}>
-        <SoftInput value={email} onChange={handleInputChange} />
-        <SoftButton onClick={() => handleInvite(teamId, email)}>
+      <Box sx={{ padding: '20px' }} display={'flex'} alignItems={'center'}>
+        <SoftInput
+          placeholder={'email'}
+          value={email}
+          onChange={handleInputChange}
+        />
+        <SoftButton
+          onClick={() => handleInvite(teamId, email)}
+          sx={{
+            marginLeft: '6px',
+            background: '#a6f7ca',
+            '&:hover': {
+              background: '#a6f7f1',
+            },
+          }}
+        >
           Invite
         </SoftButton>
       </Box>

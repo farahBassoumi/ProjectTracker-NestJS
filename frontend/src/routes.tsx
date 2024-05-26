@@ -34,7 +34,7 @@ import Office from 'examples/Icons/Office';
 import Document from 'examples/Icons/Document';
 import SpaceShip from 'examples/Icons/SpaceShip';
 import CustomerSupport from 'examples/Icons/CustomerSupport';
-import Team from 'layouts/team';
+import Manage from 'layouts/manage';
 
 const routes = [
   {
@@ -57,11 +57,11 @@ const routes = [
   },
   {
     type: 'collapse',
-    name: 'Team',
-    key: 'team',
-    route: '/team',
+    name: 'Manage',
+    key: 'manage',
+    route: '/manage',
     icon: <Office size="12px" />,
-    component: <Team />,
+    component: <Manage />,
     noCollapse: true,
   },
   { type: 'title', title: 'Account Pages', key: 'account-pages' },
