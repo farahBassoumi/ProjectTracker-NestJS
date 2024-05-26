@@ -6,27 +6,22 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { NotificationType } from '../enum/notification-type.enum';
 
 @Entity('notification')
 export class Notification {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  type: notificationTypes;
+  @Column({
+    type: 'enum',
+    enum: NotificationType,
+  })
+  type: NotificationType;
 
   @ManyToOne(() => User)
-  @Column()
   user: User;
 
   @CreateDateColumn()
   createdAt: Date;
-}
-
-export enum notificationTypes {
-  PROJECT_INVITATION = 'project.invitaion',
-  TASK_ASSIGNMENT = 'task.assignment',
-  TASK_COMMENT = 'task.comment',
-  TASK_DELETION = 'task.deletion',
-  TASK_REASSIGNMENT = 'task.reassignment',
 }

@@ -1,8 +1,7 @@
 import { User } from '../../users/entities/user.entity';
-import { notificationTypes } from '../entities/notification.entity';
+import { NotificationType } from '../enum/notification-type.enum';
 
 export class CreateNotificationDto {
-  type: notificationTypes;
-
   user: User;
+  type: NotificationType;
 }

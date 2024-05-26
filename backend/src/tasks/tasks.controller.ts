@@ -15,8 +15,8 @@ import { SearchDto } from '../common/dto/search.dto';
 import { User as UserDecorator } from '../auth/user.decorator';
 import { User } from '../users/entities/user.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { notificationTypes } from '../notifications/entities/notification.entity';
 import { CreateNotificationDto } from '../notifications/dto/create-notification.dto';
+import { NotificationType } from 'src/notifications/enum/notification-type.enum';
 
 @Controller('tasks')
 export class TasksController {
@@ -35,9 +35,9 @@ export class TasksController {
       creator: user,
     });
 
-    this.eventEmitter.emit(notificationTypes.TASK_ASSIGNMENT, {
+    this.eventEmitter.emit(NotificationType.taskAssignment, {
       user: createTaskDto.assignedTo,
-      type: notificationTypes.TASK_ASSIGNMENT,
+      type: NotificationType.taskAssignment,
     } as CreateNotificationDto);
 
     return res;
@@ -58,14 +58,14 @@ export class TasksController {
     const oldTask = await this.tasksService.findOne(id);
     const res = await this.tasksService.update(id, updateTaskDto);
 
-    this.eventEmitter.emit(notificationTypes.TASK_REASSIGNMENT, {
+    this.eventEmitter.emit(NotificationType.taskReassignment, {
       user: oldTask.assignedTo,
-      type: notificationTypes.TASK_REASSIGNMENT,
+      type: NotificationType.taskReassignment,
     } as CreateNotificationDto);
 
-    this.eventEmitter.emit(notificationTypes.TASK_REASSIGNMENT, {
+    this.eventEmitter.emit(NotificationType.taskReassignment, {
       user: res.assignedTo,
-      type: notificationTypes.TASK_REASSIGNMENT,
+      type: NotificationType.taskReassignment,
     } as CreateNotificationDto);
 
     return res;
@@ -75,9 +75,9 @@ export class TasksController {
   async remove(@Param('id') id: string) {
     const task = await this.tasksService.findOne(id);
 
-    this.eventEmitter.emit(notificationTypes.TASK_DELETION, {
+    this.eventEmitter.emit(NotificationType.taskDeletion, {
       user: task.assignedTo,
-      type: notificationTypes.TASK_DELETION,
+      type: NotificationType.taskDeletion,
     } as CreateNotificationDto);
 
     return this.tasksService.remove(id);

@@ -12,10 +12,12 @@ export class NotificationsController {
   findAll(@Query() searchDto: SearchDto) {
     return this.notificationsService.findAll(searchDto);
   }
+
   @Get('user/:id')
   findAllByUserId(@UserDecorator() user: User, @Query() searchDto: SearchDto) {
     return this.notificationsService.findAll(searchDto, { user: user });
   }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.notificationsService.findOne(id);
