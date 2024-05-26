@@ -9,8 +9,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.tsx\" \"src/**/*.ts\"",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.tsx\" --fix"
+    "lint": "eslint \"{src,apps,libs,test}/**/*.tsx\" \"{src,apps,libs,test}/**/*.ts\" --fix"
   },
+  "type": "module",
   "bugs": {
     "url": "https://github.com/creativetimofficial/soft-ui-dashboard-react/issues"
   },

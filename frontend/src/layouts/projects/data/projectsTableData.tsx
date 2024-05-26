@@ -8,7 +8,7 @@ import { axios } from 'utils';
 import SoftBox from 'components/SoftBox';
 import SoftTypography from 'components/SoftTypography';
 import SoftProgress from 'components/SoftProgress';
-import React from "react";
+import React from 'react';
 
 function Completion({ value, color }) {
   return (

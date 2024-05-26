@@ -74,7 +74,6 @@ function DefaultProjectCard({
         />
       </SoftBox>
       <SoftBox pt={3} px={0.5}>
-       
         <SoftBox mb={1}>
           {action.type === 'internal' ? (
             <SoftTypography
