@@ -31,8 +31,8 @@ export class InvitationsController {
   }
 
   @Get()
-  findAll(@Query() searchDto: SearchDto) {
-    return this.invitationsService.findAll(searchDto);
+  findAllByUser(@Query() searchDto: SearchDto, @User() user: UserEntity) {
+    return this.invitationsService.findAllByUser(searchDto, user.id);
   }
 
   @Get(':id')

@@ -1,15 +1,14 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 /* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
 import Icon from '@mui/material/Icon';
-import { AxiosInstance } from 'utils';
+import { axiosInstance } from 'utils';
 
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
 import SoftTypography from 'components/SoftTypography';
 import SoftProgress from 'components/SoftProgress';
 import React from 'react';
+import { ProjectDisplay } from 'interfaces/ProjectDisplay';
 
 function Completion({ value, color }) {
   return (
@@ -37,16 +36,12 @@ const Action = () => {
   );
 };
 
-export const fetchProjects = async (userId) => {
-  try {
-    const response = await AxiosInstance.get(
-      `/projects/findProjectsByUserId/${userId}`,
-    );
-    console.log('fetched projects:', response.data);
-    return response.data;
-  } catch (error) {
-    return null;
-  }
+export const fetchProjects = async () => {
+  const response = await axiosInstance.get(`/projects`);
+
+  console.log('fetched projects:', response.data.data);
+
+  return response.data.data;
 };
 
 const ProjectsTableData = (projectsData) => {
@@ -68,10 +63,8 @@ const ProjectsTableData = (projectsData) => {
     { name: 'action', align: 'center' },
   ];
 
-  const rows = projectsData.map((project: any) => ({
-    project: [
-      <Link to={`/project/${project.projectId}`}>{project.projectName}</Link>,
-    ],
+  const rows = projectsData.map((project: ProjectDisplay) => ({
+    project: [<Link to={`/project/${project.id}`}>{project.name}</Link>],
     status: (
       <SoftTypography variant="caption" color="text" fontWeight="medium">
         {project.status}

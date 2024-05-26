@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Project } from '../../projects/entities/project.entity';
 import { Member } from './member.entity';
+import { Invitation } from 'src/invitations/entities/invitation.entity';
 
 @Entity('team')
 export class Team {
@@ -22,6 +23,9 @@ export class Team {
     cascade: ['insert'],
   })
   members: Member[];
+
+  @OneToMany(() => Invitation, (invitation) => invitation.team)
+  invitations: Invitation[];
 
   @CreateDateColumn()
   createdAt: Date;
