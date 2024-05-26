@@ -34,22 +34,19 @@ export class ProjectsController {
   }
 
   @Get()
-  findAll(@Query() searchDto: SearchDto) {
-    return this.projectsService.findAll(searchDto);
+  findAll(@Query() searchDto: SearchDto, @User() user: UserEntity) {
+    return this.projectsService.findAllByUser(searchDto, user.id);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.projectsService.findOne(id, {
       tasks: true,
-      team: true,
+      team: {
+        members: true,
+      },
       progress: true,
     });
-  }
-
-  @Get('findProjectsByUserId/:id')
-  userProjects(@Param('id') id: string) {
-    return this.projectsService.findProjectsByUserId(id);
   }
 
   @Patch(':id')

@@ -18,7 +18,7 @@ import BasicLayout from 'layouts/authentication/components/BasicLayout';
 
 // Images
 import curved6 from 'assets/images/curved-images/curved14.jpg';
-import { AxiosInstance } from 'utils';
+import { axiosInstance } from 'utils';
 
 function SignUp() {
   const [agreement, setAgremment] = useState(true);
@@ -35,8 +35,13 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     try {
-      const { data } = await AxiosInstance.post('/auth/register', formData);
-      localStorage.setItem('auth', JSON.stringify(data));
+      const {
+        data: { user, auth },
+      } = await axiosInstance.post('/auth/register', formData);
+
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('auth', JSON.stringify(auth));
+
       navigate('/projects');
     } catch (error) {
       console.error(error);
