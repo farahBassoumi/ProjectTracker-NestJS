@@ -4,7 +4,6 @@ import {
   Delete,
   ForbiddenException,
   Get,
-  NotFoundException,
   Param,
   Patch,
   Post,
@@ -62,10 +61,6 @@ export class CommentsController {
 
   async isOwner(id: string, user: UserEntity): Promise<boolean> {
     const comment = await this.commentsService.findOne(id, { user: true });
-
-    if (!comment) {
-      throw new NotFoundException();
-    }
 
     return comment.user.id == user.id;
   }
