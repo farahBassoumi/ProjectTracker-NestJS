@@ -8,9 +8,6 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-
-import { EventType } from './enums/event-type-enum';
-import { Subject, filter } from 'rxjs';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';

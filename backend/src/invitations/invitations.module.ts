@@ -8,5 +8,6 @@ import { Invitation } from './entities/invitation.entity';
   imports: [TypeOrmModule.forFeature([Invitation])],
   controllers: [InvitationsController],
   providers: [InvitationsService],
+  exports: [InvitationsService],
 })
 export class InvitationsModule {}
