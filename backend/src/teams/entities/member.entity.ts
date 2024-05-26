@@ -27,7 +27,7 @@ export class Member {
   @Column({
     type: 'enum',
     enum: Role,
-    default: Role.member,
+    default: Role.Member,
   })
   role: Role;
 
