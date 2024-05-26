@@ -40,6 +40,11 @@ export class InvitationsController {
     return this.invitationsService.findOne(id);
   }
 
+  @Get('invitationsByUserId/:id')
+  userInvitation(@Param('id') id: string) {
+    return this.invitationsService.findInvitationsByUserId(id);
+  }
+
   @Post(':id/respond')
   async respond(
     @Param('id') id: string,
@@ -74,3 +79,7 @@ export class InvitationsController {
     return this.invitationsService.remove(id);
   }
 }
+function userInvitation(arg0: any, id: any, string: any) {
+  throw new Error('Function not implemented.');
+}
+

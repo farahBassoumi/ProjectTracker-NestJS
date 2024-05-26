@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // react-router-dom components
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // @mui material components
 import Card from '@mui/material/Card';
@@ -18,23 +18,26 @@ import BasicLayout from 'layouts/authentication/components/BasicLayout';
 
 // Images
 import curved6 from 'assets/images/curved-images/curved14.jpg';
-import { axios } from 'utils';
+import { AxiosInstance } from 'utils';
 
 function SignUp() {
   const [agreement, setAgremment] = useState(true);
   const [formData, setFormData] = useState({
-    password: '',
-    email: '',
-    username: '',
     firstName: '',
     lastName: '',
+    email: '',
+    username: '',
+    password: '',
   });
+  const navigate = useNavigate();
+
   const handleSetAgremment = () => setAgremment(!agreement);
 
   const handleSubmit = async (e) => {
     try {
-      const { data } = await axios.post('/auth/register', formData);
+      const { data } = await AxiosInstance.post('/auth/register', formData);
       localStorage.setItem('auth', JSON.stringify(data));
+      navigate('/projects');
     } catch (error) {
       console.error(error);
     }

@@ -11,10 +11,12 @@ import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
 import Footer from 'examples/Footer';
 import Table from 'examples/Tables/Table';
 import SoftInput from 'components/SoftInput';
+import { fetchProjects } from 'layouts/projects/data/projectsTableData';
 
 // Data a22
 import tasksTableData from 'layouts/tasks/data/tasksTableData';
 import { Grid } from '@mui/material';
+import { useEffect } from 'react';
 
 function Tasks() {
   const { columns: prCols, rows: prRows } = tasksTableData;

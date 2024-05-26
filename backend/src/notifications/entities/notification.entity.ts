@@ -22,6 +22,9 @@ export class Notification {
   @ManyToOne(() => User)
   user: User;
 
+  @Column({ nullable: true })
+  data: string;
+
   @CreateDateColumn()
   createdAt: Date;
 }

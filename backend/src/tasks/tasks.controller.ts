@@ -38,6 +38,7 @@ export class TasksController {
     this.eventEmitter.emit(NotificationType.taskAssignment, {
       user: createTaskDto.assignedTo,
       type: NotificationType.taskAssignment,
+      data: JSON.stringify(res),
     } as CreateNotificationDto);
 
     return res;
@@ -58,16 +59,19 @@ export class TasksController {
     const oldTask = await this.tasksService.findOne(id);
     const res = await this.tasksService.update(id, updateTaskDto);
 
-    this.eventEmitter.emit(NotificationType.taskReassignment, {
-      user: oldTask.assignedTo,
-      type: NotificationType.taskReassignment,
-    } as CreateNotificationDto);
+    if (oldTask.assignedTo != res.assignedTo) {
+      this.eventEmitter.emit(NotificationType.taskReassignment, {
+        user: oldTask.assignedTo,
+        type: NotificationType.taskReassignment,
+        data: JSON.stringify(oldTask),
+      } as CreateNotificationDto);
 
-    this.eventEmitter.emit(NotificationType.taskReassignment, {
-      user: res.assignedTo,
-      type: NotificationType.taskReassignment,
-    } as CreateNotificationDto);
-
+      this.eventEmitter.emit(NotificationType.taskReassignment, {
+        user: res.assignedTo,
+        type: NotificationType.taskReassignment,
+        data: JSON.stringify(res),
+      } as CreateNotificationDto);
+    }
     return res;
   }
 
@@ -78,6 +82,7 @@ export class TasksController {
     this.eventEmitter.emit(NotificationType.taskDeletion, {
       user: task.assignedTo,
       type: NotificationType.taskDeletion,
+      data: JSON.stringify(task),
     } as CreateNotificationDto);
 
     return this.tasksService.remove(id);

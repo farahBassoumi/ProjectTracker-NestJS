@@ -7,7 +7,9 @@ import { CreateNotificationDto } from '../notifications/dto/create-notification.
 export class TaskListener {
   constructor(private notificationsService: NotificationsService) {}
   @OnEvent('**')
-  async handleEverything(payload: CreateNotificationDto) {
-    return this.notificationsService.create(payload);
+  async persistNotification(payload: CreateNotificationDto) {
+    const notif = await this.notificationsService.create(payload);
+    console.log(notif);
+    this.notificationsService.notifyUser(notif);
   }
 }

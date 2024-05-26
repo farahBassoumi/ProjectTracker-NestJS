@@ -15,22 +15,47 @@ export class ProjectsService extends CrudService<Project> {
     super(projectsRepository);
   }
 
-  async findProjectsByUserId(userId: string): Promise<DeepPartial<Project>[]> {
+  async findProjectsByUserId(userId: string): Promise<DeepPartial<object>[]> {
+    // Fetch projects with teams and members
     const projects = await this.repository.find({
-      relations: ['teams', 'teams.members'],
+      relations: ['team', 'team.members', 'tasks'],
     });
 
-    // Filter projects where the user is a member of any team
+    // Filter projects where the user is a member
     const projectsWithUser = projects.filter((project) =>
       project.team.members.some((member) => member.userId === userId),
     );
 
-    const projectsWithUserIdsInfo = projectsWithUser.map((project) => ({
-      projectId: project.id,
-      projectName: project.name,
-      progress: project.progress, // Assuming `progress` is a field in the project object
-    }));
-    return projectsWithUserIdsInfo;
+    // Map project details with completion ratio and status
+    const projectsWithUserDetails = await Promise.all(
+      projectsWithUser.map(async (project) => {
+        // Calculate completion ratio
+        const totalTasks = project.tasks.length;
+        const tasksDone = project.tasks.filter(
+          (task) => task.status === TaskStatus.DONE,
+        ).length;
+        const completion = totalTasks > 0 ? (tasksDone / totalTasks) * 100 : 0;
+
+        // Determine project status
+        let status;
+        if (tasksDone === 0) {
+          status = 'Not Started';
+        } else if (tasksDone === totalTasks) {
+          status = 'Done';
+        } else {
+          status = 'In Progress';
+        }
+
+        return {
+          projectId: project.id,
+          projectName: project.name,
+          completion,
+          status,
+        };
+      }),
+    );
+
+    return projectsWithUserDetails;
   }
 
   async computeProjectDetails(

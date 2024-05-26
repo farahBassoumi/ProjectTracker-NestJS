@@ -1,12 +1,11 @@
-// src/interfaces/Team.js
+import { Project } from './Project';
+import { User } from './User';
 
-const Team = {
-  id: undefined,
-  project: null,
-  teamLeader: null,
-  subLeaders: [],
-  members: [],
-  createdAt: undefined,
-};
-
-export default Team;
+export interface Team {
+  id?: string;
+  project: Project;
+  teamLeader: User;
+  subLeaders?: User[];
+  members?: User[];
+  createdAt?: Date;
+}

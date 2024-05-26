@@ -39,15 +39,6 @@ import Team from 'layouts/team';
 const routes = [
   {
     type: 'collapse',
-    name: 'Project',
-    key: 'project',
-    route: '/project',
-    icon: <Shop size="12px" />,
-    component: <Project />,
-    noCollapse: true,
-  },
-  {
-    type: 'collapse',
     name: 'Projects',
     key: 'projects',
     route: '/projects',

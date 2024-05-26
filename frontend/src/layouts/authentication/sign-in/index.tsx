@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // react-router-dom components
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // @mui material components
 import Switch from '@mui/material/Switch';
@@ -17,12 +17,15 @@ import CoverLayout from 'layouts/authentication/components/CoverLayout';
 
 // Images
 import curved9 from 'assets/images/curved-images/curved-6.jpg';
-import { axios } from 'utils';
+import { AxiosInstance } from 'utils';
 
 function SignIn() {
   const [rememberMe, setRememberMe] = useState(true);
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
+
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
   const handleChange = (e) => {
     setFormData((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
@@ -31,8 +34,9 @@ function SignIn() {
 
   const handleSubmit = async (e) => {
     try {
-      const { data } = await axios.post('/auth/login', formData);
+      const { data } = await AxiosInstance.post('/auth/login', formData);
       localStorage.setItem('auth', JSON.stringify(data));
+      navigate('/projects');
     } catch (error) {
       console.error(error);
     }
