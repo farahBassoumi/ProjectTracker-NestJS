@@ -1,7 +1,8 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 // @mui material components
 import Card from '@mui/material/Card';
-import axios from 'axios';
+import { AxiosInstance } from 'utils';
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
 import SoftTypography from 'components/SoftTypography';
@@ -13,22 +14,31 @@ import Footer from 'examples/Footer';
 import Table from 'examples/Tables/Table';
 
 // Data
-import projectsTableData from 'layouts/projects/data/projectsTableData';
+import projectsTableData, {
+  fetchProjects,
+} from 'layouts/projects/data/projectsTableData';
 import SoftButton from 'components/SoftButton';
 
 import { useState, useEffect } from 'react';
 import SoftInput from 'components/SoftInput';
-import { axios } from 'utils';
 import { Project } from 'interfaces/Project';
 import { TaskStatus } from 'interfaces/TaskStatus';
-import { Padding } from '@mui/icons-material';
 
 function Tables() {
-  const { columns: prCols, rows: prRows } = projectsTableData;
-
   const [showForm, setShowForm] = useState(false);
+  const [projects, setProjects] = useState([]);
   const [projectTitle, setProjectTitle] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
+
+  useEffect(() => {
+    const result = fetchProjects('cd02191e-2ddd-47f2-9777-eb6f8905be2e'); //USERIDREPLACE
+
+    result.then((result) => {
+      setProjects(result);
+    });
+  }, []);
+
+  const { columns: prCols, rows: prRows } = projectsTableData(projects);
 
   const handleAddProject = () => {
     console.log(TaskStatus.DONE);
@@ -36,17 +46,16 @@ function Tables() {
   };
 
   useEffect(() => {
-    getInvitations();
+    getInvitations('cd02191e-2ddd-47f2-9777-eb6f8905be2e'); //USERIDREPLACE
   }, []);
 
   //get invitations data from backend
   const [invitations, setInvitations] = useState([]);
-  const getInvitations = () => {
-    axios
-      .get('http://localhost:3000/invitations/')
+  const getInvitations = (userId) => {
+    AxiosInstance.get('/invitations/')
       .then((response) => {
-        console.log('Invitations fetched successfully:', response.data);
-        setInvitations(response.data);
+        console.log('Invitations fetched successfully:', response.data.data);
+        setInvitations(response.data.data);
       })
       .catch((error) => {
         console.error('Error fetching invitations:', error);
@@ -64,8 +73,7 @@ function Tables() {
     };
 
     // Send POST request to backend
-    axios
-      .post('http://localhost:3000/projects/', newProject)
+    AxiosInstance.post('/projects/', newProject)
       .then((response) => {
         console.log('Project created successfully:', response.data);
         // Reset form fields and hide the form

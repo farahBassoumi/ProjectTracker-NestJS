@@ -1,8 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Icon from '@mui/material/Icon';
-import { axios } from 'utils';
+import { AxiosInstance } from 'utils';
 
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
@@ -36,23 +37,20 @@ const Action = () => {
   );
 };
 
-const ProjectsTableData = () => {
-  const [projectData, setProjectData] = useState([]);
+export const fetchProjects = async (userId) => {
+  try {
+    const response = await AxiosInstance.get(
+      `/projects/findProjectsByUserId/${userId}`,
+    );
+    console.log('fetched projects:', response.data);
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+};
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const userId = 'your-user-id'; // Replace with the actual user ID
-        const response = await axios.get(`/findProjectsByUserId/${userId}`);
-        setProjectData(response.data);
-      } catch (error) {
-        console.error('Error fetching user projects:', error);
-      }
-    };
-
-    fetchProjects();
-  }, []);
-
+const ProjectsTableData = (projectsData) => {
+  console.log(projectsData);
   const formatCompletionColor = (completion) => {
     if (completion >= 100) {
       return 'success';
@@ -70,17 +68,19 @@ const ProjectsTableData = () => {
     { name: 'action', align: 'center' },
   ];
 
-  const rows = projectData.map((project: any) => ({
-    project: [project.projectName],
+  const rows = projectsData.map((project: any) => ({
+    project: [
+      <Link to={`/project/${project.projectId}`}>{project.projectName}</Link>,
+    ],
     status: (
       <SoftTypography variant="caption" color="text" fontWeight="medium">
-        {project.progress.status}
+        {project.status}
       </SoftTypography>
     ),
     completion: (
       <Completion
-        value={project.progress.completion}
-        color={formatCompletionColor(project.progress.completion)}
+        value={project.completion}
+        color={formatCompletionColor(project.completion)}
       />
     ),
     action: <Action />,

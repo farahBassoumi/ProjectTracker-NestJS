@@ -34,6 +34,7 @@ import {
 
 // Images
 import brand from 'assets/images/logo-ct.png';
+import Project from 'layouts/project';
 
 export default function App() {
   const [controller, dispatch] = useSoftUIController();
@@ -148,7 +149,8 @@ export default function App() {
       {layout === 'vr' && <Configurator />}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/projects" />} />
+        <Route path="/project/:projectId" element={<Project />}></Route>
+        <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
       </Routes>
     </ThemeProvider>
   );

@@ -29,7 +29,7 @@ import gradientLineChartData from 'layouts/project/data/gradientLineChartData';
 
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { axios } from 'utils';
+import { AxiosInstance } from 'utils';
 
 function Dashboard() {
   const { size } = typography;
@@ -41,8 +41,9 @@ function Dashboard() {
     // Fetch project data from the backend
     const fetchProject = async () => {
       try {
-        const response = await axios.get(`/projects/${projectId}`);
+        const response = await AxiosInstance.get(`/projects/${projectId}`);
         setProject(response.data);
+        console.log(project);
       } catch (error) {
         console.error('Error fetching project:', error);
       }

@@ -47,7 +47,7 @@ export class ProjectsController {
     });
   }
 
-  @Get(':id')
+  @Get('findProjectsByUserId/:id')
   userProjects(@Param('id') id: string) {
     return this.projectsService.findProjectsByUserId(id);
   }

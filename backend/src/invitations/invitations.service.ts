@@ -28,6 +28,14 @@ export class InvitationsService extends CrudService<Invitation> {
     return super.create(createInvitationDto);
   }
 
+  async findInvitationsByUserId(userId: string): Promise<Invitation[]> {
+    const invitations = await this.repository.find();
+
+    return invitations.filter((invitation) => {
+      invitation.receiver.id == userId;
+    });
+  }
+
   async respond(id: string, updateInvitationDto: UpdateInvitationDto) {
     const invitation = await this.findOne(id, {
       receiver: true,
