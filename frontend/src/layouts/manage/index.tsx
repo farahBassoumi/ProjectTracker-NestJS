@@ -19,14 +19,13 @@ export default function Manage() {
   const [teams, setTeams] = useState([]);
   const [projects, setProjects] = useState([]);
 
-  let userID = '';
-
   const fetchProjects = async () => {
-    const result = axiosInstance.get(`/projects/leader/${userID}`);
-    console.log('result: ', result);
-    result.then((result) => {
-      setProjects(result);
-    });
+    const userId = getUserIdFromToken();
+    const result = await axiosInstance.get(
+      `/projects/findProjectsByLeader/${userId}`,
+    );
+    console.log('result: ', result.data);
+    setProjects(result.data);
   };
 
   const getUserIdFromToken = (): string | null => {
@@ -36,7 +35,6 @@ export default function Manage() {
     }
     try {
       const decodedToken = jwtDecode<any>(token);
-      userID = decodedToken.sub;
       return decodedToken.sub;
     } catch (error) {
       console.error('Failed to decode token:', error);
@@ -45,23 +43,19 @@ export default function Manage() {
   };
 
   useEffect(() => {
-    userID = getUserIdFromToken();
-    console.log('id ', userID);
     fetchProjects();
-    setTeams(exampleProjects);
-  }, []);
+    setTeams(projects);
+  });
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <SoftBox py={3}>
-        {teams.map((team) => (
-          <SoftBox mb={3} key={team.projectId}>
+        {teams.map((team, key) => (
+          <SoftBox mb={3} key={team.id}>
             <Grid container spacing={3}>
-             
               <Grid item xs={12} md={10} lg={12}>
-                <TeamTable name={team.projectName} projectId={team.projectId}  />
-                
+                <TeamTable name={team.name} projectId={team.id} key={key}/>
               </Grid>
             </Grid>
           </SoftBox>
@@ -79,8 +73,6 @@ export default function Manage() {
               </Grid>
             </Grid>
           </SoftBox> */}
-
-
     </DashboardLayout>
   );
 }

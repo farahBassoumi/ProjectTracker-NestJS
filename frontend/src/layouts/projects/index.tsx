@@ -72,6 +72,22 @@ function Tables() {
     setShowForm(true);
   };
 
+  const getUserIdFromToken = (): string | null => {
+    const token = localStorage.getItem('auth');
+
+    if (!token) {
+      return null;
+    }
+
+    try {
+      const decodedToken = jwtDecode<any>(token);
+      return decodedToken.sub;
+    } catch (error) {
+      console.error('Failed to decode token:', error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     getInvitations();
   }, []);
@@ -80,11 +96,12 @@ function Tables() {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
 
   const getInvitations = () => {
+    const userId = getUserIdFromToken();
     axiosInstance
-      .get('/invitations')
+      .get(`/invitations/invitationsByUserId/${userId}`)
       .then((response) => {
-        console.log('Invitations fetched successfully:', response.data.data);
-        setInvitations(response.data.data);
+        console.log('Invitations fetched successfully:', response.data);
+        setInvitations(response.data);
       })
       .catch((error) => {
         if (error instanceof UnauthorizedError) {
