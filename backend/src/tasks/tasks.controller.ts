@@ -102,6 +102,7 @@ export class TasksController {
     } as CreateNotificationDto);
 
     this.eventEmitter.emit(EventType.TaskRemoved, {
+      description: `Task ${task.name}removed`,
       recipient: task.project.id,
       data: task,
     });
