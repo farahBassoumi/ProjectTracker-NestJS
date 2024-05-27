@@ -114,10 +114,41 @@ export class TasksController {
     });
   }
 
+  @Post('stat/:id')
+  async updatestat(@Param('id') id: string, @Body() statusn: number){
+    const oldTask = await this.tasksService.findOne(id);
+    console.log(statusn);
+    let updatetaskDto = new UpdateTaskDto();
+    updatetaskDto.statusn = statusn;
+   
+       // Convert statusn to TaskStatus enum value
+       if (updatetaskDto.statusn !== undefined) {
+        updatetaskDto.status = TaskStatus[Object.keys(TaskStatus)[statusn]];
+      }
+     console.log(TaskStatus[Object.keys(TaskStatus)[statusn]]);
+    console.log(updatetaskDto.status);
+ 
+     const res = await this.tasksService.update(id, updatetaskDto);
+
+     return res;
+    
+  }
+
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
     const oldTask = await this.tasksService.findOne(id);
+   console.log(updateTaskDto.statusn);
+    if (updateTaskDto.statusn !== undefined) {
+      // Convert statusn to TaskStatus enum value
+      const statusKeys = Object.keys(TaskStatus).filter(
+        (key) => !isNaN(Number(TaskStatus[key]))
+      );
+      updateTaskDto.status = TaskStatus[statusKeys[updateTaskDto.statusn]];
+    }
+   console.log(updateTaskDto);
+
     const res = await this.tasksService.update(id, updateTaskDto);
+   
 
     if (oldTask.assignedTo != res.assignedTo) {
       this.eventEmitter.emit(NotificationType.taskReassignment, {
