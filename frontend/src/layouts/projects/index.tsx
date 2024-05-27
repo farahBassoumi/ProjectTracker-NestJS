@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
 // @mui material components
 import Card from '@mui/material/Card';
 import { axiosInstance } from 'utils';
@@ -33,8 +35,6 @@ function Tables() {
   const navigate = useNavigate();
 
   const eventSource = new EventSource('http://localhost:3000/events/sse');
-
-  
 
   eventSource.onmessage = function (event) {
     const eventData = JSON.parse(event.data);
