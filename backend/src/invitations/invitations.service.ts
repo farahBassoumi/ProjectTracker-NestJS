@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Invitation } from './entities/invitation.entity';
 import { UpdateInvitationDto } from './dto/update-invitation.dto';
-import { Member } from 'src/teams/entities/member.entity';
+import { Member } from 'src/members/entities/member.entity';
 import { InvitationStatus } from './enum/invitation-status.enum';
 import { CreateInvitationDto } from './dto/create-invitation.dto';
 import { Pagination } from 'src/common/dto/pagination.dto';

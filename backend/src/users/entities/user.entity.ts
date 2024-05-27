@@ -1,5 +1,5 @@
 import { Exclude, instanceToPlain } from 'class-transformer';
-import { Member } from 'src/teams/entities/member.entity';
+import { Member } from 'src/members/entities/member.entity';
 import {
   Column,
   CreateDateColumn,

@@ -9,13 +9,10 @@ export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
 
   @Get()
-  findAll(@Query() searchDto: SearchDto) {
-    return this.notificationsService.findAll(searchDto);
-  }
-
-  @Get('user/:id')
   findAllByUserId(@UserDecorator() user: User, @Query() searchDto: SearchDto) {
-    return this.notificationsService.findAll(searchDto, { user: user });
+    return this.notificationsService.findAll(searchDto, {
+      user: { id: user.id },
+    });
   }
 
   @Get(':id')

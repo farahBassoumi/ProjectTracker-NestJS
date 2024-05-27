@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
 import Icon from '@mui/material/Icon';

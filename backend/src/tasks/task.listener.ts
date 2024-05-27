@@ -10,10 +10,10 @@ export class TaskListener {
     private notificationsService: NotificationsService,
     private readonly eventsService: EventsService,
   ) {}
-  @OnEvent('notification.*')
+
+  @OnEvent('notification.*.*')
   async persistNotification(payload: CreateNotificationDto) {
     const notif = await this.notificationsService.create(payload);
-    console.log(notif);
     this.notificationsService.notifyUser(notif);
   }
 
