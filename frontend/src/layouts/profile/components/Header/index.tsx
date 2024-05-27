@@ -1,12 +1,8 @@
-// @ts-nocheck
 import { useState, useEffect } from 'react';
 
 // @mui material components
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
-import AppBar from '@mui/material/AppBar';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
@@ -16,31 +12,32 @@ import SoftAvatar from 'components/SoftAvatar';
 // Soft UI Dashboard React examples
 import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
 
-// Soft UI Dashboard React icons
-import Cube from 'examples/Icons/Cube';
-import Document from 'examples/Icons/Document';
-import Settings from 'examples/Icons/Settings';
-
 // Soft UI Dashboard React base styles
 import breakpoints from 'assets/theme/base/breakpoints';
 
 // Images
 import burceMars from 'assets/images/bruce-mars.jpg';
 import curved0 from 'assets/images/curved-images/curved0.jpg';
-import { jwtDecode } from 'jwt-decode';
-import {axiosInstance} from 'utils';
-
+import { user as getUser } from 'utils';
+import { UnauthorizedError } from 'errors/UnauthorizedError';
+import { User } from 'interfaces/User';
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
-  interface user{
-    firstname: string;
-    lastname: string;
-    username: string;
-    createdAt: string;
-  }
   const [tabsOrientation, setTabsOrientation] = useState('horizontal');
-  const [tabValue, setTabValue] = useState(0);
-  const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
+
+  let user_: User;
+
+  try {
+    user_ = getUser();
+  } catch (error) {
+    if (error instanceof UnauthorizedError) {
+      navigate('/sign-in');
+    }
+  }
+
+  const user = user_;
 
   useEffect(() => {
     // A function that sets the orientation state of the tabs.
@@ -61,74 +58,6 @@ function Header() {
     // Remove event listener on cleanup
     return () => window.removeEventListener('resize', handleTabsOrientation);
   }, [tabsOrientation]);
-
-
-
-
-
-
-
-  let userID='';
-  useEffect(() => {
-    userID = getUserIdFromToken();
-    console.log('id ', userID);
-    fetchUser();
-  }, []);
-
-  const fetchUser = async () => {
-
-    try {
-    const response = await axiosInstance.get(
-      `/users/${userID}`,
-    );
-    console.log('fetched user:', response.data);
-    setUser({
-      firstname: response.data.firstName,
-      lastname: response.data.lastName,
-      username: response.data.username,
-      createdAt: response.data.createdAt,
-    });
-
-    return response.data;
-  } catch (error) {
-    console.log('Failed to fetch user:');
-    return null;
-  }
-  
-  }
-
-
-
-
-  const getUserIdFromToken = (): string | null => {
-    const token = localStorage.getItem('auth');
-  
-    if (!token) {
-      return null;
-    }
-  
-    try {
-      const decodedToken = jwtDecode<any>(token); 
-      userID=decodedToken.sub;
-      return decodedToken.sub;
-    } catch (error) {
-      console.error('Failed to decode token:', error);
-      return null;
-    }
-  };
-
-
-
-
-
-
-
-
-
-
-
-
-  const handleSetTabValue = (event, newValue) => setTabValue(newValue);
 
   return (
     <SoftBox className="header" position="relative">
@@ -179,16 +108,11 @@ function Header() {
           <Grid item>
             <SoftBox height="100%" mt={0.5} lineHeight={1}>
               <SoftTypography variant="h5" fontWeight="medium">
-              {user ? 
-              <span> {user.firstname} {user.lastname} </span>
-
-               : 'Loading...'}
+                <span> {`${user.firstName} ${user.lastName}`}</span>
               </SoftTypography>
               <SoftTypography variant="button" color="text" fontWeight="medium">
-              {user ? 
-              <span> {user.username}  </span>
-
-               : 'Loading...'}              </SoftTypography>
+                <span> {user.username} </span>
+              </SoftTypography>
             </SoftBox>
           </Grid>
           {/* <Grid item xs={12} md={6} lg={4} sx={{ ml: 'auto' }}>

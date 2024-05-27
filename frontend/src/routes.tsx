@@ -21,16 +21,13 @@
 */
 
 // Soft UI Dashboard React layouts
-import Project from 'layouts/project';
 import Projects from 'layouts/projects';
 import Profile from 'layouts/profile';
 import SignIn from 'layouts/authentication/sign-in';
 import SignUp from 'layouts/authentication/sign-up';
 import Tasks from 'layouts/tasks';
-import Task from 'layouts/task';
 
 // Soft UI Dashboard React icons
-import Shop from 'examples/Icons/Shop';
 import Office from 'examples/Icons/Office';
 import Document from 'examples/Icons/Document';
 import SpaceShip from 'examples/Icons/SpaceShip';
@@ -79,7 +76,7 @@ const routes = [
     type: 'collapse',
     name: 'Sign In',
     key: 'sign-in',
-    route: '/authentication/sign-in',
+    route: '/sign-in',
     icon: <Document size="12px" />,
     component: <SignIn />,
     noCollapse: true,
@@ -88,7 +85,7 @@ const routes = [
     type: 'collapse',
     name: 'Sign Up',
     key: 'sign-up',
-    route: '/authentication/sign-up',
+    route: '/sign-up',
     icon: <SpaceShip size="12px" />,
     component: <SignUp />,
     noCollapse: true,
