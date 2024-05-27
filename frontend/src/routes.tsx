@@ -46,15 +46,6 @@ const routes = [
   },
   {
     type: 'collapse',
-    name: 'Tasks',
-    key: 'tasks',
-    route: '/tasks',
-    icon: <Office size="12px" />,
-    component: <Tasks />,
-    noCollapse: true,
-  },
-  {
-    type: 'collapse',
     name: 'Manage',
     key: 'manage',
     route: '/manage',
