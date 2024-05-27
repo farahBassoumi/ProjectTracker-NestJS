@@ -1,16 +1,22 @@
 import { Type } from 'class-transformer';
 import { EntityDto } from '../../common/dto/entity.dto';
-import { ValidateNested, IsNotEmpty, Matches } from 'class-validator';
+import {
+  ValidateNested,
+  IsNotEmpty,
+  Matches,
+  IsOptional,
+} from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
 import { Role } from 'src/members/enum/role.enum';
+import { EmailDto } from 'src/common/dto/email.dto';
 
 export class CreateInvitationDto {
   sender: User;
 
-  @Type(() => EntityDto)
+  @Type(() => EmailDto)
   @ValidateNested()
   @IsNotEmpty()
-  receiver: EntityDto;
+  receiver: EmailDto;
 
   @Type(() => EntityDto)
   @ValidateNested()
@@ -26,6 +32,7 @@ export class CreateInvitationDto {
       message: `The role must be either ${Role.SubLeader} or ${Role.Member}.`,
     },
   )
+  @IsOptional()
   role: Role;
 
   expirationDate: Date;
