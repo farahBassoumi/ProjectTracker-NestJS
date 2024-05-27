@@ -38,6 +38,8 @@ import Project from 'layouts/project';
 import Tasks from 'layouts/tasks';
 import Task from 'layouts/task';
 import Invitation from 'layouts/invitations';
+import SignIn from './layouts/authentication/sign-in';
+import SignUp from './layouts/authentication/sign-up';
 
 export default function App() {
   const [controller, dispatch] = useSoftUIController();
@@ -152,6 +154,9 @@ export default function App() {
       {layout === 'vr' && <Configurator />}
       <Routes>
         {getRoutes(routes)}
+        <Route path="/sign-in" element={<SignIn />}></Route>
+        <Route path="/sign-up" element={<SignUp />}></Route>
+
         <Route path="/project/:projectId" element={<Project />}></Route>
         <Route path="/tasks/project/:projectId" element={<Tasks />}></Route>
         <Route path="/tasks/:taskId" element={<Task />}></Route>
