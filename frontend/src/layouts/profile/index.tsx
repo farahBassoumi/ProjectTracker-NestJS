@@ -32,6 +32,7 @@ import projectImage from 'assets/images/project.png';
 //import Project from "layouts/profile/project.model.js";
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import { axiosInstance } from '../../utils';
 
 
 function Overview() {
@@ -45,7 +46,7 @@ let userID='';
 
   
 const fetchprojects = async () => {
-      const result = fetchProjects(userID);
+      const result = axiosInstance.get(`/projects/${userID}`);
   console.log("result: ", result);
       result.then((result) => {
         setProjects(result);
