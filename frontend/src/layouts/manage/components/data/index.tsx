@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-//@ts-nocheck
 import { Box, FormControl, IconButton, MenuItem, Select } from '@mui/material';
 import SoftBox from 'components/SoftBox';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -7,15 +5,19 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from 'utils';
 ///////// role select component
-const RoleSelect = ({ id, role }) => {
+const RoleSelect = ({ teamId, userId, role }) => {
   const [selectedRole, setRole] = useState(role);
 
-  const handleRoleChange = (event) => {
+  const handleRoleChange = async (event) => {
     const role = event.target.value;
-    const result = axiosInstance.patch(`/teams/${id}`, { role });
+
+    const result = await axiosInstance.patch(`/members/${teamId}/${userId}`, {
+      role,
+    });
+
     console.log('result: ', result);
     console.log('role:', role);
-    alert(role);
+
     setRole(role);
   };
 
@@ -32,13 +34,13 @@ const RoleSelect = ({ id, role }) => {
 };
 
 ///////// kick component
-const KickMember = ({ id }) => {
+const KickMember = ({ teamId, userId }) => {
   const navigate = useNavigate();
-  const handleClick = () => {
-    const result=axiosInstance.delete(`/teams/${id}`);
+
+  const handleClick = async () => {
+    const result = await axiosInstance.delete(`/members/${teamId}/${userId}`);
     console.log('result: ', result);
-    alert(id);
-    //// refresh page after kicking member
+
     navigate('/manage');
   };
 
@@ -50,7 +52,7 @@ const KickMember = ({ id }) => {
 };
 
 ///////// format members array into appropriate rows
-export default function formatTeamData(members) {
+export default function formatTeamData([teamId, members]) {
   const rows = members.map((member) => ({
     firstName: (
       <SoftBox display="flex" py={1}>
@@ -63,8 +65,8 @@ export default function formatTeamData(members) {
       </SoftBox>
     ),
     email: member.email,
-    role: <RoleSelect id={member.id} role={member.role} />,
-    kick: <KickMember id={member.id} />,
+    role: <RoleSelect teamId={teamId} userId={member.id} role={member.role} />,
+    kick: <KickMember teamId={teamId} userId={member.id} />,
   }));
 
   return rows;

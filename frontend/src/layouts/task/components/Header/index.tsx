@@ -1,18 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 // @mui material components
-import Card from "@mui/material/Card";
-import Grid from "@mui/material/Grid";
-import AppBar from "@mui/material/AppBar";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
-import { TiArrowBack } from "react-icons/ti";
-import { VscCircleFilled } from "react-icons/vsc";
-import { IconContext } from "react-icons";
-import { FcSms } from "react-icons/fc";
-import { MdDateRange } from "react-icons/md";
-import { LuReplace } from "react-icons/lu";
+import Card from '@mui/material/Card';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import { TiArrowBack } from 'react-icons/ti';
+import { VscCircleFilled } from 'react-icons/vsc';
+import { IconContext } from 'react-icons';
+import { FcSms } from 'react-icons/fc';
+import { MdDateRange } from 'react-icons/md';
+import { LuReplace } from 'react-icons/lu';
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
@@ -20,15 +17,10 @@ import SoftAvatar from "components/SoftAvatar";
 import {getUserIdFromToken} from 'utils/getuserid';
 import { getStatusText } from "utils/taskStatusMapping";
 // Soft UI Dashboard React examples
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-
-// Soft UI Dashboard React icons
-import Cube from "examples/Icons/Cube";
-import Document from "examples/Icons/Document";
-import Settings from "examples/Icons/Settings";
+import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
 
 // Soft UI Dashboard React base styles
-import breakpoints from "assets/theme/base/breakpoints";
+import breakpoints from 'assets/theme/base/breakpoints';
 
 // Images
 import burceMars from "assets/images/bruce-mars.jpg";
@@ -41,7 +33,7 @@ import {
 import { Icon, Menu, MenuItem } from "@mui/material";
 
 function Header() {
-  const [tabsOrientation, setTabsOrientation] = useState("horizontal");
+  const [tabsOrientation, setTabsOrientation] = useState('horizontal');
   const [tabValue, setTabValue] = useState(0);
   const [task, setTask] = useState([]);
   const { taskId } = useParams();
@@ -53,20 +45,20 @@ function Header() {
     // A function that sets the orientation state of the tabs.
     function handleTabsOrientation() {
       return window.innerWidth < breakpoints.values.sm
-        ? setTabsOrientation("vertical")
-        : setTabsOrientation("horizontal");
+        ? setTabsOrientation('vertical')
+        : setTabsOrientation('horizontal');
     }
 
     /** 
      The event listener that's calling the handleTabsOrientation function when resizing the window.
     */
-    window.addEventListener("resize", handleTabsOrientation);
+    window.addEventListener('resize', handleTabsOrientation);
 
     // Call the handleTabsOrientation function to set the state with the initial value.
     handleTabsOrientation();
 
     // Remove event listener on cleanup
-    return () => window.removeEventListener("resize", handleTabsOrientation);
+    return () => window.removeEventListener('resize', handleTabsOrientation);
   }, [tabsOrientation]);
 
   useEffect(() => {
@@ -126,11 +118,12 @@ function Header() {
       <Card
         sx={{
           backdropFilter: `saturate(200%) blur(30px)`,
-          backgroundColor: ({ functions: { rgba }, palette: { white } }) => rgba(white.main, 0.8),
+          backgroundColor: ({ functions: { rgba }, palette: { white } }) =>
+            rgba(white.main, 0.8),
           boxShadow: ({ boxShadows: { navbarBoxShadow } }) => navbarBoxShadow,
-          position: "relative",
+          position: 'relative',
           mt: -25,
-          mx: 3,  
+          mx: 3,
           py: 2,
           px: 2,
         }}
@@ -143,20 +136,26 @@ function Header() {
               </SoftTypography>
             </SoftBox>
           </Grid>
-          <Grid item >
-          <SoftTypography variant="h5" fontWeight="medium" borderLeft={1} borderColor={"#344767"}>
-           &nbsp;&nbsp;<TiArrowBack /> Back TO WORK Items
-              </SoftTypography>
-          
-            </Grid>
+          <Grid item>
+            <SoftTypography
+              variant="h5"
+              fontWeight="medium"
+              borderLeft={1}
+              borderColor={'#344767'}
+            >
+              &nbsp;&nbsp;
+              <TiArrowBack /> Back TO WORK Items
+            </SoftTypography>
+          </Grid>
         </Grid>
       </Card>
       <Card
         sx={{
           backdropFilter: `saturate(200%) blur(30px)`,
-          backgroundColor: ({ functions: { rgba }, palette: { white } }) => rgba(white.main, 0.8),
+          backgroundColor: ({ functions: { rgba }, palette: { white } }) =>
+            rgba(white.main, 0.8),
           boxShadow: ({ boxShadows: { navbarBoxShadow } }) => navbarBoxShadow,
-          position: "relative",
+          position: 'relative',
           mt: 5,
           mx: 3,
           py: 2,
@@ -165,11 +164,25 @@ function Header() {
       >
         <Grid container spacing={3} alignItems="center">
           <Grid item>
-          <Box sx={{ display: 'grid', gridTemplateColumns: 'max-content auto', gap: 2, mt: 2 }}>
-          <IconContext.Provider value={{ color: "blue", size: 20, className: "global-class-name" }}>
-          <SoftTypography variant="h5" fontWeight="medium">
-                State &nbsp;&nbsp;&nbsp;&nbsp;
-              </SoftTypography></IconContext.Provider>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: 'max-content auto',
+                gap: 2,
+                mt: 2,
+              }}
+            >
+              <IconContext.Provider
+                value={{
+                  color: 'blue',
+                  size: 20,
+                  className: 'global-class-name',
+                }}
+              >
+                <SoftTypography variant="h5" fontWeight="medium">
+                  State &nbsp;&nbsp;&nbsp;&nbsp;
+                </SoftTypography>
+              </IconContext.Provider>
               <SoftTypography variant="h4" fontWeight="medium">
               <VscCircleFilled />&nbsp;&nbsp;&nbsp;{task.status ? getStatusText(Number(task.status)) : 'To Do'}
               </SoftTypography>
@@ -179,13 +192,28 @@ function Header() {
               <SoftTypography variant="h4" fontWeight="medium">
               <LuReplace />&nbsp;&nbsp;&nbsp;{task.project ? task.project.name : 'project'}
               </SoftTypography>
-        </Box></Grid>
-        <Grid item>
-          <Box sx={{ display: 'grid', gridTemplateColumns: 'max-content auto', gap: 3, mt: 3 }}>
-          <IconContext.Provider value={{ color: "blue", size: 20, className: "global-class-name" }}>
-          <SoftTypography variant="h5" fontWeight="medium">
-                Comments &nbsp;&nbsp;&nbsp;&nbsp;
-              </SoftTypography></IconContext.Provider>
+            </Box>
+          </Grid>
+          <Grid item>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: 'max-content auto',
+                gap: 3,
+                mt: 3,
+              }}
+            >
+              <IconContext.Provider
+                value={{
+                  color: 'blue',
+                  size: 20,
+                  className: 'global-class-name',
+                }}
+              >
+                <SoftTypography variant="h5" fontWeight="medium">
+                  Comments &nbsp;&nbsp;&nbsp;&nbsp;
+                </SoftTypography>
+              </IconContext.Provider>
               <SoftTypography variant="h4" fontWeight="medium">
               <FcSms />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{task.comments ? task.comments.length : 0}
               </SoftTypography>

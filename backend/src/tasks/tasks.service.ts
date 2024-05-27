@@ -15,8 +15,10 @@ export class TasksService extends CrudService<Task> {
   }
 
   async findAllTasks(): Promise<Task[]> {
-    return this.repository.find({relations: ['comments', 'project', 'creator', 'assignedTo'], } );
-  } 
+    return this.repository.find({
+      relations: ['comments', 'project', 'creator', 'assignedTo'],
+    });
+  }
 
   findByProjectId(projectId: string) {
     return this.repository.find({
@@ -24,5 +26,4 @@ export class TasksService extends CrudService<Task> {
       relations: ['project', 'creator', 'assignedTo'],
     });
   }
-
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CrudService } from '../common/crud/crud.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Project } from './entities/project.entity';
 import { ProjectCalculationDetails } from './dto/project-calculation-details.dto';
 import { TaskStatus } from 'src/tasks/enums/task-status.enum';
@@ -21,20 +21,6 @@ export class ProjectsService extends CrudService<Project> {
     super(projectsRepository);
   }
 
-  async findProjectsByUserId(userId: string): Promise<DeepPartial<object>[]> {
-    // Fetch projects with teams and members
-    const projects = await this.repository.find({
-      relations: ['team', 'team.members', 'tasks'],
-    });
-
-    // Filter projects where the user is a member
-    const projectsWithUser = projects.filter((project) =>
-      project.team.members.some((member) => member.userId === userId),
-    );
-
-    return projectsWithUser;
-  }
-
   async findAllByUser(
     searchDto: SearchDto,
     userId: string,
@@ -45,6 +31,9 @@ export class ProjectsService extends CrudService<Project> {
         team: { members: { userId } },
       },
       {
+        team: {
+          members: true,
+        },
         tasks: true,
       },
     );

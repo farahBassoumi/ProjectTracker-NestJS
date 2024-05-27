@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 import { User } from '../../users/entities/user.entity';
-import { Role } from './enum/role.enum';
+import { Role } from '../enum/role.enum';
 import { Team } from '../../teams/entities/team.entity';
 
 @Entity('member')

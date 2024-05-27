@@ -18,7 +18,7 @@ export class TeamsController {
   }
 
   @Get(':id/invitations')
-  findAllInvitaions(@Param('id') id: string, @Query() searchDto: SearchDto) {
+  findAllInvitations(@Param('id') id: string, @Query() searchDto: SearchDto) {
     return this.teamsService.findAllInvitations(id, searchDto);
   }
 

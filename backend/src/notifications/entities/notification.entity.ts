@@ -22,8 +22,8 @@ export class Notification {
   @ManyToOne(() => User)
   user: User;
 
-  @Column({ nullable: true })
-  data: string;
+  @Column({ type: 'jsonb' })
+  data: object;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,4 +1,3 @@
-// @ts-nocheck 
 // @mui material components
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
@@ -29,30 +28,23 @@ import team4 from 'assets/images/team-4.jpg';
 import projectImage from 'assets/images/project.png';
 //import Project from "layouts/profile/project.model.js";
 import { useEffect, useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
-import { axiosInstance } from '../../utils';
+import { axiosInstance, user as getUser } from 'utils';
 import { UnauthorizedError } from 'errors/UnauthorizedError';
 import { useNavigate } from 'react-router-dom';
-import { Project } from 'interfaces/Project';
+import { ProjectDisplay } from 'interfaces/ProjectDisplay';
 
 function Overview() {
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<ProjectDisplay[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userID = getUserIdFromToken();
-
     async function fetchData() {
-      console.log(userID);
-      const response = await axiosInstance.get(
-        `/projects/findProjectsByUserId/${userID}`,
-      );
-      return response.data;
+      const response = await axiosInstance.get(`/projects`);
+      return response.data.data;
     }
 
     fetchData()
       .then((result) => {
-        console.log(result);
         setProjects(result);
       })
       .catch((error) => {
@@ -61,22 +53,6 @@ function Overview() {
         }
       });
   }, []);
-
-  const getUserIdFromToken = (): string | null => {
-    const token = localStorage.getItem('auth');
-
-    if (!token) {
-      return null;
-    }
-
-    try {
-      const decodedToken = jwtDecode<any>(token);
-      return decodedToken.sub;
-    } catch (error) {
-      console.error('Failed to decode token:', error);
-      return null;
-    }
-  };
 
   const authorsList = [
     [
@@ -136,15 +112,14 @@ function Overview() {
           </SoftBox>
           <SoftBox p={2}>
             <Grid container spacing={3}>
-              {projects.map((project: Project, index) => (
+              {projects.map((project, index) => (
                 <Grid item xs={12} md={6} xl={4} key={project.id}>
                   <DefaultProjectCard
-                    key={project.id}
                     key={project.id}
                     image={projectImage}
                     title={project.name}
                     description={project.description}
-                    status="test"
+                    status={project.status}
                     action={{
                       type: 'internal',
                       route: '/pages/profile/profile-overview',

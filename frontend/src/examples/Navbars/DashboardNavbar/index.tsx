@@ -16,7 +16,6 @@ import Icon from '@mui/material/Icon';
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
 import SoftTypography from 'components/SoftTypography';
-import SoftInput from 'components/SoftInput';
 
 // Soft UI Dashboard React examples
 import Breadcrumbs from 'examples/Breadcrumbs';
@@ -41,7 +40,6 @@ import {
 
 // Images
 import team2 from 'assets/images/team-2.jpg';
-import logoSpotify from 'assets/images/small-logos/logo-spotify.svg';
 import webSocketService from '../../../utils/websocketService';
 import { user } from '../../../utils/user';
 import { User } from '../../../interfaces/User';
@@ -52,6 +50,7 @@ import {
 import { axiosInstance } from '../../../utils';
 import { Task } from '../../../interfaces/Task';
 import { Invitation } from '../../../interfaces/Invitation';
+import dateFormatter from '../../../utils/dateFormatter';
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
@@ -65,12 +64,21 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchNotifs = async () => {
+    const fetchNotifications = async () => {
       const res = await axiosInstance.get(`/notifications`);
+      res.data.data = res.data.data
+        .map(({ createdAt, ...notif }) => {
+          return { createdAt: new Date(createdAt), ...notif };
+        })
+        .sort(function (a, b) {
+          var c = a.createdAt;
+          var d = b.createdAt;
+          return d - c;
+        });
       setNotifications(res.data.data);
     };
 
-    fetchNotifs();
+    fetchNotifications();
 
     webSocketService.connect(currentUser.id);
 
@@ -138,44 +146,44 @@ function DashboardNavbar({ absolute, light, isMini }) {
       sx={{ mt: 2 }}
     >
       {notifications.length != 0 &&
-        notifications.map((notification: Notification) => {
-          const date = notification.createdAt;
+        notifications.map(({ createdAt, type: type_, data }: Notification) => {
+          const date = new Date(createdAt);
+          const { id, name } = data;
           let title;
           let targetId;
           let subtitle;
           let type;
-          const data = JSON.parse(notification.data);
 
-          switch (notification.type) {
+          switch (type_) {
             case NotificationType.projectInvitation:
               title = 'Project Invitation ';
-              subtitle = '';
-              targetId = (data as Invitation).id;
+              targetId = id;
+              subtitle = data.project?.name;
               type = 'invitations';
               break;
             case NotificationType.taskAssignment:
               title = 'Task Assigned: ';
-              targetId = (data as Task).id;
-              subtitle = (data as Task).name;
+              targetId = id;
+              subtitle = name;
               type = 'tasks';
               break;
             case NotificationType.taskDeletion:
               title = 'Task Deleted ';
-              targetId = (data as Task).id;
-              subtitle = (data as Task).name;
+              targetId = id;
+              subtitle = name;
               type = 'tasks';
               break;
             case NotificationType.taskReassignment:
               title = 'Your Task was Reassigned to someone else womp womp';
-              targetId = (data as Task).id;
-              subtitle = (data as Task).name;
+              targetId = id;
+              subtitle = name;
               type = 'tasks';
 
               break;
             case NotificationType.taskComment:
               title = 'Comment Added On Task';
-              targetId = (data as Task).id;
-              subtitle = (data as Task).name;
+              targetId = id;
+              subtitle = name;
               type = 'tasks';
 
               break;
@@ -191,9 +199,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
 
           return (
             <NotificationItem
+              key={id}
               image={<img src={team2} alt="person" />}
               title={[title, subtitle]}
-              date={date}
+              date={dateFormatter(date)}
               onClick={(e) => handleNotificationClick(e, targetId, type)}
             />
           );

@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 // @mui material components
 import Card from '@mui/material/Card';
 import { axiosInstance } from 'utils';
@@ -21,7 +19,6 @@ import SoftButton from 'components/SoftButton';
 import { useState, useEffect } from 'react';
 import SoftInput from 'components/SoftInput';
 import { Project } from 'interfaces/Project';
-import { TaskStatus } from 'interfaces/TaskStatus';
 import { Invitation } from 'interfaces/Invitation';
 import { useNavigate } from 'react-router-dom';
 import { UnauthorizedError } from 'errors/UnauthorizedError';
@@ -81,9 +78,9 @@ function Tables() {
 
   const getInvitations = () => {
     axiosInstance
-      .get('/invitations')
+      .get(`/invitations`)
       .then((response) => {
-        console.log('Invitations fetched successfully:', response.data.data);
+        console.log('Invitations fetched successfully:', response.data);
         setInvitations(response.data.data);
       })
       .catch((error) => {
@@ -92,6 +89,7 @@ function Tables() {
         }
       });
   };
+
   const handleSubmit = () => {
     // Handle form submission here, e.g., send data to backend
     console.log('Project Title:', projectTitle);
@@ -187,9 +185,8 @@ function Tables() {
           </SoftBox>
           <SoftBox>
             {invitations.map((invitation, index) => (
-              <div>
+              <div key={invitation.id}>
                 <div
-                  key={invitation.id}
                   style={{
                     padding: '10px',
                     fontSize: '0.9rem',
