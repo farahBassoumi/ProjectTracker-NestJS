@@ -16,10 +16,7 @@ export class Event {
   @Column()
   name: string;
 
-  @Column({
-    type: 'enum',
-    enum: EventType,
-  })
+  @Column()
   type: EventType;
 
   @ManyToOne(() => Project)
