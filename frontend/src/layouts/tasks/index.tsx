@@ -60,7 +60,7 @@ function Tasks() {
     fetchData();
   }, []);
 
-  console.log('ts:', tasks);
+  console.log('tasks:', tasks);
   const { columns: taskCols, rows: taskRows } = tasksTableData(tasks);
 
   const handleAddTask = () => {
