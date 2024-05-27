@@ -88,7 +88,7 @@ function Tasks() {
       description: taskDescription,
       project: { id: selectedProject }, // Wrap projectId in an object as required by DTO
       assignedTo: assignedTo ? { id: assignedTo } : undefined,
-      DueDate: deadlineInMilliseconds,
+      dueDate: deadlineInMilliseconds,
     };
 
     // Send POST request to backend
