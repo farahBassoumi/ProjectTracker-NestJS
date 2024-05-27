@@ -5,6 +5,7 @@ import { Box, Dialog, DialogTitle } from '@mui/material';
 import SoftButton from 'components/SoftButton';
 import SoftInput from 'components/SoftInput';
 import React, { useState } from 'react';
+import { axiosInstance } from 'utils';
 
 export default function InviteMemberDialog({ teamId, onClose, open }) {
   const [email, setEmail] = useState('');
@@ -12,10 +13,21 @@ export default function InviteMemberDialog({ teamId, onClose, open }) {
   const handleClose = () => {
     onClose();
   };
-  const handleInvite = (teamId, email) => {
-    alert(`teamId:${teamId}   email:${email}`);
+
+  const handleInvite = async (teamId: string, email: string) => {
+    await axiosInstance.post('/invitations', {
+      receiver: {
+        email,
+      },
+      team: {
+        id: teamId,
+      },
+    });
+
+    setEmail('');
     onClose();
   };
+
   const handleInputChange = (event) => {
     setEmail(event.target.value);
   };
