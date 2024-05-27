@@ -51,7 +51,7 @@ export class TasksController {
       }
     }
     const dueDate = new Date();
-    dueDate.setTime(dueDate.getTime() + createTaskDto.DueDate);
+    dueDate.setTime(dueDate.getTime() + createTaskDto.dueDate);
 
     const res = await this.tasksService.create({
       ...createTaskDto,
@@ -60,8 +60,6 @@ export class TasksController {
       status: TaskStatus.TO_DO,
       assignedTo: assignedToUser,
     });
-
-    console.log('here 1');
 
     const newEvent: CreateEventDto = {
       description: 'Task Created',
@@ -78,7 +76,6 @@ export class TasksController {
       data: res,
     } as CreateNotificationDto);
 
-    console.log('here2');
 
     this.eventEmitter.emit(EventType.TaskCreated, {
       description: `Task ${createTaskDto.name} added`,
@@ -86,7 +83,6 @@ export class TasksController {
       data: createTaskDto,
     });
 
-    console.log('here3');
     return res;
   }
 

@@ -9,6 +9,7 @@ import SoftBox from 'components/SoftBox';
 import SoftTypography from 'components/SoftTypography';
 import SoftAvatar from 'components/SoftAvatar';
 import done from '../../../../assets/images/small-logos/profilesvg.svg';
+import { Member } from 'interfaces/Member';
 
 function ProjectMembers({ team }) {
   return (
@@ -41,9 +42,11 @@ function ProjectMembers({ team }) {
           <SoftBox>
             <Grid container spacing={3} display="flex" flexDirection="row">
               <Grid item xs={12} sm={6} xl={3} display="flex">
-                {team.members.map((member) => (
-                  <><SoftAvatar src={done} /><SoftAvatar src={done} /><SoftAvatar src={done} /></>
-
+                {team.members.map((member: Member) => (
+                  <SoftAvatar
+                    key={member.userId}
+                    src={member.user?.profilePicture ?? done}
+                  />
                 ))}
               </Grid>
             </Grid>

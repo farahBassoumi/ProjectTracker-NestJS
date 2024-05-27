@@ -32,53 +32,76 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from 'utils';
 import { TaskStatus } from 'interfaces/TaskStatus';
+import { EventSourcePolyfill } from 'event-source-polyfill';
+import { baseURL } from 'utils';
+import { Project } from 'interfaces/Project';
 
 function Dashboard() {
+  const { projectId } = useParams();
+  const [project, setProject] = useState<Project | null>(null);
+  const [eventSource, setEventSource] = useState<EventSource | null>(null);
+
   const { size } = typography;
   const { chart, items } = reportsBarChartData;
-  const { projectId } = useParams(); // Get the project ID from the URL params
-  const [project, setProject] = useState(null);
 
-  const auth = localStorage.getItem('auth');
-  const parsedAuth = JSON.parse(auth);
-  console.log(parsedAuth['accessToken']);
+  useEffect(() => {
+    const authString = localStorage.getItem('auth');
 
-  const eventSource = new EventSource('http://localhost:3000/events/sse', {
-    headers: {
-      authorizationHeader: `Bearer ${parsedAuth['accessToken']}`, // and/or any other headers you need
-    },
-  });
-
-  eventSource.onmessage = function (event) {
-    const eventData = JSON.parse(event.data);
-
-    // Check if the received event is for the current project
-    if (eventData.type !== null) {
-      const newTask = eventData.data;
-      // Handle the new task event, for example, update the UI
-      console.log(newTask);
+    if (!authString) {
+      return;
     }
-  };
+
+    const { accessToken } = JSON.parse(authString);
+
+    const eventSource = new EventSourcePolyfill(
+      `${baseURL}/events/sse/${projectId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          ['Keep-Alive']: 'timeout=3600, max=0',
+        },
+      },
+    );
+
+    eventSource.onmessage = function (event) {
+      console.log('sse event: ', event);
+
+      const eventData = JSON.parse(event.data);
+      console.log(eventData);
+
+      // Check if the received event is for the current project
+      if (eventData.type !== null) {
+        const newTask = eventData.data;
+        // Handle the new task event, for example, update the UI
+        console.log(newTask);
+      }
+
+      eventSource.onerror = (event) => {
+        console.error('sse error:', event);
+      };
+    };
+
+    setEventSource(eventSource);
+  }, [projectId]);
 
   useEffect(() => {
     // Fetch project data from the backend
     const fetchProject = async () => {
       const response = await axiosInstance.get(`/projects/${projectId}`);
+
       setProject(response.data);
-      console.log(project);
     };
 
     fetchProject();
-  }, []); // Fetch project data whenever the project ID changes
+  }, [projectId]); // Fetch project data whenever the project ID changes
 
   if (!project) {
     // Render loading state or return null if no project data is available
-    return null;
+    return <></>;
   }
 
   const projectTasksLink = `/tasks/project/${projectId}`;
 
-  console.log(project);
   return (
     <DashboardLayout>
       <SoftBox py={3}>

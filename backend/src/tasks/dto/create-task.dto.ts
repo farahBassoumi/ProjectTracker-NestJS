@@ -1,5 +1,6 @@
 import {
   IsDefined,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -10,9 +11,11 @@ import { Type } from 'class-transformer';
 
 export class CreateTaskDto {
   @IsString()
+  @IsNotEmpty()
   name: string;
 
   @IsString()
+  @IsNotEmpty()
   description: string;
 
   @Type(() => EntityDto)
@@ -27,5 +30,5 @@ export class CreateTaskDto {
   assignedTo?: EntityDto;
 
   @IsNumber()
-  DueDate: number;
+  dueDate: number;
 }
