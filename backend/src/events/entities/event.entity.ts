@@ -20,11 +20,11 @@ export class Event {
   @Column()
   type: EventType;
 
-  @OneToOne(() => User)
-  user: User;
+  @Column()
+  userId: string;
 
-  @ManyToOne(() => Project)
-  project: Project;
+  @Column()
+  projectId: string;
 
   @CreateDateColumn()
   createdAt: Date;

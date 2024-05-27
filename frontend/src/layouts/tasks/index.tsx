@@ -21,7 +21,11 @@ import Footer from 'examples/Footer';
 import Table from 'examples/Tables/Table';
 
 // Data
-import tasksTableData, { fetchTasks, fetchProjects, fetchTeamMembers } from 'layouts/tasks/data/tasksTableData';
+import tasksTableData, {
+  fetchTasks,
+  fetchProjects,
+  fetchTeamMembers,
+} from 'layouts/tasks/data/tasksTableData';
 import { UnauthorizedError } from 'errors/UnauthorizedError';
 
 function Tasks() {
@@ -120,16 +124,28 @@ function Tasks() {
             rows={4}
           />
           <SoftBox mt={2}>
-            <select value={selectedProject} onChange={(e) => setSelectedProject(e.target.value)} style={{ width: '100%', padding: '10px', margin: '8px 0' }}>
-              <option value="" disabled>Select a project</option>
+            <select
+              value={selectedProject}
+              onChange={(e) => setSelectedProject(e.target.value)}
+              style={{ width: '100%', padding: '10px', margin: '8px 0' }}
+            >
+              <option value="" disabled>
+                Select a project
+              </option>
               {projects.map((project) => (
                 <option key={project.id} value={project.id}>
                   {project.name}
                 </option>
               ))}
             </select>
-            <select value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)} style={{ width: '100%', padding: '10px', margin: '8px 0' }}>
-              <option value="" disabled>Select a team member</option>
+            <select
+              value={assignedTo}
+              onChange={(e) => setAssignedTo(e.target.value)}
+              style={{ width: '100%', padding: '10px', margin: '8px 0' }}
+            >
+              <option value="" disabled>
+                Select a team member
+              </option>
               {teamMembers.map((member) => (
                 <option key={member.id} value={member.id}>
                   {member.firstName} {member.lastName}
@@ -140,22 +156,31 @@ function Tasks() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit} color="primary">Submit</Button>
+          <Button onClick={handleSubmit} color="primary">
+            Submit
+          </Button>
         </DialogActions>
       </Dialog>
       <SoftBox py={3}>
         <Card>
-          <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+          <SoftBox
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            p={3}
+          >
             <SoftTypography variant="h6">My Tasks</SoftTypography>
           </SoftBox>
-          <SoftBox sx={{
-            '& .MuiTableRow-root:not(:last-child)': {
-              '& td': {
-                borderBottom: ({ borders: { borderWidth, borderColor } }) =>
-                  `${borderWidth[1]} solid ${borderColor}`,
+          <SoftBox
+            sx={{
+              '& .MuiTableRow-root:not(:last-child)': {
+                '& td': {
+                  borderBottom: ({ borders: { borderWidth, borderColor } }) =>
+                    `${borderWidth[1]} solid ${borderColor}`,
+                },
               },
-            },
-          }}>
+            }}
+          >
             <Table columns={taskCols} rows={taskRows} />
           </SoftBox>
         </Card>
