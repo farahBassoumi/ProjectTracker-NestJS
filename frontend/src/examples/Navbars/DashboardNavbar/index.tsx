@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 // react-router components
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 
 // prop-types is a library for typechecking of props.
 import PropTypes from 'prop-types';
@@ -42,6 +42,16 @@ import {
 // Images
 import team2 from 'assets/images/team-2.jpg';
 import logoSpotify from 'assets/images/small-logos/logo-spotify.svg';
+import webSocketService from '../../../utils/websocketService';
+import { user } from '../../../utils/user';
+import { User } from '../../../interfaces/User';
+import {
+  Notification,
+  NotificationType,
+} from '../../../interfaces/Notification';
+import { axiosInstance } from '../../../utils';
+import { Task } from '../../../interfaces/Task';
+import { Invitation } from '../../../interfaces/Invitation';
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
@@ -50,6 +60,31 @@ function DashboardNavbar({ absolute, light, isMini }) {
     controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split('/').slice(1);
+  const currentUser: User = user();
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchNotifs = async () => {
+      const res = await axiosInstance.get(`/notifications`);
+      setNotifications(res.data.data);
+    };
+
+    fetchNotifs();
+
+    webSocketService.connect(currentUser.id);
+
+    webSocketService.onNotification((notification: Notification) => {
+      setNotifications((prevNotifications) => [
+        notification,
+        ...prevNotifications,
+      ]);
+    });
+
+    return () => {
+      webSocketService.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     // Setting the navbar type
@@ -85,9 +120,12 @@ function DashboardNavbar({ absolute, light, isMini }) {
     setOpenConfigurator(dispatch, !openConfigurator);
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
-
+  const handleNotificationClick = (e, targetId, type) => {
+    e.preventDefault();
+    navigate(`${type}/${targetId}`);
+  };
   // Render the notifications menu
-  const renderMenu = () => (
+  const renderMenu = (notifications) => (
     <Menu
       anchorEl={openMenu}
       anchorReference={null}
@@ -99,32 +137,67 @@ function DashboardNavbar({ absolute, light, isMini }) {
       onClose={handleCloseMenu}
       sx={{ mt: 2 }}
     >
-      <NotificationItem
-        image={<img src={team2} alt="person" />}
-        title={['New message', 'from Laur']}
-        date="13 minutes ago"
-        onClick={handleCloseMenu}
-      />
-      <NotificationItem
-        image={<img src={logoSpotify} alt="person" />}
-        title={['New album', 'by Travis Scott']}
-        date="1 day"
-        onClick={handleCloseMenu}
-      />
-      <NotificationItem
-        color="secondary"
-        image={
-          <Icon
-            fontSize="small"
-            sx={{ color: ({ palette: { white } }) => white.main }}
-          >
-            payment
-          </Icon>
-        }
-        title={['', 'Payment successfully completed']}
-        date="2 days"
-        onClick={handleCloseMenu}
-      />
+      {notifications.length != 0 &&
+        notifications.map((notification: Notification) => {
+          const date = notification.createdAt;
+          let title;
+          let targetId;
+          let subtitle;
+          let type;
+          const data = JSON.parse(notification.data);
+
+          switch (notification.type) {
+            case NotificationType.projectInvitation:
+              title = 'Project Invitation ';
+              subtitle = '';
+              targetId = (data as Invitation).id;
+              type = 'invitations';
+              break;
+            case NotificationType.taskAssignment:
+              title = 'Task Assigned: ';
+              targetId = (data as Task).id;
+              subtitle = (data as Task).name;
+              type = 'tasks';
+              break;
+            case NotificationType.taskDeletion:
+              title = 'Task Deleted ';
+              targetId = (data as Task).id;
+              subtitle = (data as Task).name;
+              type = 'tasks';
+              break;
+            case NotificationType.taskReassignment:
+              title = 'Your Task was Reassigned to someone else womp womp';
+              targetId = (data as Task).id;
+              subtitle = (data as Task).name;
+              type = 'tasks';
+
+              break;
+            case NotificationType.taskComment:
+              title = 'Comment Added On Task';
+              targetId = (data as Task).id;
+              subtitle = (data as Task).name;
+              type = 'tasks';
+
+              break;
+
+            default:
+              title = '';
+              targetId = '';
+              subtitle = '';
+              type = 'tasks';
+
+              break;
+          }
+
+          return (
+            <NotificationItem
+              image={<img src={team2} alt="person" />}
+              title={[title, subtitle]}
+              date={date}
+              onClick={(e) => handleNotificationClick(e, targetId, type)}
+            />
+          );
+        })}
     </Menu>
   );
 
@@ -213,7 +286,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   notifications
                 </Icon>
               </IconButton>
-              {renderMenu()}
+              {renderMenu(notifications)}
             </SoftBox>
           </SoftBox>
         )}
