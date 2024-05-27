@@ -15,6 +15,7 @@ import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
 import { InvitationStatus } from 'interfaces/InvitationStatus';
 import { type Invitation } from 'interfaces/Invitation';
 import SoftButton from 'components/SoftButton';
+import dateFormatter from '../../utils/dateFormatter';
 
 function Invitation() {
   const [invitation, setInvitation] = useState<Invitation | null>(null);
@@ -118,23 +119,35 @@ function Invitation() {
             </SoftBox>
           </CoverLayout> */}
       <SoftBox py={3}>
-        <SoftBox mt={4} mb={1}>
-          <SoftButton
-            variant="gradient"
-            color="error"
-            onClick={() => handleRespond(InvitationStatus.Dismissed)}
-          >
-            Dismiss
-          </SoftButton>
+        <SoftBox>
+          You Have received an invitation to join a Project from{' '}
+          <b> {invitation?.sender.username} </b> . It expires{' '}
+          {dateFormatter(new Date(invitation?.expirationDate))}.
+          <br /> Project Details:
+          <ul style={{ marginLeft: '3cm' }}>
+            <li> Name: {invitation?.team.project.name}</li>
+            <li> Short Description: {invitation?.team.project.description}</li>
+          </ul>
         </SoftBox>
-        <SoftBox mt={4} mb={1}>
-          <SoftButton
-            variant="gradient"
-            color="info"
-            onClick={() => handleRespond(InvitationStatus.Accepted)}
-          >
-            Accept
-          </SoftButton>
+        <SoftBox mt={4} mb={1} display="flex" justifyContent="space-evenly">
+          <SoftBox mt={4} mb={1}>
+            <SoftButton
+              variant="gradient"
+              color="error"
+              onClick={() => handleRespond(InvitationStatus.Dismissed)}
+            >
+              Dismiss
+            </SoftButton>
+          </SoftBox>
+          <SoftBox mt={4} mb={1}>
+            <SoftButton
+              variant="gradient"
+              color="info"
+              onClick={() => handleRespond(InvitationStatus.Accepted)}
+            >
+              Accept
+            </SoftButton>
+          </SoftBox>
         </SoftBox>
       </SoftBox>
     </DashboardLayout>

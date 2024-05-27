@@ -180,40 +180,70 @@ function Tables() {
           </SoftBox>
           <SoftBox>
             {invitations.map((invitation, index) => (
-              <div key={invitation.id}>
-                <div
-                  style={{
-                    padding: '10px',
-                    fontSize: '0.9rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginRight: '10%',
-                    marginLeft: '10%',
-                  }}
-                >
-                  <div>{`from: ${invitation.sender.firstName} ${invitation.sender.lastName}`}</div>
+              <SoftBox
+                display="flex"
+                justifyContent="space-evenly"
+                py={3}
+                style={{ fontSize: '1rem' }}
+                key={invitation.id}
+              >
+                <div>
+                  Invitation to Project <b> {invitation.team.project.name} </b>{' '}
+                  received from: <b>{invitation.sender.username}.</b>
                 </div>
-                <div
-                  style={{
-                    marginRight: '4%',
-                    marginLeft: '4%',
+                <SoftButton
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate(`/invitations/${invitation.id}`);
                   }}
+                  color="#7E8EF1"
+                  sx={{ background: '#7E8EF1', color: '#000' }}
                 >
-                  {' '}
-                  {index !== invitations.length - 1 && (
-                    <hr
-                      style={{
-                        borderWidth: '1px',
-                        borderColor: 'lightgrey',
-                        opacity: 0.5,
-                        margin: '8px 0',
-                      }}
-                    />
-                  )}
-                </div>
-                <div style={{ height: '8px' }}></div>
-              </div>
+                  View Invitation Details
+                </SoftButton>
+              </SoftBox>
+              // <div >
+              //   <div
+              //     style={{
+              //       padding: '10px',
+              //       fontSize: '0.9rem',
+              //       display: 'flex',
+              //       alignItems: 'center',
+              //       justifyContent: 'space-between',
+              //       marginRight: '10%',
+              //       marginLeft: '10%',
+              //     }}
+              //   >
+              //     <div>{`from: ${invitation.sender.firstName} ${invitation.sender.lastName} invitation to project ${invitation.team.project.name}`}</div>
+              //     <button
+              //       onClick={(e) => {
+              //         e.preventDefault();
+              //         navigate(`invitations/${invitation.id}`);
+              //       }}
+              //     >
+              //       View Invitation Details
+              //     </button>
+              //   </div>
+              //   <div
+              //     style={{
+              //       marginRight: '4%',
+              //       marginLeft: '4%',
+              //     }}
+              //   >
+              //     {' '}
+              //     {index !== invitations.length - 1 && (
+              //       <hr
+              //         style={{
+              //           borderWidth: '1px',
+              //           borderColor: 'lightgrey',
+              //           opacity: 0.5,
+              //           margin: '8px 0',
+              //         }}
+              //       />
+              //     )}
+              //   </div>
+              //   <div style={{ height: '8px' }}></div>
+              // </div>
             ))}
           </SoftBox>
         </Card>
