@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 //@ts-nocheck
 // @mui material components
 import Grid from '@mui/material/Grid';
@@ -9,7 +10,7 @@ import SoftTypography from 'components/SoftTypography';
 
 // Soft UI Dashboard React examples
 import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
-import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
+// import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
 import Footer from 'examples/Footer';
 import MiniStatisticsCard from 'examples/Cards/StatisticsCards/MiniStatisticsCard';
 import ReportsBarChart from 'examples/Charts/BarCharts/ReportsBarChart';
@@ -30,6 +31,7 @@ import gradientLineChartData from 'layouts/project/data/gradientLineChartData';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from 'utils';
+import { TaskStatus } from 'interfaces/TaskStatus';
 
 function Dashboard() {
   const { size } = typography;
@@ -62,21 +64,29 @@ function Dashboard() {
             <Grid item xs={12} sm={6} xl={3}>
               <MiniStatisticsCard
                 title={{ text: 'Total Tasks' }}
-                count="150"
+                count={project.tasks.length}
                 icon={{ color: 'info', component: 'list' }}
               />
             </Grid>
             <Grid item xs={12} sm={6} xl={3}>
               <MiniStatisticsCard
                 title={{ text: 'Done' }}
-                count="70"
+                count={
+                  project.tasks.filter(
+                    (task) => task.status === TaskStatus.DONE,
+                  ).length
+                }
                 icon={{ color: 'success', component: 'checkmark' }}
               />
             </Grid>
             <Grid item xs={12} sm={6} xl={3}>
               <MiniStatisticsCard
                 title={{ text: 'In Progress' }}
-                count="30"
+                count={
+                  project.tasks.filter(
+                    (task) => task.status === TaskStatus.IN_PROGRESS,
+                  ).length
+                }
                 icon={{ color: 'warning', component: 'publishedWithChanges' }}
               />
             </Grid>
@@ -84,7 +94,11 @@ function Dashboard() {
               <MiniStatisticsCard
                 title={{ text: 'To Do' }}
                 icon={{ color: 'info', component: 'pending' }}
-                count="50"
+                count={
+                  project.tasks.filter(
+                    (task) => task.status === TaskStatus.TO_DO,
+                  ).length
+                }
               />
             </Grid>
           </Grid>

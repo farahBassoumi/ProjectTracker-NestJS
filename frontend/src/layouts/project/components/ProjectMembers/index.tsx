@@ -1,13 +1,12 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+//@ts-nocheck
 // @mui material components
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
-import Icon from '@mui/material/Icon';
 
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
 import SoftTypography from 'components/SoftTypography';
-import done from 'assets/images/small-logos/done.svg';
-import SoftAvatar from 'components/SoftAvatar';
 
 function ProjectMembers({ team }) {
   return (
@@ -40,10 +39,9 @@ function ProjectMembers({ team }) {
           <SoftBox>
             <Grid container spacing={3} display="flex" flexDirection="row">
               <Grid item xs={12} sm={6} xl={3} display="flex">
-                <SoftAvatar src={done} />
-                <SoftAvatar src={done} />
-                <SoftAvatar src={done} />
-                <SoftAvatar src={done} />
+                {team.members.map((member) => (
+                  <SoftBox>{member.userId}</SoftBox>
+                ))}
               </Grid>
             </Grid>
           </SoftBox>

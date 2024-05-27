@@ -16,6 +16,9 @@ import DefaultProjectCard from 'examples/Cards/ProjectCards/DefaultProjectCard';
 // Overview page components
 import Header from 'layouts/profile/components/Header';
 
+// Data
+// import profilesListData from 'layouts/profile/data/profilesListData';
+// import { fetchProjects } from 'layouts/projects/data/projectsTableData';
 // Images
 
 import team1 from 'assets/images/team-1.jpg';
@@ -120,6 +123,13 @@ function Overview() {
                 >
                   Architects design houses
                 </SoftTypography>
+                <SoftTypography
+                  variant="button"
+                  fontWeight="regular"
+                  color="text"
+                >
+                  Architects design houses
+                </SoftTypography>
               </SoftTypography>
             </SoftBox>
           </SoftBox>
@@ -129,15 +139,12 @@ function Overview() {
                 <Grid item xs={12} md={6} xl={4} key={project.id}>
                   <DefaultProjectCard
                     key={project.id}
+                    key={project.id}
                     image={projectImage}
                     title={project.name}
                     description={project.description}
                     status="test"
                     action={{
-                      type: 'internal',
-                      route: '/pages/profile/profile-overview',
-                      color: 'info',
-                      label: 'view project',
                       type: 'internal',
                       route: '/pages/profile/profile-overview',
                       color: 'info',
