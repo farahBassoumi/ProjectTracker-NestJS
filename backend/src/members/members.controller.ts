@@ -1,16 +1,10 @@
-import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Patch } from '@nestjs/common';
 import { MembersService } from './members.service';
 import { UpdateMemberDto } from './dto/update-member.dto';
-import { CreateMemberDto } from './dto/create-member.dto';
 
 @Controller('members')
 export class MembersController {
   constructor(private readonly membersService: MembersService) {}
-
-  @Post()
-  create(@Body() createMemberDto: CreateMemberDto) {
-    return this.membersService.create(createMemberDto);
-  }
 
   @Patch(':teamId/:userId')
   update(

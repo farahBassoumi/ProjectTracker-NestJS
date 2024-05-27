@@ -56,7 +56,7 @@ export class TasksController {
 
     const res = await this.tasksService.create({
       ...createTaskDto,
-      dueDate : dueDate,
+      dueDate: dueDate,
       creator: user,
       status: TaskStatus.TO_DO,
       assignedTo: assignedToUser,
@@ -103,7 +103,11 @@ export class TasksController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.tasksService.findOne(id , { assignedTo: true, project: true ,comments: true});
+    return this.tasksService.findOne(id, {
+      assignedTo: true,
+      project: true,
+      comments: true,
+    });
   }
 
   @Patch(':id')

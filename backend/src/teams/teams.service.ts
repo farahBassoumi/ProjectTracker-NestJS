@@ -36,6 +36,6 @@ export class TeamsService extends CrudService<Team> {
       throw new NotFoundException(`Team for project ID ${projectId} not found`);
     }
 
-    return team.members.map(member => member.user);
+    return team.members.map((member) => member.user);
   }
 }

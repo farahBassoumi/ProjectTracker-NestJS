@@ -23,7 +23,9 @@ export class TeamsController {
   }
 
   @Get('members/:projectId')
-  async findMembersByProjectId(@Param('projectId') projectId: string): Promise<User[]> {
+  async findMembersByProjectId(
+    @Param('projectId') projectId: string,
+  ): Promise<User[]> {
     return this.teamsService.findMembersByProjectId(projectId);
   }
 }

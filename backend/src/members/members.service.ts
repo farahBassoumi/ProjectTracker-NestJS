@@ -4,7 +4,6 @@ import { Member } from './entities/member.entity';
 import { DeleteResult, Not, Repository } from 'typeorm';
 import { Role } from './enum/role.enum';
 import { UpdateMemberDto } from './dto/update-member.dto';
-import { CreateMemberDto } from './dto/create-member.dto';
 
 @Injectable()
 export class MembersService {
@@ -12,12 +11,6 @@ export class MembersService {
     @InjectRepository(Member)
     private readonly membersRepository: Repository<Member>,
   ) {}
-
-  create(createMemberDto: CreateMemberDto): Promise<Member> {
-    const entity = this.membersRepository.create(createMemberDto);
-
-    return this.membersRepository.save(entity);
-  }
 
   async update(
     teamId: string,
