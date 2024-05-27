@@ -80,6 +80,13 @@ export class TasksController {
     return this.tasksService.findAllTasks();
   }
 
+  @Get('project/:projectId')
+  findByProjectId(@Param('projectId') projectId: string) {
+    return this.tasksService.findByProjectId(projectId);
+  }
+
+  
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {

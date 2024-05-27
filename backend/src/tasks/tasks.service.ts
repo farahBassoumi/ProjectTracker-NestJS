@@ -18,4 +18,11 @@ export class TasksService extends CrudService<Task> {
     return this.repository.find({relations: ['comments', 'project', 'creator', 'assignedTo'], } );
   } 
 
+  findByProjectId(projectId: string) {
+    return this.repository.find({
+      where: { project: { id: projectId } },
+      relations: ['project', 'creator', 'assignedTo'],
+    });
+  }
+
 }

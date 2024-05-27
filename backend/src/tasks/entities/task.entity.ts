@@ -25,7 +25,7 @@ export class Task {
   @OneToMany(() => Comment, (comment) => comment.task)
   comments: Comment[];
 
-  @Column({ default: TaskStatus.IN_PROGRESS })
+  @Column({ default: TaskStatus.TO_DO })
   status: TaskStatus;
 
   @ManyToOne(() => Project, (project) => project.tasks)

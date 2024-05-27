@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -33,12 +33,13 @@ function Tasks() {
   const [taskDescription, setTaskDescription] = useState('');
   const [selectedProject, setSelectedProject] = useState('');
   const [assignedTo, setAssignedTo] = useState('');
+  const { projectId } = useParams(); // Get projectId from URL parameters
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const tasksResult = await fetchTasks();
+        const tasksResult = await fetchTasks(projectId); // Pass projectId to fetchTasks
         const projectsResult = await fetchProjects();
         const teamMembersResult = await fetchTeamMembers();
         setTasks(tasksResult);
@@ -51,7 +52,7 @@ function Tasks() {
       }
     };
     fetchData();
-  }, []);
+  }, [projectId]);
 
   const { columns: taskCols, rows: taskRows } = tasksTableData(tasks);
 

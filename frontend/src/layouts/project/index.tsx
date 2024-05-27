@@ -55,6 +55,8 @@ function Dashboard() {
     return null;
   }
 
+  const projectTasksLink = `/tasks/project/${projectId}`;
+
   console.log(project);
   return (
     <DashboardLayout>
@@ -66,6 +68,7 @@ function Dashboard() {
                 title={{ text: 'Total Tasks' }}
                 count={project.tasks.length}
                 icon={{ color: 'info', component: 'list' }}
+                link={projectTasksLink}
               />
             </Grid>
             <Grid item xs={12} sm={6} xl={3}>

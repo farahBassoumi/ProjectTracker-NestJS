@@ -1,5 +1,6 @@
 // prop-types is a library for typechecking of props
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 // @mui material components
 import Card from '@mui/material/Card';
@@ -17,84 +18,91 @@ function MiniStatisticsCard({
   percentage,
   icon,
   direction,
+  link, // Add link prop
 }) {
-  return (
-    <Card>
-      <SoftBox bgColor={bgColor} variant="gradient">
-        <SoftBox p={2}>
-          <Grid container alignItems="center">
-            {direction === 'left' ? (
-              <Grid item>
-                <SoftBox
-                  variant="gradient"
-                  bgColor={bgColor === 'white' ? icon.color : 'white'}
-                  color={bgColor === 'white' ? 'white' : 'dark'}
-                  width="3rem"
-                  height="3rem"
-                  borderRadius="md"
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  shadow="md"
-                >
-                  <Icon fontSize="small" color="inherit">
-                    {icon.component}
-                  </Icon>
-                </SoftBox>
-              </Grid>
-            ) : null}
-            <Grid item xs={8}>
-              <SoftBox ml={direction === 'left' ? 2 : 0} lineHeight={1}>
-                <SoftTypography
-                  variant="button"
-                  color={bgColor === 'white' ? 'text' : 'white'}
-                  opacity={bgColor === 'white' ? 1 : 0.7}
-                  textTransform="capitalize"
-                  fontWeight={title.fontWeight}
-                >
-                  {title.text}
-                </SoftTypography>
-                <SoftTypography
-                  variant="h5"
-                  fontWeight="bold"
-                  color={bgColor === 'white' ? 'dark' : 'white'}
-                >
-                  {count}{' '}
-                  <SoftTypography
-                    variant="button"
-                    color={percentage.color}
-                    fontWeight="bold"
-                  >
-                    {percentage.text}
-                  </SoftTypography>
-                </SoftTypography>
+  const cardContent = (
+    <SoftBox bgColor={bgColor} variant="gradient">
+      <SoftBox p={2}>
+        <Grid container alignItems="center">
+          {direction === 'left' ? (
+            <Grid item>
+              <SoftBox
+                variant="gradient"
+                bgColor={bgColor === 'white' ? icon.color : 'white'}
+                color={bgColor === 'white' ? 'white' : 'dark'}
+                width="3rem"
+                height="3rem"
+                borderRadius="md"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                shadow="md"
+              >
+                <Icon fontSize="small" color="inherit">
+                  {icon.component}
+                </Icon>
               </SoftBox>
             </Grid>
-            {direction === 'right' ? (
-              <Grid item xs={4}>
-                <SoftBox
-                  variant="gradient"
-                  bgColor={bgColor === 'white' ? icon.color : 'white'}
-                  color={bgColor === 'white' ? 'white' : 'dark'}
-                  width="3rem"
-                  height="3rem"
-                  marginLeft="auto"
-                  borderRadius="md"
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  shadow="md"
+          ) : null}
+          <Grid item xs={8}>
+            <SoftBox ml={direction === 'left' ? 2 : 0} lineHeight={1}>
+              <SoftTypography
+                variant="button"
+                color={bgColor === 'white' ? 'text' : 'white'}
+                opacity={bgColor === 'white' ? 1 : 0.7}
+                textTransform="capitalize"
+                fontWeight={title.fontWeight}
+              >
+                {title.text}
+              </SoftTypography>
+              <SoftTypography
+                variant="h5"
+                fontWeight="bold"
+                color={bgColor === 'white' ? 'dark' : 'white'}
+              >
+                {count}{' '}
+                <SoftTypography
+                  variant="button"
+                  color={percentage.color}
+                  fontWeight="bold"
                 >
-                  <Icon fontSize="small" color="inherit">
-                    {icon.component}
-                  </Icon>
-                </SoftBox>
-              </Grid>
-            ) : null}
+                  {percentage.text}
+                </SoftTypography>
+              </SoftTypography>
+            </SoftBox>
           </Grid>
-        </SoftBox>
+          {direction === 'right' ? (
+            <Grid item xs={4}>
+              <SoftBox
+                variant="gradient"
+                bgColor={bgColor === 'white' ? icon.color : 'white'}
+                color={bgColor === 'white' ? 'white' : 'dark'}
+                width="3rem"
+                height="3rem"
+                marginLeft="auto"
+                borderRadius="md"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                shadow="md"
+              >
+                <Icon fontSize="small" color="inherit">
+                  {icon.component}
+                </Icon>
+              </SoftBox>
+            </Grid>
+          ) : null}
+        </Grid>
       </SoftBox>
-    </Card>
+    </SoftBox>
+  );
+
+  return link ? (
+    <Link to={link} style={{ textDecoration: 'none' }}>
+      <Card>{cardContent}</Card>
+    </Link>
+  ) : (
+    <Card>{cardContent}</Card>
   );
 }
 
@@ -110,6 +118,7 @@ MiniStatisticsCard.defaultProps = {
     text: '',
   },
   direction: 'right',
+  link: '', // Add default link value
 };
 
 // Typechecking props for the MiniStatisticsCard
@@ -124,7 +133,7 @@ MiniStatisticsCard.propTypes = {
     'error',
     'dark',
   ]),
-  title: PropTypes.PropTypes.shape({
+  title: PropTypes.shape({
     fontWeight: PropTypes.oneOf(['light', 'regular', 'medium', 'bold']),
     text: PropTypes.string,
   }),
@@ -155,6 +164,7 @@ MiniStatisticsCard.propTypes = {
     component: PropTypes.node.isRequired,
   }).isRequired,
   direction: PropTypes.oneOf(['right', 'left']),
+  link: PropTypes.string, // Add link prop type
 };
 
 export default MiniStatisticsCard;

@@ -8,8 +8,7 @@ import SoftBox from 'components/SoftBox';
 import SoftTypography from 'components/SoftTypography';
 import SoftProgress from 'components/SoftProgress';
 import { TaskDisplay } from 'interfaces/TaskDisplay';
-
-
+import { getStatusText } from 'utils/taskStatusMapping';
 
 const Action = () => {
   return (
@@ -19,8 +18,9 @@ const Action = () => {
   );
 };
 
-export const fetchTasks = async () => {
-  const response = await axiosInstance.get('/tasks/findAll');
+export const fetchTasks = async (projectId = null) => {
+  const url = projectId ? `/tasks/project/${projectId}` : '/tasks/findAll';
+  const response = await axiosInstance.get(url);
   console.log(response.data);
   return response.data;
 };
@@ -44,16 +44,15 @@ const tasksTableData = (tasksData) => {
   ];
   
   const rows = tasksData.map((task: TaskDisplay) => ({
-    
     task: [<Link to={`/tasks/${task.id}`}>{task.name}</Link>],
     status: (
       <SoftTypography variant="caption" color="text" fontWeight="medium">
-        {task.status}
+        {getStatusText(Number(task.status))}
       </SoftTypography>
     ),
     assigned_to: (
       <SoftTypography variant="caption" color="text" fontWeight="medium">
-        {task.assignedTo ? task.assignedTo.firstName : 'Unassigned'}
+        {task.assignedTo ? `${task.assignedTo.firstName} ${task.assignedTo.lastName}` : 'Unassigned'}
       </SoftTypography>
     ),
     action: <Action />,

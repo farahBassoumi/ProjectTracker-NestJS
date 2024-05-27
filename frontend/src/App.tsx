@@ -35,6 +35,7 @@ import {
 // Images
 import brand from 'assets/images/logo-ct.png';
 import Project from 'layouts/project';
+import Tasks from 'layouts/tasks';
 
 export default function App() {
   const [controller, dispatch] = useSoftUIController();
@@ -150,6 +151,7 @@ export default function App() {
       <Routes>
         {getRoutes(routes)}
         <Route path="/project/:projectId" element={<Project />}></Route>
+        <Route path="/tasks/project/:projectId" element={<Tasks />}></Route>
         <Route path="*" element={<Navigate to="/sign-in" />} />
       </Routes>
     </ThemeProvider>
