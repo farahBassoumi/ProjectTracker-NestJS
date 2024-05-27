@@ -35,19 +35,22 @@ export class TasksController {
     @UserDecorator() user: User,
   ) {
     let assignedToUser: User | undefined;
-  if (createTaskDto.assignedTo && createTaskDto.assignedTo.id) {
-    assignedToUser = await this.UsersService.findOne(createTaskDto.assignedTo.id);
-    console.log(assignedToUser);
-    if (!assignedToUser) {
-      throw new NotFoundException(`User with ID ${createTaskDto.assignedTo.id} not found`);
+    if (createTaskDto.assignedTo && createTaskDto.assignedTo.id) {
+      assignedToUser = await this.UsersService.findOne(
+        createTaskDto.assignedTo.id,
+      );
+      console.log(assignedToUser);
+      if (!assignedToUser) {
+        throw new NotFoundException(
+          `User with ID ${createTaskDto.assignedTo.id} not found`,
+        );
+      }
     }
-  }
     const res = await this.tasksService.create({
       ...createTaskDto,
       creator: user,
       assignedTo: assignedToUser,
     });
-
 
     this.eventEmitter.emit(NotificationType.taskAssignment, {
       user: createTaskDto.assignedTo,
