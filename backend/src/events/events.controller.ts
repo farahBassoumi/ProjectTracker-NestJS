@@ -51,6 +51,11 @@ export class EventsController {
     return this.eventsService.findAll(searchDto);
   }
 
+  @Get('findByProjectId/:id')
+  findByProjectId(@Param(':id') projectId: string) {
+    return this.eventsService.findByProjectId(projectId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.eventsService.findOne(id);

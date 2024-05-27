@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // @mui material components
 import Card from '@mui/material/Card';
@@ -15,13 +15,24 @@ import Table from 'examples/Tables/Table';
 
 // Data
 import data from 'layouts/project/components/Events/data';
+import { axiosInstance } from 'utils';
 
-function Events() {
+function Events(projectId) {
   const { columns, rows } = data();
   const [menu, setMenu] = useState(null);
+  const [events, setEvents] = useState(null);
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
   const closeMenu = () => setMenu(null);
+
+  useEffect(() => {
+    async function getExistingEvents() {
+      const response = await axiosInstance.get(`findByProjectId/${projectId}`);
+      console.log(response.data);
+      setEvents(response.data);
+    }
+    getExistingEvents();
+  });
 
   const renderMenu = (
     <Menu

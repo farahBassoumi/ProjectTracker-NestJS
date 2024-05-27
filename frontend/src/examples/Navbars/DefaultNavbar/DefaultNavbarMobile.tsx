@@ -40,7 +40,7 @@ function DefaultNavbarMobile({ open, close }) {
         <DefaultNavbarLink
           icon="account_circle"
           name="sign up"
-          route="/authentication/sign-up"
+          route="/sign-up"
         />
         <DefaultNavbarLink
           icon="key"

@@ -22,6 +22,8 @@ import { CreateNotificationDto } from '../notifications/dto/create-notification.
 import { NotificationType } from 'src/notifications/enum/notification-type.enum';
 import { EventType } from 'src/events/enums/event-type-enum';
 import { TaskStatus } from './enums/task-status.enum';
+import { EventsService } from 'src/events/events.service';
+import { CreateEventDto } from 'src/events/dto/create-event.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -29,6 +31,7 @@ export class TasksController {
     private readonly tasksService: TasksService,
     private readonly UsersService: UsersService,
     private eventEmitter: EventEmitter2,
+    private readonly eventService: EventsService,
   ) {}
 
   @Post()
@@ -55,6 +58,15 @@ export class TasksController {
       assignedTo: assignedToUser,
     });
 
+    const newEvent: CreateEventDto = {
+      description: 'Task Created',
+      type: EventType.TaskCreated,
+      userId: user.id,
+      projectId: createTaskDto.project.id,
+    };
+
+    await this.eventService.create(newEvent);
+
     this.eventEmitter.emit(NotificationType.taskAssignment, {
       user: createTaskDto.assignedTo,
       type: NotificationType.taskAssignment,
@@ -75,8 +87,8 @@ export class TasksController {
     return this.tasksService.findAll(searchDto);
   }
 
- @Get('findAll')
- findAllTasks() {
+  @Get('findAll')
+  findAllTasks() {
     return this.tasksService.findAllTasks();
   }
 

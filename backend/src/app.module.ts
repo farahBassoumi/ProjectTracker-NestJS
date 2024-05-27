@@ -14,6 +14,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { MembersModule } from './members/members.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     CommentsModule,
     AuthModule,
     NotificationsModule,
+    MembersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -7,7 +7,7 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 import { Project } from '../../projects/entities/project.entity';
-import { Member } from './member.entity';
+import { Member } from '../../members/entities/member.entity';
 import { Invitation } from 'src/invitations/entities/invitation.entity';
 
 @Entity('team')

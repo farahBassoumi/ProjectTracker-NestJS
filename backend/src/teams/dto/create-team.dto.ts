@@ -1,5 +1,5 @@
 import { IsEmpty, IsOptional } from 'class-validator';
-import { Member } from '../entities/member.entity';
+import { Member } from '../../members/entities/member.entity';
 
 export class CreateTeamDto {
   @IsEmpty()
