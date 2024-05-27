@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Box, FormControl, IconButton, MenuItem, Select } from '@mui/material';
 import SoftBox from 'components/SoftBox';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -10,7 +11,9 @@ const RoleSelect = ({ teamId, userId, role }) => {
 
   const handleRoleChange = async (event) => {
     const role = event.target.value;
-
+    console.log('role:', role);
+    console.log('teamId:', teamId);
+    console.log('userId:', userId);
     const result = await axiosInstance.patch(`/members/${teamId}/${userId}`, {
       role,
     });
@@ -51,23 +54,30 @@ const KickMember = ({ teamId, userId }) => {
   );
 };
 
-///////// format members array into appropriate rows
-export default function formatTeamData([teamId, members]) {
-  const rows = members.map((member) => ({
-    firstName: (
-      <SoftBox display="flex" py={1}>
-        {member.firstName}
-      </SoftBox>
-    ),
-    lastName: (
-      <SoftBox display="flex" py={1}>
-        {member.lastName}
-      </SoftBox>
-    ),
-    email: member.email,
-    role: <RoleSelect teamId={teamId} userId={member.id} role={member.role} />,
-    kick: <KickMember teamId={teamId} userId={member.id} />,
-  }));
+export default function formatTeamData(membersInfo) {
+  const rows = membersInfo
+    .filter((member) => member.role !== 'LEADER')
+    .map((member) => ({
+      firstName: (
+        <SoftBox display="flex" py={1}>
+          {member.firstName}
+        </SoftBox>
+      ),
+      lastName: (
+        <SoftBox display="flex" py={1}>
+          {member.lastName}
+        </SoftBox>
+      ),
+      email: member.email,
+      role: (
+        <RoleSelect
+          teamId={member.teamId}
+          userId={member.id}
+          role={member.role}
+        />
+      ),
+      kick: <KickMember teamId={member.teamId} userId={member.id} />,
+    }));
 
   return rows;
 }
