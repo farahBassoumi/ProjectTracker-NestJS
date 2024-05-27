@@ -130,7 +130,9 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleCloseMenu = () => setOpenMenu(false);
   const handleNotificationClick = (e, targetId, type) => {
     e.preventDefault();
-    navigate(`${type}/${targetId}`);
+    console.log(type)
+    console.log("id:", targetId)
+    navigate(`/${type}/${targetId}`);
   };
   // Render the notifications menu
   const renderMenu = (notifications) => (
@@ -147,6 +149,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
     >
       {notifications.length != 0 &&
         notifications.map(({ createdAt, type: type_, data }: Notification) => {
+          console.log(notifications)
           const date = new Date(createdAt);
           const { id, name } = data;
           let title;
@@ -159,7 +162,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
               title = 'Project Invitation ';
               targetId = id;
               subtitle = data.project?.name;
-              type = 'projects';
+              type = 'invitations';
+              console.log("here")
               break;
             case NotificationType.taskAssignment:
               title = 'Task Assigned: ';

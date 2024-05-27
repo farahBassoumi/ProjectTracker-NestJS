@@ -43,6 +43,8 @@ export class AuthService extends CrudService<Auth> {
 
     const tokens = this.generateTokens(user);
 
+    console.log("here");
+
     await super.create({ user, refreshToken: tokens.refreshToken });
 
     return {
