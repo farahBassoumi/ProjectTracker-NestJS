@@ -18,7 +18,10 @@ export class CreateMemberDto {
     `^${Object.values(Role)
       .filter((value) => value != Role.Leader)
       .join('|')}$`,
-    'i',
+    '',
+    {
+      message: `The role must be either ${Role.SubLeader} or ${Role.Member}.`,
+    },
   )
   role: Role;
 }

@@ -5,6 +5,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from 'utils';
+import { Role } from 'interfaces/Member';
 ///////// role select component
 const RoleSelect = ({ teamId, userId, role }) => {
   const [selectedRole, setRole] = useState(role);
@@ -28,8 +29,8 @@ const RoleSelect = ({ teamId, userId, role }) => {
     <Box sx={{ minWidth: '140px' }}>
       <FormControl fullWidth>
         <Select value={selectedRole} onChange={handleRoleChange}>
-          <MenuItem value="member">Member</MenuItem>
-          <MenuItem value="sub-leader">Sub-Leader</MenuItem>
+          <MenuItem value={Role.Member}>Member</MenuItem>
+          <MenuItem value={Role.SubLeader}>Sub-Leader</MenuItem>
         </Select>
       </FormControl>
     </Box>
@@ -56,7 +57,7 @@ const KickMember = ({ teamId, userId }) => {
 
 export default function formatTeamData(membersInfo) {
   const rows = membersInfo
-    .filter((member) => member.role !== 'LEADER')
+    .filter((member) => member.role !== Role.Leader)
     .map((member) => ({
       firstName: (
         <SoftBox display="flex" py={1}>
