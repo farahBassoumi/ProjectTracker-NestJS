@@ -11,4 +11,8 @@ export class EventsService extends CrudService<Event> {
   ) {
     super(eventsRepository);
   }
+
+  async findByProjectId(projectId: string) {
+    return this.repository.find({ where: { id: projectId as any } });
+  }
 }
