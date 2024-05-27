@@ -76,7 +76,6 @@ export class TasksController {
       data: res,
     } as CreateNotificationDto);
 
-
     this.eventEmitter.emit(EventType.TaskCreated, {
       description: `Task ${createTaskDto.name} added`,
       recipient: createTaskDto.project.id,

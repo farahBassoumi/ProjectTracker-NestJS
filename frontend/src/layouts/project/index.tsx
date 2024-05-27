@@ -58,7 +58,7 @@ function Dashboard() {
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          ['Keep-Alive']: 'timeout=3600, max=0',
+          ['Keep-Alive']: 'timeout=36000, max=0',
         },
       },
     );
