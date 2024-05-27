@@ -48,7 +48,7 @@ function Dashboard() {
     };
 
     fetchProject();
-  }, [projectId]); // Fetch project data whenever the project ID changes
+  }, []); // Fetch project data whenever the project ID changes
 
   if (!project) {
     // Render loading state or return null if no project data is available

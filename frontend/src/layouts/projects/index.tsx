@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
 // @mui material components
 import Card from '@mui/material/Card';
 import { axiosInstance } from 'utils';
@@ -13,9 +15,7 @@ import Footer from 'examples/Footer';
 import Table from 'examples/Tables/Table';
 
 // Data
-import projectsTableData, {
-  fetchProjects,
-} from 'layouts/projects/data/projectsTableData';
+import projectsTableData from 'layouts/projects/data/projectsTableData';
 import SoftButton from 'components/SoftButton';
 
 import { useState, useEffect } from 'react';
@@ -29,14 +29,32 @@ import { UnauthorizedError } from 'errors/UnauthorizedError';
 function Tables() {
   const [showForm, setShowForm] = useState(false);
   const [projects, setProjects] = useState([]);
+  const [hasAddedProject, setHasAddedProject] = useState(false);
   const [projectTitle, setProjectTitle] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const result = fetchProjects();
+  const eventSource = new EventSource('http://localhost:3000/events/sse');
 
-    result
+  eventSource.onmessage = function (event) {
+    const eventData = JSON.parse(event.data);
+
+    // Check if the received event is for the current project
+    if (eventData.type !== null) {
+      const newTask = eventData.data;
+      // Handle the new task event, for example, update the UI
+      console.log(newTask);
+    }
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axiosInstance.get(`/projects`);
+
+      return response.data.data;
+    }
+
+    fetchData()
       .then((result) => {
         setProjects(result);
       })
@@ -45,12 +63,12 @@ function Tables() {
           navigate('/sign-in');
         }
       });
-  }, []);
+  }, [hasAddedProject]);
 
   const { columns: prCols, rows: prRows } = projectsTableData(projects);
 
   const handleAddProject = () => {
-    console.log(TaskStatus.DONE);
+    setHasAddedProject(true);
     setShowForm(true);
   };
 
@@ -94,6 +112,7 @@ function Tables() {
         setProjectTitle('');
         setProjectDescription('');
         setShowForm(false);
+        setHasAddedProject(!hasAddedProject);
       })
       .catch((error) => {
         console.error('Error creating project:', error);

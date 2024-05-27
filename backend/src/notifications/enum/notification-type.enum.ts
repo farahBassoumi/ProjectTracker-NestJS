@@ -1,7 +1,7 @@
 export enum NotificationType {
-  projectInvitation = 'project.invitaion',
-  taskAssignment = 'task.assignment',
-  taskComment = 'task.comment',
-  taskDeletion = 'task.deletion',
-  taskReassignment = 'task.reassignment',
+  projectInvitation = 'notification.project.invitaion',
+  taskAssignment = 'notification.task.assignment',
+  taskComment = 'notification.task.comment',
+  taskDeletion = 'notification.task.deletion',
+  taskReassignment = 'notification.task.reassignment',
 }

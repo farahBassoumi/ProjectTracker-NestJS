@@ -3,24 +3,28 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
 import { EventType } from '../enums/event-type-enum';
-
+import { Project } from 'src/projects/entities/project.entity';
+import { User } from 'src/users/entities/user.entity';
 @Entity('event')
 export class Event {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  name: string;
+  description: string;
 
   @Column()
   type: EventType;
 
-  @ManyToOne(() => User)
-  owner: User;
+  @OneToOne(() => User)
+  user: User;
+
+  @ManyToOne(() => Project)
+  project: Project;
 
   @CreateDateColumn()
   createdAt: Date;
