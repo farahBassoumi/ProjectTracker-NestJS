@@ -51,6 +51,7 @@ import { axiosInstance } from '../../../utils';
 import { Task } from '../../../interfaces/Task';
 import { Invitation } from '../../../interfaces/Invitation';
 import dateFormatter from '../../../utils/dateFormatter';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
@@ -231,6 +232,24 @@ function DashboardNavbar({ absolute, light, isMini }) {
         </SoftBox>
         {isMini ? null : (
           <SoftBox sx={(theme) => navbarRow(theme, { isMini })}>
+            <IconButton
+              size="small"
+              color="inherit"
+              onClick={async (e) => {
+                try {
+                  const res = await axiosInstance.post('/auth/logout');
+                } catch (err) {
+                  console.error(err);
+                }
+                localStorage.removeItem('auth');
+                localStorage.removeItem('user');
+
+                navigate('/sign-in');
+              }}
+            >
+              <LogoutIcon> Logout</LogoutIcon>
+            </IconButton>
+
             <SoftBox color={light ? 'white' : 'inherit'}>
               {localStorage.getItem('auth') == null ? (
                 <Link to="/authentication/sign-in">
@@ -264,6 +283,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   </IconButton>
                 </Link>
               )}
+
               <IconButton
                 size="small"
                 color="inherit"
