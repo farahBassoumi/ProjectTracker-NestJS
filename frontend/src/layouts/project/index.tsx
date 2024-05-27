@@ -53,7 +53,7 @@ function Dashboard() {
     return null;
   }
 
-  console.log(project)
+  console.log(project);
   return (
     <DashboardLayout>
       <SoftBox py={3}>

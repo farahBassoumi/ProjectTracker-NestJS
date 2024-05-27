@@ -16,9 +16,6 @@ import DefaultProjectCard from 'examples/Cards/ProjectCards/DefaultProjectCard';
 // Overview page components
 import Header from 'layouts/profile/components/Header';
 
-// Data
-import profilesListData from 'layouts/profile/data/profilesListData';
-import { fetchProjects } from 'layouts/projects/data/projectsTableData';
 // Images
 
 import team1 from 'assets/images/team-1.jpg';
@@ -30,20 +27,28 @@ import projectImage from 'assets/images/project.png';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { axiosInstance } from '../../utils';
+import { UnauthorizedError } from 'errors/UnauthorizedError';
+import { useNavigate } from 'react-router-dom';
+import { Project } from 'interfaces/Project';
 
 function Overview() {
   const [projects, setProjects] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const userID = getUserIdFromToken();
-    async function fetchData() {
-      const response = await axiosInstance.get(`/projects/${userID}`);
 
-      return response.data.data;
+    async function fetchData() {
+      console.log(userID);
+      const response = await axiosInstance.get(
+        `/projects/findProjectsByUserId/${userID}`,
+      );
+      return response.data;
     }
 
     fetchData()
       .then((result) => {
+        console.log(result);
         setProjects(result);
       })
       .catch((error) => {
@@ -51,7 +56,7 @@ function Overview() {
           navigate('/sign-in');
         }
       });
-  });
+  }, []);
 
   const getUserIdFromToken = (): string | null => {
     const token = localStorage.getItem('auth');
@@ -62,40 +67,12 @@ function Overview() {
 
     try {
       const decodedToken = jwtDecode<any>(token);
-      userID = decodedToken.sub;
       return decodedToken.sub;
     } catch (error) {
       console.error('Failed to decode token:', error);
       return null;
     }
   };
-
-  const projectsTest = [
-    {
-      id: 1,
-      name: 'Project One',
-      description: 'Description for project one',
-      startDate: new Date(2023, 0, 1),
-      name: 'Project One',
-      description: 'Description for project one',
-      startDate: new Date(2023, 0, 1),
-    },
-    {
-      id: 2,
-      name: 'Project Two',
-      description: 'Description for project two',
-      startDate: new Date(2023, 1, 15),
-      name: 'Project Two',
-      description: 'Description for project two',
-      startDate: new Date(2023, 1, 15),
-    },
-    {
-      id: 3,
-      name: 'Project Three',
-      description: 'Description for project three',
-      startDate: new Date(2023, 2, 20),
-    },
-  ];
 
   const authorsList = [
     [
@@ -148,14 +125,14 @@ function Overview() {
           </SoftBox>
           <SoftBox p={2}>
             <Grid container spacing={3}>
-              {projects.map((project, index) => (
+              {projects.map((project: Project, index) => (
                 <Grid item xs={12} md={6} xl={4} key={project.id}>
                   <DefaultProjectCard
                     key={project.id}
                     image={projectImage}
                     title={project.name}
                     description={project.description}
-                    status={project.status}
+                    status="test"
                     action={{
                       type: 'internal',
                       route: '/pages/profile/profile-overview',
