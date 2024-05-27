@@ -5,13 +5,16 @@ import SoftBox from 'components/SoftBox';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { axiosInstance } from 'utils';
 ///////// role select component
 const RoleSelect = ({ id, role }) => {
   const [selectedRole, setRole] = useState(role);
 
   const handleRoleChange = (event) => {
     const role = event.target.value;
+    const result = axiosInstance.patch(`/teams/${id}`, { role });
+    console.log('result: ', result);
+    console.log('role:', role);
     alert(role);
     setRole(role);
   };
@@ -32,6 +35,8 @@ const RoleSelect = ({ id, role }) => {
 const KickMember = ({ id }) => {
   const navigate = useNavigate();
   const handleClick = () => {
+    const result=axiosInstance.delete(`/teams/${id}`);
+    console.log('result: ', result);
     alert(id);
     //// refresh page after kicking member
     navigate('/manage');
