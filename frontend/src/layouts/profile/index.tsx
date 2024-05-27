@@ -1,11 +1,8 @@
-//@ts-nocheck
 // @mui material components
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 
 // @mui icons
-
-
 
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
@@ -20,8 +17,8 @@ import DefaultProjectCard from 'examples/Cards/ProjectCards/DefaultProjectCard';
 import Header from 'layouts/profile/components/Header';
 
 // Data
-import profilesListData from 'layouts/profile/data/profilesListData';
-import { fetchProjects } from 'layouts/projects/data/projectsTableData';
+// import profilesListData from 'layouts/profile/data/profilesListData';
+// import { fetchProjects } from 'layouts/projects/data/projectsTableData';
 // Images
 
 import team1 from 'assets/images/team-1.jpg';
@@ -33,39 +30,46 @@ import projectImage from 'assets/images/project.png';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { axiosInstance } from '../../utils';
-
+import { UnauthorizedError } from 'errors/UnauthorizedError';
+import { useNavigate } from 'react-router-dom';
+import { Project } from 'interfaces/Project';
 
 function Overview() {
   const [projects, setProjects] = useState([]);
-let userID='';
+  const navigate = useNavigate();
+
   useEffect(() => {
-    userID = getUserIdFromToken();
-    console.log('id ', userID);
-    fetchprojects();
-  }, []);
+    const userID = getUserIdFromToken();
 
-  
-const fetchprojects = async () => {
-      const result = axiosInstance.get(`/projects/${userID}`);
-  console.log("result: ", result);
-      result.then((result) => {
+    async function fetchData() {
+      console.log(userID);
+      const response = await axiosInstance.get(
+        `/projects/findProjectsByUserId/${userID}`,
+      );
+      return response.data;
+    }
+
+    fetchData()
+      .then((result) => {
+        console.log(result);
         setProjects(result);
+      })
+      .catch((error) => {
+        if (error instanceof UnauthorizedError) {
+          navigate('/sign-in');
+        }
       });
-
-}
-
-
+  }, []);
 
   const getUserIdFromToken = (): string | null => {
     const token = localStorage.getItem('auth');
-  
+
     if (!token) {
       return null;
     }
-  
+
     try {
-      const decodedToken = jwtDecode<any>(token); 
-      userID=decodedToken.sub;
+      const decodedToken = jwtDecode<any>(token);
       return decodedToken.sub;
     } catch (error) {
       console.error('Failed to decode token:', error);
@@ -73,67 +77,30 @@ const fetchprojects = async () => {
     }
   };
 
-
-
-
-
-
-
-  const projectsTest = [
-    {
-      id: 1,
-      name: 'Project One',
-      description: 'Description for project one',
-      startDate: new Date(2023, 0, 1),
-      name: 'Project One',
-      description: 'Description for project one',
-      startDate: new Date(2023, 0, 1),
-    },
-    {
-      id: 2,
-      name: 'Project Two',
-      description: 'Description for project two',
-      startDate: new Date(2023, 1, 15),
-      name: 'Project Two',
-      description: 'Description for project two',
-      startDate: new Date(2023, 1, 15),
-    },
-    {
-      id: 3,
-      name: 'Project Three',
-      description: 'Description for project three',
-      startDate: new Date(2023, 2, 20),
-    }
-  ];
-
   const authorsList = [
     [
       { image: team1, name: 'farah' },
       { image: team2, name: 'farah2' },
       { image: team3, name: 'Nick Daniel' },
       { image: team4, name: 'Peterson' },
-
     ],
     [
       { image: team3, name: 'Nick Daniel' },
       { image: team4, name: 'Peterson' },
       { image: team1, name: 'Elena Morison' },
       { image: team2, name: 'Ryan Milly' },
-     
     ],
     [
       { image: team4, name: 'Peterson' },
       { image: team3, name: 'Nick Daniel' },
       { image: team2, name: 'Ryan Milly' },
       { image: team1, name: 'Elena Morison' },
- 
     ],
   ];
 
   return (
     <DashboardLayout>
       <Header />
-
 
       <SoftBox mt={5} mb={3}>
         <Card>
@@ -149,33 +116,35 @@ const fetchprojects = async () => {
                 fontWeight="regular"
                 color="text"
               >
-              <SoftTypography
-                variant="button"
-                fontWeight="regular"
-                color="text"
-              >
-                Architects design houses
+                <SoftTypography
+                  variant="button"
+                  fontWeight="regular"
+                  color="text"
+                >
+                  Architects design houses
+                </SoftTypography>
+                <SoftTypography
+                  variant="button"
+                  fontWeight="regular"
+                  color="text"
+                >
+                  Architects design houses
+                </SoftTypography>
               </SoftTypography>
-              </SoftTypography>
-
             </SoftBox>
           </SoftBox>
           <SoftBox p={2}>
             <Grid container spacing={3}>
-              {projects.map((project, index) => (
+              {projects.map((project: Project, index) => (
                 <Grid item xs={12} md={6} xl={4} key={project.id}>
                   <DefaultProjectCard
-                   key={project.id}
-
+                    key={project.id}
+                    key={project.id}
                     image={projectImage}
                     title={project.name}
                     description={project.description}
-                    status={project.status}
+                    status="test"
                     action={{
-                      type: 'internal',
-                      route: '/pages/profile/profile-overview',
-                      color: 'info',
-                      label: 'view project',
                       type: 'internal',
                       route: '/pages/profile/profile-overview',
                       color: 'info',
@@ -186,7 +155,6 @@ const fetchprojects = async () => {
                 </Grid>
               ))}
             </Grid>
-        
           </SoftBox>
         </Card>
       </SoftBox>

@@ -150,7 +150,7 @@ export default function App() {
       <Routes>
         {getRoutes(routes)}
         <Route path="/project/:projectId" element={<Project />}></Route>
-        <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
+        <Route path="*" element={<Navigate to="/sign-in" />} />
       </Routes>
     </ThemeProvider>
   );
