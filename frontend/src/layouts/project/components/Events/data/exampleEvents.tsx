@@ -2,15 +2,6 @@ import bug from 'assets/images/small-logos/bug.svg';
 import inprogress from 'assets/images/small-logos/inprogress.svg';
 import done from 'assets/images/small-logos/done.svg';
 
-// initialization nfetchi ml bdd
-
-evenets = []
-
-// listeni aala events
-
-
-events.apppend(ejdid)
-
 const events = [
   {
     description: [done, 'this is a test event'],
