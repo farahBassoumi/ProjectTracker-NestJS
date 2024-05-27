@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
 import Icon from '@mui/material/Icon';
-import { axiosInstance } from 'utils';
 
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
