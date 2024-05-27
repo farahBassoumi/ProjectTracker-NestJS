@@ -15,6 +15,7 @@ export default function InviteMemberDialog({ teamId, onClose, open }) {
   };
 
   const handleInvite = async (teamId: string, email: string) => {
+    if (!email)  return alert('Please enter email');
     await axiosInstance.post('/invitations', {
       receiver: {
         email,

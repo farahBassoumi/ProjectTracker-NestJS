@@ -1,4 +1,5 @@
 // @mui material components
+// @ts-nocheck
 import Card from '@mui/material/Card';
 import { axiosInstance, handleError } from 'utils';
 
@@ -82,7 +83,10 @@ function Tables() {
       name: projectTitle,
       description: projectDescription,
     };
-
+if (!projectTitle || !projectDescription) {
+      alert('Please enter project title and description');
+      return;
+    }
     // Send POST request to backend
     axiosInstance
       .post('/projects', newProject)

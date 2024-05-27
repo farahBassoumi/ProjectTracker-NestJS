@@ -34,6 +34,10 @@ function SignIn() {
   };
 
   const handleSubmit = async (e) => {
+    if (!formData.email || !formData.password) {
+      alert('Please enter email and password');
+      return;
+    }
     try {
       const {
         data: { user, auth },
