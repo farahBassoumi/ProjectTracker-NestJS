@@ -159,7 +159,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
               title = 'Project Invitation ';
               targetId = id;
               subtitle = data.project?.name;
-              type = 'invitations';
+              type = 'projects';
               break;
             case NotificationType.taskAssignment:
               title = 'Task Assigned: ';

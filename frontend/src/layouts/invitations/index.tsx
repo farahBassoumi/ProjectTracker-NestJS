@@ -43,7 +43,7 @@ function Invitation() {
       status,
     });
 
-    navigate(`/projects/${invitation.team.project.id}`);
+    navigate(`/project/${invitation.team.project.id}`);
   };
 
   return (

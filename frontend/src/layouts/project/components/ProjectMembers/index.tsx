@@ -7,6 +7,8 @@ import Card from '@mui/material/Card';
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
 import SoftTypography from 'components/SoftTypography';
+import SoftAvatar from 'components/SoftAvatar';
+import done from '../../../../assets/images/small-logos/profilesvg.svg';
 
 function ProjectMembers({ team }) {
   return (
@@ -40,7 +42,8 @@ function ProjectMembers({ team }) {
             <Grid container spacing={3} display="flex" flexDirection="row">
               <Grid item xs={12} sm={6} xl={3} display="flex">
                 {team.members.map((member) => (
-                  <SoftBox>{member.userId}</SoftBox>
+                  <><SoftAvatar src={done} /><SoftAvatar src={done} /><SoftAvatar src={done} /></>
+
                 ))}
               </Grid>
             </Grid>
