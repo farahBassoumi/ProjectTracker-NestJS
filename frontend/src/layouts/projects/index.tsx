@@ -1,6 +1,6 @@
 // @mui material components
 import Card from '@mui/material/Card';
-import { axiosInstance } from 'utils';
+import { axiosInstance, handleError } from 'utils';
 
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
@@ -21,8 +21,7 @@ import SoftInput from 'components/SoftInput';
 import { Project } from 'interfaces/Project';
 import { Invitation } from 'interfaces/Invitation';
 import { useNavigate } from 'react-router-dom';
-import { UnauthorizedError } from 'errors/UnauthorizedError';
-import { jwtDecode } from 'jwt-decode';
+
 function Tables() {
   const [showForm, setShowForm] = useState(false);
   const [projects, setProjects] = useState([]);
@@ -56,9 +55,7 @@ function Tables() {
         setProjects(result);
       })
       .catch((error) => {
-        if (error instanceof UnauthorizedError) {
-          navigate('/sign-in');
-        }
+        handleError(error, navigate);
       });
   }, [hasAddedProject]);
 
@@ -84,9 +81,7 @@ function Tables() {
         setInvitations(response.data.data);
       })
       .catch((error) => {
-        if (error instanceof UnauthorizedError) {
-          navigate('/sign-in');
-        }
+        handleError(error, navigate);
       });
   };
 

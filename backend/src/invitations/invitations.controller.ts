@@ -59,7 +59,13 @@ export class InvitationsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.invitationsService.findOne(id);
+    return this.invitationsService.findOne(id, {
+      receiver: true,
+      sender: true,
+      team: {
+        project: true,
+      },
+    });
   }
 
   @Post(':id/respond')

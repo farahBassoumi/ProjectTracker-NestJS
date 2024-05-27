@@ -28,8 +28,7 @@ import team4 from 'assets/images/team-4.jpg';
 import projectImage from 'assets/images/project.png';
 //import Project from "layouts/profile/project.model.js";
 import { useEffect, useState } from 'react';
-import { axiosInstance, user as getUser } from 'utils';
-import { UnauthorizedError } from 'errors/UnauthorizedError';
+import { axiosInstance, handleError } from 'utils';
 import { useNavigate } from 'react-router-dom';
 import { ProjectDisplay } from 'interfaces/ProjectDisplay';
 
@@ -48,9 +47,7 @@ function Overview() {
         setProjects(result);
       })
       .catch((error) => {
-        if (error instanceof UnauthorizedError) {
-          navigate('/sign-in');
-        }
+        handleError(error, navigate);
       });
   }, []);
 

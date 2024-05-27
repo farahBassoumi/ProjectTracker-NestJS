@@ -13,12 +13,9 @@ import { axiosInstance } from '../../../utils';
 
 import members from './data/exampleTeam';
 
-
-
-function TeamsTable({team, name, projectId }) {
+function TeamsTable({ team, name, projectId }) {
   const [rows, setRows] = useState();
   const [membersInfo, setMembersInfo] = useState([]);
-
 
   const columns = [
     { name: 'email', align: 'left' },
@@ -28,30 +25,26 @@ function TeamsTable({team, name, projectId }) {
     { name: 'kick', align: 'center' },
   ];
 
-
-
-
-
   useEffect(() => {
     const fetchMemberInfo = async () => {
       const promises = team.team.members.map(async (member) => {
         try {
           const response = await axiosInstance.get(`/users/${member.userId}`); // Adjust the API endpoint
-          if(member.role === 'MEMBER'){
+          if (member.role === 'MEMBER') {
             response.data.role = 'member';
-          }
-          else if(member.role === 'SUB_LEADER'){
+          } else if (member.role === 'SUB_LEADER') {
             response.data.role = 'sub-leader';
-          }
-          else{
+          } else {
             response.data.role = 'LEADER';
           }
           response.data.teamId = member.teamId;
-      
-          return response.data; 
-          
+
+          return response.data;
         } catch (error) {
-          console.error(`Failed to  fetch member info for ID ${memberId}:`, error);
+          console.error(
+            `Failed to  fetch member info for ID ${memberId}:`,
+            error,
+          );
           return null;
         }
       });
@@ -71,19 +64,12 @@ function TeamsTable({team, name, projectId }) {
     fetchMemberInfo();
   }, [team.team.members]); // Run effect when team members array changes
 
-
-
-
-
-
-
-
   useEffect(() => {
     console.log('team.team.members', team.team.members);
-    // replace members with api call 
-   const rows = formatTeamData(membersInfo);
+    // replace members with api call
+    const rows = formatTeamData(membersInfo);
     setRows(rows);
-    console.log("membersInfo", membersInfo);
+    console.log('membersInfo', membersInfo);
   }, []);
 
   return (
@@ -111,12 +97,6 @@ function TeamsTable({team, name, projectId }) {
           },
         }}
       >
-
-
-
-
-
-
         <Table columns={columns} rows={rows} />
       </SoftBox>
     </Card>

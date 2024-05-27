@@ -27,11 +27,14 @@ export class InvitationsService extends CrudService<Invitation> {
       searchDto,
       {
         receiver: { id: userId },
+        status: InvitationStatus.Pending,
       },
       {
         receiver: true,
         sender: true,
-        team: true,
+        team: {
+          project: true,
+        },
       },
     );
   }

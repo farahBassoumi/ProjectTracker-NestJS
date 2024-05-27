@@ -19,8 +19,7 @@ import breakpoints from 'assets/theme/base/breakpoints';
 // Images
 import burceMars from 'assets/images/bruce-mars.jpg';
 import curved0 from 'assets/images/curved-images/curved0.jpg';
-import { user as getUser } from 'utils';
-import { UnauthorizedError } from 'errors/UnauthorizedError';
+import { user as getUser, handleError } from 'utils';
 import { User } from 'interfaces/User';
 import { useNavigate } from 'react-router-dom';
 
@@ -33,9 +32,7 @@ function Header() {
   try {
     user_ = getUser();
   } catch (error) {
-    if (error instanceof UnauthorizedError) {
-      navigate('/sign-in');
-    }
+    handleError(error, navigate);
   }
 
   const user = user_;

@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import { axiosInstance } from 'utils';
+import { axiosInstance, handleError } from 'utils';
 
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
@@ -54,9 +54,7 @@ function Tasks() {
         setProjects(projectsResult);
         setTeamMembers(teamMembersResult);
       } catch (error) {
-        if (error instanceof UnauthorizedError) {
-          navigate('/sign-in');
-        }
+        handleError(error, navigate);
       }
     };
     fetchData();
@@ -89,8 +87,8 @@ function Tasks() {
       name: taskTitle,
       description: taskDescription,
       project: { id: selectedProject }, // Wrap projectId in an object as required by DTO
-      assignedTo: assignedTo ? { id: assignedTo } : undefined, 
-      DueDate: deadlineInMilliseconds
+      assignedTo: assignedTo ? { id: assignedTo } : undefined,
+      DueDate: deadlineInMilliseconds,
     };
 
     // Send POST request to backend

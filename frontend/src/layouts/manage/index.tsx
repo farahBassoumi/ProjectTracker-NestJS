@@ -20,7 +20,6 @@ export default function Manage() {
     console.log('result: ', result.data);
     console.log('result.data.data: ', result.data.data);
     setProjects(result.data.data);
-
   };
 
   const getUserIdFromToken = (): string | null => {
@@ -40,8 +39,7 @@ export default function Manage() {
   useEffect(() => {
     fetchProjects();
 
-   // setTeams(projects);
-
+    // setTeams(projects);
   }, []);
 
   return (
@@ -52,8 +50,13 @@ export default function Manage() {
           <SoftBox mb={3} key={team.id}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={10} lg={12}>
-                <div> {team.data}  </div>
-                <TeamTable team={team } name={team.name} projectId={team.id} key={key}/>
+                <div> {team.data} </div>
+                <TeamTable
+                  team={team}
+                  name={team.name}
+                  projectId={team.id}
+                  key={key}
+                />
               </Grid>
             </Grid>
           </SoftBox>

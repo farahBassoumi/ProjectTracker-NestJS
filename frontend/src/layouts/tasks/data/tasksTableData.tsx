@@ -36,14 +36,16 @@ const getUserIdFromToken = (): string | null => {
 };
 
 export const fetchTasks = async (projectId = null) => {
-  const url = `/tasks/project/${projectId}`
-  const response = await axiosInstance.get(url);  
+  const url = `/tasks/project/${projectId}`;
+  const response = await axiosInstance.get(url);
   console.log(response.data);
   return response.data;
 };
 
 export const fetchProjects = async () => {
-  const response = await axiosInstance.get(`/projects/findProjectsByUserId/${getUserIdFromToken()}`);
+  const response = await axiosInstance.get(
+    `/projects/findProjectsByUserId/${getUserIdFromToken()}`,
+  );
   console.log(response.data);
   return response.data;
 };
