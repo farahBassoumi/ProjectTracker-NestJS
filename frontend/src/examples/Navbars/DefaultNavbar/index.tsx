@@ -121,7 +121,7 @@ function DefaultNavbar({ transparent, light, action }) {
           <DefaultNavbarLink
             icon="account_circle"
             name="sign up"
-            route="/authentication/sign-up"
+            route="/sign-up"
             light={light}
           />
           <DefaultNavbarLink
