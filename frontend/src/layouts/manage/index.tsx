@@ -19,7 +19,8 @@ export default function Manage() {
 
     console.log('result: ', result.data);
     console.log('result.data.data: ', result.data.data);
-    setProjects(result.data);
+    setProjects(result.data.data);
+
   };
 
   const getUserIdFromToken = (): string | null => {
@@ -31,21 +32,23 @@ export default function Manage() {
       const decodedToken = jwtDecode<any>(token);
       return decodedToken.sub;
     } catch (error) {
-      console.error('Failed             to  decode token:', error);
+      console.error('Failed                to  decode token:', error);
       return null;
     }
   };
 
   useEffect(() => {
     fetchProjects();
-    setTeams(projects);
+
+   // setTeams(projects);
+
   }, []);
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <SoftBox py={3}>
-        {teams.map((team, key) => (
+        {projects.map((team, key) => (
           <SoftBox mb={3} key={team.id}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={10} lg={12}>
