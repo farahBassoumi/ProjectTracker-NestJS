@@ -51,6 +51,7 @@ export class TasksController {
     const res = await this.tasksService.create({
       ...createTaskDto,
       creator: user,
+      status: TaskStatus.TO_DO,
       assignedTo: assignedToUser,
     });
 
@@ -73,6 +74,12 @@ export class TasksController {
   findAll(@Query() searchDto: SearchDto) {
     return this.tasksService.findAll(searchDto);
   }
+
+ @Get('findAll')
+ findAllTasks() {
+    return this.tasksService.findAllTasks();
+  }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {

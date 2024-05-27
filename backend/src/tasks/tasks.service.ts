@@ -13,4 +13,9 @@ export class TasksService extends CrudService<Task> {
   ) {
     super(tasksRepository);
   }
+
+  async findAllTasks(): Promise<Task[]> {
+    return this.repository.find({relations: ['comments', 'project', 'creator', 'assignedTo'], } );
+  } 
+
 }

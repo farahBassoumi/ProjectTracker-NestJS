@@ -20,9 +20,9 @@ const Action = () => {
 };
 
 export const fetchTasks = async () => {
-  const response = await axiosInstance.get('/tasks');
-  console.log(response.data.data);
-  return response.data.data;
+  const response = await axiosInstance.get('/tasks/findAll');
+  console.log(response.data);
+  return response.data;
 };
 
 export const fetchProjects = async () => {
@@ -39,20 +39,21 @@ const tasksTableData = (tasksData) => {
   const columns = [
     { name: 'task', align: 'left' },
     { name: 'status', align: 'left' },
-    { name: 'assigned to', align: 'center' },
+    { name: 'assigned_to', align: 'center' },
     { name: 'action', align: 'center' },
   ];
-
+  
   const rows = tasksData.map((task: TaskDisplay) => ({
+    
     task: [<Link to={`/tasks/${task.id}`}>{task.name}</Link>],
     status: (
       <SoftTypography variant="caption" color="text" fontWeight="medium">
         {task.status}
       </SoftTypography>
     ),
-    assigned: (
+    assigned_to: (
       <SoftTypography variant="caption" color="text" fontWeight="medium">
-        {task.assignedTo}
+        {task.assignedTo ? task.assignedTo.firstName : 'Unassigned'}
       </SoftTypography>
     ),
     action: <Action />,
