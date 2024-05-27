@@ -84,28 +84,6 @@ function Overview() {
                 Projects
               </SoftTypography>
             </SoftBox>
-            <SoftBox mb={1}>
-              <SoftTypography
-                variant="button"
-                fontWeight="regular"
-                color="text"
-              >
-                <SoftTypography
-                  variant="button"
-                  fontWeight="regular"
-                  color="text"
-                >
-                  Architects design houses
-                </SoftTypography>
-                <SoftTypography
-                  variant="button"
-                  fontWeight="regular"
-                  color="text"
-                >
-                  Architects design houses
-                </SoftTypography>
-              </SoftTypography>
-            </SoftBox>
           </SoftBox>
           <SoftBox p={2}>
             <Grid container spacing={3}>
@@ -119,7 +97,7 @@ function Overview() {
                     status={project.status}
                     action={{
                       type: 'internal',
-                      route: '/pages/profile/profile-overview',
+                      route: `/project/${project.id}`,
                       color: 'info',
                       label: 'view project',
                     }}
