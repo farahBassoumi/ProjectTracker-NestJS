@@ -22,7 +22,7 @@ import { Project } from 'interfaces/Project';
 import { Invitation } from 'interfaces/Invitation';
 import { useNavigate } from 'react-router-dom';
 import { UnauthorizedError } from 'errors/UnauthorizedError';
-
+import { jwtDecode } from 'jwt-decode';
 function Tables() {
   const [showForm, setShowForm] = useState(false);
   const [projects, setProjects] = useState([]);
