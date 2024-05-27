@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Member } from './entities/member.entity';
-import { Not, Repository } from 'typeorm';
-import { Role } from './entities/enum/role.enum';
+import { DeleteResult, Not, Repository } from 'typeorm';
+import { Role } from './enum/role.enum';
+import { UpdateMemberDto } from './dto/update-member.dto';
+import { CreateMemberDto } from './dto/create-member.dto';
 
 @Injectable()
 export class MembersService {
@@ -10,6 +12,38 @@ export class MembersService {
     @InjectRepository(Member)
     private readonly membersRepository: Repository<Member>,
   ) {}
+
+  create(createMemberDto: CreateMemberDto): Promise<Member> {
+    const entity = this.membersRepository.create(createMemberDto);
+
+    return this.membersRepository.save(entity);
+  }
+
+  async update(
+    teamId: string,
+    userId: string,
+    { role }: UpdateMemberDto,
+  ): Promise<Member> {
+    const member = await this.membersRepository.findOneBy({ teamId, userId });
+
+    if (!member) {
+      throw new NotFoundException();
+    }
+
+    member.role = role;
+
+    return this.membersRepository.save(member);
+  }
+
+  async remove(teamId: string, userId: string): Promise<DeleteResult> {
+    const result = await this.membersRepository.delete({ teamId, userId });
+
+    if (!result.affected) {
+      throw new NotFoundException();
+    }
+
+    return result;
+  }
 
   hasRole(teamId: string, userId: string, role?: Role): Promise<boolean> {
     switch (role) {

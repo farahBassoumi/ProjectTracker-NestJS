@@ -52,6 +52,7 @@ import {
 import { axiosInstance } from '../../../utils';
 import { Task } from '../../../interfaces/Task';
 import { Invitation } from '../../../interfaces/Invitation';
+import dateFormatter from '../../../utils/dateFormatter';
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
@@ -65,12 +66,21 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchNotifs = async () => {
+    const fetchNotifications = async () => {
       const res = await axiosInstance.get(`/notifications`);
+      res.data.data = res.data.data
+        .map(({ createdAt, ...notif }) => {
+          return { createdAt: new Date(createdAt), ...notif };
+        })
+        .sort(function (a, b) {
+          var c = a.createdAt;
+          var d = b.createdAt;
+          return d - c;
+        });
       setNotifications(res.data.data);
     };
 
-    fetchNotifs();
+    fetchNotifications();
 
     webSocketService.connect(currentUser.id);
 
@@ -193,7 +203,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
             <NotificationItem
               image={<img src={team2} alt="person" />}
               title={[title, subtitle]}
-              date={date}
+              date={dateFormatter(date)}
               onClick={(e) => handleNotificationClick(e, targetId, type)}
             />
           );

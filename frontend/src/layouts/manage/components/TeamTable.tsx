@@ -23,7 +23,7 @@ function TeamsTable({ name, projectId }) {
 
   useEffect(() => {
     // replace members with api call
-    const res = members;
+    const res = [projectId, members];
     const rows = formatTeamData(res);
     setRows(rows);
   }, []);

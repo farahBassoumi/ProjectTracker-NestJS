@@ -15,7 +15,7 @@ import { SearchDto } from '../common/dto/search.dto';
 import { User } from '../auth/user.decorator';
 import { User as UserEntity } from '../users/entities/user.entity';
 import { Member } from 'src/members/entities/member.entity';
-import { Role } from 'src/members/entities/enum/role.enum';
+import { Role } from 'src/members/enum/role.enum';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Controller('projects')

@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { IS_PUBLIC_KEY } from './decorators/public.decorator';
 import { ROLE } from './decorators/role.decorator';
-import { Role } from 'src/members/entities/enum/role.enum';
+import { Role } from 'src/members/enum/role.enum';
 import { MembersService } from 'src/members/members.service';
 import { User } from 'src/users/entities/user.entity';
 import { Request } from 'express';
