@@ -27,12 +27,16 @@ function Events(projectId) {
 
   useEffect(() => {
     async function getExistingEvents() {
-      const response = await axiosInstance.get(`findByProjectId/${projectId}`);
+      const response = await axiosInstance.get(
+        `events/findByProjectId/${projectId}`,
+      );
+
       console.log(response.data);
       setEvents(response.data);
     }
+
     getExistingEvents();
-  });
+  }, []);
 
   const renderMenu = (
     <Menu

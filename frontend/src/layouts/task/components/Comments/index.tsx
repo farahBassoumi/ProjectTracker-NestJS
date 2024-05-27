@@ -1,20 +1,19 @@
-import { useState } from "react";
-import Card from "@mui/material/Card";
-import Icon from "@mui/material/Icon";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import { useState } from 'react';
+import Card from '@mui/material/Card';
+import Icon from '@mui/material/Icon';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import SoftInput from 'components/SoftInput';
-import TextField from "@mui/material";
-import Button from "@mui/material/Button";
-
+import TextField from '@mui/material';
+import Button from '@mui/material/Button';
 
 // @mui material components
-import Switch from "@mui/material/Switch";
+import Switch from '@mui/material/Switch';
 
 // Soft UI Dashboard React components
-import SoftBox from "components/SoftBox";
-import SoftTypography from "components/SoftTypography";
-import { Grid } from "@mui/material";
+import SoftBox from 'components/SoftBox';
+import SoftTypography from 'components/SoftTypography';
+import { Grid } from '@mui/material';
 
 function Comments() {
   const [followsMe, setFollowsMe] = useState(true);
@@ -33,12 +32,12 @@ function Comments() {
       id="simple-menu"
       anchorEl={menu}
       anchorOrigin={{
-        vertical: "top",
-        horizontal: "left",
+        vertical: 'top',
+        horizontal: 'left',
       }}
       transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       open={Boolean(menu)}
       onClose={closeMenu}
@@ -51,26 +50,32 @@ function Comments() {
 
   return (
     <Card>
-        <SoftBox  display="flex" justifyContent="space-between" alignItems="center" p={3}>
+      <SoftBox
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        p={3}
+      >
         <SoftBox>
           <SoftTypography variant="h6" gutterBottom>
             Comments
           </SoftTypography>
         </SoftBox>
         <SoftBox color="text" px={2}>
-          <Icon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" onClick={openMenu}>
+          <Icon
+            sx={{ cursor: 'pointer', fontWeight: 'bold' }}
+            fontSize="small"
+            onClick={openMenu}
+          >
             more_vert
           </Icon>
         </SoftBox>
         {renderMenu}
       </SoftBox>
       <SoftBox pd={3}>
-      <SoftInput>
-      </SoftInput>
-        <Button >
-          Add Comment
-        </Button>
-        </SoftBox>
+        <SoftInput></SoftInput>
+        <Button>Add Comment</Button>
+      </SoftBox>
     </Card>
   );
 }

@@ -15,19 +15,41 @@ import { UpdateInvitationDto } from './dto/update-invitation.dto';
 import { SearchDto } from '../common/dto/search.dto';
 import { User } from 'src/auth/user.decorator';
 import { User as UserEntity } from 'src/users/entities/user.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { NotificationType } from 'src/notifications/enum/notification-type.enum';
+import { CreateNotificationDto } from 'src/notifications/dto/create-notification.dto';
 
 @Controller('invitations')
 export class InvitationsController {
-  constructor(private readonly invitationsService: InvitationsService) {}
+  constructor(
+    private readonly invitationsService: InvitationsService,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   @Post()
-  create(
+  async create(
     @Body() createInvitationDto: CreateInvitationDto,
     @User() user: UserEntity,
   ) {
     createInvitationDto.sender = user;
 
-    return this.invitationsService.create(createInvitationDto);
+    const { id } = await this.invitationsService.create(createInvitationDto);
+
+    const invitation = await this.invitationsService.findOne(id, {
+      sender: true,
+      receiver: true,
+      team: {
+        project: true,
+      },
+    });
+
+    this.eventEmitter.emit(NotificationType.projectInvitation, {
+      user: invitation.receiver,
+      type: NotificationType.projectInvitation,
+      data: invitation,
+    } as CreateNotificationDto);
+
+    return invitation;
   }
 
   @Get()
@@ -38,11 +60,6 @@ export class InvitationsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.invitationsService.findOne(id);
-  }
-
-  @Get('invitationsByUserId/:id')
-  userInvitation(@Param('id') id: string) {
-    return this.invitationsService.findInvitationsByUserId(id);
   }
 
   @Post(':id/respond')

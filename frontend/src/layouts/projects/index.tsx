@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-nocheck
 // @mui material components
 import Card from '@mui/material/Card';
 import { axiosInstance } from 'utils';
@@ -21,7 +19,6 @@ import SoftButton from 'components/SoftButton';
 import { useState, useEffect } from 'react';
 import SoftInput from 'components/SoftInput';
 import { Project } from 'interfaces/Project';
-import { TaskStatus } from 'interfaces/TaskStatus';
 import { Invitation } from 'interfaces/Invitation';
 import { useNavigate } from 'react-router-dom';
 import { UnauthorizedError } from 'errors/UnauthorizedError';
@@ -72,22 +69,6 @@ function Tables() {
     setShowForm(true);
   };
 
-  const getUserIdFromToken = (): string | null => {
-    const token = localStorage.getItem('auth');
-
-    if (!token) {
-      return null;
-    }
-
-    try {
-      const decodedToken = jwtDecode<any>(token);
-      return decodedToken.sub;
-    } catch (error) {
-      console.error('Failed to decode token:', error);
-      return null;
-    }
-  };
-
   useEffect(() => {
     getInvitations();
   }, []);
@@ -96,12 +77,11 @@ function Tables() {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
 
   const getInvitations = () => {
-    const userId = getUserIdFromToken();
     axiosInstance
-      .get(`/invitations/invitationsByUserId/${userId}`)
+      .get(`/invitations`)
       .then((response) => {
         console.log('Invitations fetched successfully:', response.data);
-        setInvitations(response.data);
+        setInvitations(response.data.data);
       })
       .catch((error) => {
         if (error instanceof UnauthorizedError) {
@@ -109,6 +89,7 @@ function Tables() {
         }
       });
   };
+
   const handleSubmit = () => {
     // Handle form submission here, e.g., send data to backend
     console.log('Project Title:', projectTitle);
@@ -204,9 +185,8 @@ function Tables() {
           </SoftBox>
           <SoftBox>
             {invitations.map((invitation, index) => (
-              <div>
+              <div key={invitation.id}>
                 <div
-                  key={invitation.id}
                   style={{
                     padding: '10px',
                     fontSize: '0.9rem',

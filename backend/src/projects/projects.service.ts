@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CrudService } from '../common/crud/crud.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Project } from './entities/project.entity';
 import { ProjectCalculationDetails } from './dto/project-calculation-details.dto';
 import { TaskStatus } from 'src/tasks/enums/task-status.enum';
@@ -11,7 +11,6 @@ import {
   ProjectDisplay,
   ProjectStatus,
 } from './interfaces/project-display.interface';
-import { Role } from 'src/members/enum/role.enum';
 
 @Injectable()
 export class ProjectsService extends CrudService<Project> {
@@ -20,32 +19,6 @@ export class ProjectsService extends CrudService<Project> {
     projectsRepository: Repository<Project>,
   ) {
     super(projectsRepository);
-  }
-
-  async findProjectsByLeader(userId: string): Promise<DeepPartial<object>[]> {
-    const projects = await this.repository.find({
-      relations: ['team', 'team.members'],
-    });
-
-    return projects.filter((project) =>
-      project.team.members.some(
-        (member) => member.userId == userId && member.role == Role.Leader,
-      ),
-    );
-  }
-
-  async findProjectsByUserId(userId: string): Promise<DeepPartial<object>[]> {
-    // Fetch projects with teams and members
-    const projects = await this.repository.find({
-      relations: ['team', 'team.members', 'tasks'],
-    });
-
-    // Filter projects where the user is a member
-    const projectsWithUser = projects.filter((project) =>
-      project.team.members.some((member) => member.userId === userId),
-    );
-
-    return projectsWithUser;
   }
 
   async findAllByUser(
@@ -58,6 +31,9 @@ export class ProjectsService extends CrudService<Project> {
         team: { members: { userId } },
       },
       {
+        team: {
+          members: true,
+        },
         tasks: true,
       },
     );

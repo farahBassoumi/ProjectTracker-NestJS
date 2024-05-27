@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { error } from 'console';
 
 const instance = axios.create({
   baseURL: 'http://localhost:3000/',
@@ -25,7 +24,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.log(error);
+    return Promise.reject(error);
   },
 );
 

@@ -37,16 +37,6 @@ export class ProjectsController {
     return this.projectsService.create(createProjectDto);
   }
 
-  @Get('findProjectsByUserId/:id')
-  userProjects(@Param('id') id: string) {
-    return this.projectsService.findProjectsByUserId(id);
-  }
-
-  @Get('findProjectsByLeader/:id')
-  projectsByLeader(@Param('id') id: string) {
-    return this.projectsService.findProjectsByLeader(id);
-  }
-
   @Get()
   findAll(@Query() searchDto: SearchDto, @User() user: UserEntity) {
     return this.projectsService.findAllByUser(searchDto, user.id);

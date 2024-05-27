@@ -42,7 +42,7 @@ const tasksTableData = (tasksData) => {
     { name: 'assigned_to', align: 'center' },
     { name: 'action', align: 'center' },
   ];
-  
+
   const rows = tasksData.map((task: TaskDisplay) => ({
     task: [<Link to={`/tasks/${task.id}`}>{task.name}</Link>],
     status: (
@@ -52,7 +52,9 @@ const tasksTableData = (tasksData) => {
     ),
     assigned_to: (
       <SoftTypography variant="caption" color="text" fontWeight="medium">
-        {task.assignedTo ? `${task.assignedTo.firstName} ${task.assignedTo.lastName}` : 'Unassigned'}
+        {task.assignedTo
+          ? `${task.assignedTo.firstName} ${task.assignedTo.lastName}`
+          : 'Unassigned'}
       </SoftTypography>
     ),
     action: <Action />,

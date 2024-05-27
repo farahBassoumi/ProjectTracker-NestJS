@@ -7,6 +7,7 @@ import { SearchDto } from 'src/common/dto/search.dto';
 import { ProjectsService } from 'src/projects/projects.service';
 import { Pagination } from 'src/common/dto/pagination.dto';
 import { Project } from 'src/projects/entities/project.entity';
+import { Role } from 'src/members/enum/role.enum';
 
 @Injectable()
 export class UsersService extends CrudService<User> {
@@ -22,17 +23,31 @@ export class UsersService extends CrudService<User> {
     return this.repository.findOneBy({ email });
   }
 
-  findPublicProjects(
-    id: string,
+  findProjectsByUser(
     searchDto: SearchDto,
+    id: string,
+    isPublic?: boolean,
+    isLeader?: boolean,
   ): Promise<Pagination<Project>> {
-    return this.projectsService.findAll(searchDto, {
-      team: {
-        members: {
-          userId: id,
+    isPublic = isPublic ? true : undefined;
+    const role = isLeader ? Role.Leader : undefined;
+
+    return this.projectsService.findAll(
+      searchDto,
+      {
+        team: {
+          members: {
+            userId: id,
+            role,
+          },
+        },
+        isPublic,
+      },
+      {
+        team: {
+          members: !isPublic,
         },
       },
-      isPublic: true,
-    });
+    );
   }
 }

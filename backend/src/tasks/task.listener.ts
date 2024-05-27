@@ -11,13 +11,13 @@ export class TaskListener {
     private readonly eventsService: EventsService,
   ) {}
 
-  @OnEvent('notification.*.*')
+  @OnEvent('notification.**')
   async persistNotification(payload: CreateNotificationDto) {
     const notif = await this.notificationsService.create(payload);
     this.notificationsService.notifyUser(notif);
   }
 
-  @OnEvent('event.*')
+  @OnEvent('event.**')
   async persistEvnt(payload: any) {
     await this.eventsService.create(payload);
   }

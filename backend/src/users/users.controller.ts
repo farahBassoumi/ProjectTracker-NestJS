@@ -10,6 +10,8 @@ import {
 import { UsersService } from './users.service';
 import { SearchDto } from '../common/dto/search.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User as UserEntity } from './entities/user.entity';
+import { User } from 'src/auth/user.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -26,8 +28,31 @@ export class UsersController {
   }
 
   @Get(':id/projects')
-  findPublicProjects(@Param('id') id: string, @Query() searchDto: SearchDto) {
-    return this.usersService.findPublicProjects(id, searchDto);
+  findProjects(
+    @Param('id') id: string,
+    @Query() searchDto: SearchDto,
+    @User() user: UserEntity,
+  ) {
+    const isPublic = user.id !== id;
+
+    return this.usersService.findProjectsByUser(searchDto, id, isPublic);
+  }
+
+  @Get(':id/projects/led')
+  findProjectsLed(
+    @Param('id') id: string,
+    @Query() searchDto: SearchDto,
+    @User() user: UserEntity,
+  ) {
+    const isPublic = user.id !== id;
+    const isLeader = true;
+
+    return this.usersService.findProjectsByUser(
+      searchDto,
+      id,
+      isPublic,
+      isLeader,
+    );
   }
 
   @Patch(':id')

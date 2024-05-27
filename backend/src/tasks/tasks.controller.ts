@@ -70,7 +70,7 @@ export class TasksController {
     this.eventEmitter.emit(NotificationType.taskAssignment, {
       user: createTaskDto.assignedTo,
       type: NotificationType.taskAssignment,
-      data: JSON.stringify(res),
+      data: res,
     } as CreateNotificationDto);
 
     this.eventEmitter.emit(EventType.TaskCreated, {
@@ -97,9 +97,6 @@ export class TasksController {
     return this.tasksService.findByProjectId(projectId);
   }
 
-  
-
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.tasksService.findOne(id);
@@ -114,13 +111,13 @@ export class TasksController {
       this.eventEmitter.emit(NotificationType.taskReassignment, {
         user: oldTask.assignedTo,
         type: NotificationType.taskReassignment,
-        data: JSON.stringify(oldTask),
+        data: oldTask,
       } as CreateNotificationDto);
 
       this.eventEmitter.emit(NotificationType.taskReassignment, {
         user: res.assignedTo,
         type: NotificationType.taskReassignment,
-        data: JSON.stringify(res),
+        data: res,
       } as CreateNotificationDto);
     }
 
@@ -147,7 +144,7 @@ export class TasksController {
     this.eventEmitter.emit(NotificationType.taskDeletion, {
       user: task.assignedTo,
       type: NotificationType.taskDeletion,
-      data: JSON.stringify(task),
+      data: task,
     } as CreateNotificationDto);
 
     this.eventEmitter.emit(EventType.TaskRemoved, {

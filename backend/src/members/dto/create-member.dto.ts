@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, Matches, ValidateNested } from 'class-validator';
+import { IsNotEmpty, Matches, ValidateNested } from 'class-validator';
 import { Role } from '../enum/role.enum';
 import { Type } from 'class-transformer';
 import { EntityDto } from 'src/common/dto/entity.dto';

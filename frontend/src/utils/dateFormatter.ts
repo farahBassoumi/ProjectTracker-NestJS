@@ -6,6 +6,7 @@ export default function dateFormatter(date: Date): string {
     date.getMonth(),
     date.getDate(),
   );
+
   const nowStartOfDay = new Date(
     now.getFullYear(),
     now.getMonth(),

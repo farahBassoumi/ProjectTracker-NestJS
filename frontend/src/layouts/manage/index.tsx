@@ -1,51 +1,28 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-//@ts-nocheck
 import Grid from '@mui/material/Grid';
 import SoftBox from 'components/SoftBox';
 import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
 import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
 import { useEffect, useState } from 'react';
 import TeamTable from './components/TeamTable';
-import { axiosInstance } from '../../utils';
-//////////// test data
-import { teams } from './components/data/exampleTeam';
-import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
-
-const exampleProjects = teams;
+import { axiosInstance, user as getUser } from '../../utils';
+import { Project } from 'interfaces/Project';
 
 export default function Manage() {
-  const [teams, setTeams] = useState([]);
+  const [teams, setTeams] = useState<Project[]>([]);
   const [projects, setProjects] = useState([]);
+  const user = getUser();
 
   const fetchProjects = async () => {
-    const userId = getUserIdFromToken();
-    const result = await axiosInstance.get(
-      `/projects/findProjectsByLeader/${userId}`,
-    );
-    console.log('result: ', result.data);
-    setProjects(result.data);
-  };
+    const result = await axiosInstance.get(`/users/${user.id}/projects/led`);
 
-  const getUserIdFromToken = (): string | null => {
-    const token = localStorage.getItem('auth');
-    if (!token) {
-      return null;
-    }
-    try {
-      const decodedToken = jwtDecode<any>(token);
-      return decodedToken.sub;
-    } catch (error) {
-      console.error('Failed to decode token:', error);
-      return null;
-    }
+    console.log('result: ', result.data);
+    setProjects(result.data.data);
   };
 
   useEffect(() => {
     fetchProjects();
     setTeams(projects);
-  });
+  }, []);
 
   return (
     <DashboardLayout>
@@ -55,7 +32,7 @@ export default function Manage() {
           <SoftBox mb={3} key={team.id}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={10} lg={12}>
-                <TeamTable name={team.name} projectId={team.id} key={key}/>
+                <TeamTable name={team.name} projectId={team.id} key={key} />
               </Grid>
             </Grid>
           </SoftBox>
