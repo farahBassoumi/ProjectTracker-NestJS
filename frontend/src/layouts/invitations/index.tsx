@@ -33,91 +33,31 @@ function Invitation() {
   }, [id]);
 
   const handleRespond = async (
+    event: Event,
     status: InvitationStatus.Accepted | InvitationStatus.Dismissed,
   ) => {
     if (!invitation) {
       return;
     }
 
+    event.preventDefault();
+
+    let uri = '/projects';
+
     await axiosInstance.post(`/invitations/${id}/respond`, {
       status,
     });
 
-    navigate(`/project/${invitation.team.project.id}`);
+    if (status === InvitationStatus.Accepted) {
+      uri = `/project/${invitation.team.project.id}`;
+    }
+
+    navigate(uri);
   };
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      {/* <CoverLayout
-            title="Welcome back"
-            description="Enter your email and password to sign in"
-            image={curved9}
-          >
-            <SoftBox component="form" role="form">
-              <SoftBox mb={2}>
-                <SoftBox mb={1} ml={0.5}>
-                  <SoftTypography
-                    component="label"
-                    variant="caption"
-                    fontWeight="bold"
-                  >
-                    Email
-                  </SoftTypography>
-                </SoftBox>
-                <SoftInput
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  onChange={handleChange}
-                />
-              </SoftBox>
-              <SoftBox mb={2}>
-                <SoftBox mb={1} ml={0.5}>
-                  <SoftTypography
-                    component="label"
-                    variant="caption"
-                    fontWeight="bold"
-                  >
-                    Password
-                  </SoftTypography>
-                </SoftBox>
-                <SoftInput
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  onChange={handleChange}
-                />
-              </SoftBox>
-              <SoftBox display="flex" alignItems="center">
-                <Switch checked={rememberMe} onChange={handleSetRememberMe} />
-                <SoftTypography
-                  variant="button"
-                  fontWeight="regular"
-                  onClick={handleSetRememberMe}
-                  sx={{ cursor: 'pointer', userSelect: 'none' }}
-                >
-                  &nbsp;&nbsp;Remember me
-                </SoftTypography>
-              </SoftBox>
-    
-              <SoftBox mt={3} textAlign="center">
-                <SoftTypography variant="button" color="text" fontWeight="regular">
-                  Don&apos;t have an account?{' '}
-                  <SoftTypography
-                    component={Link}
-                    to="/sign-up"
-                    variant="button"
-                    color="info"
-                    fontWeight="medium"
-                    textGradient
-                  >
-                    Sign up
-                  </SoftTypography>
-                </SoftTypography>
-              </SoftBox>
-            </SoftBox>
-          </CoverLayout> */}
       <SoftBox py={3}>
         <SoftBox>
           You Have received an invitation to join a Project from{' '}
@@ -134,7 +74,9 @@ function Invitation() {
             <SoftButton
               variant="gradient"
               color="error"
-              onClick={() => handleRespond(InvitationStatus.Dismissed)}
+              onClick={(event: Event) =>
+                handleRespond(event, InvitationStatus.Dismissed)
+              }
             >
               Dismiss
             </SoftButton>
@@ -143,7 +85,9 @@ function Invitation() {
             <SoftButton
               variant="gradient"
               color="info"
-              onClick={() => handleRespond(InvitationStatus.Accepted)}
+              onClick={(event: Event) =>
+                handleRespond(event, InvitationStatus.Accepted)
+              }
             >
               Accept
             </SoftButton>
