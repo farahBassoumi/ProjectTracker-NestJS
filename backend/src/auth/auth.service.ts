@@ -54,8 +54,10 @@ export class AuthService extends CrudService<Auth> {
   }
 
   async login(loginUserDto: LoginUserDto): Promise<AccountDto> {
+    console.log('loginUserDto: ');
     const { email, password } = loginUserDto;
-
+    console.log('loginUserDto: ', loginUserDto);
+if(!email || !password) alert('Please enter email and password');
     const user = await this.usersService.findOneByEmail(email);
 
     if (!user || !(await verify(user.password, password))) {

@@ -18,6 +18,7 @@ import { getUserIdFromToken } from 'utils/getuserid';
 import { getStatusText } from 'utils/taskStatusMapping';
 // Soft UI Dashboard React examples
 import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
+import StatusDropdown from 'layouts/task/components/status/statusdropdown'; 
 
 // Soft UI Dashboard React base styles
 import breakpoints from 'assets/theme/base/breakpoints';
@@ -25,7 +26,7 @@ import breakpoints from 'assets/theme/base/breakpoints';
 // Images
 import burceMars from 'assets/images/bruce-mars.jpg';
 import curved0 from 'assets/images/curved-images/curved0.jpg';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { fetchTask } from 'layouts/task/data/TaskListData';
 import { Icon, Menu, MenuItem } from '@mui/material';
@@ -71,7 +72,7 @@ function Header() {
   }, []);
 
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
-
+  const backlink = `/tasks/project/${task.project ? task.project.id : ''}`;
   const assignedToMe = task.assignedTo
     ? task.assignedTo.id === getUserIdFromToken()
     : false;
@@ -138,6 +139,7 @@ function Header() {
             </SoftBox>
           </Grid>
           <Grid item>
+          <Link to={backlink} style={{ textDecoration: 'none' }}>
             <SoftTypography
               variant="h5"
               fontWeight="medium"
@@ -147,6 +149,7 @@ function Header() {
               &nbsp;&nbsp;
               <TiArrowBack /> Back TO WORK Items
             </SoftTypography>
+            </Link>
           </Grid>
         </Grid>
       </Card>
@@ -173,22 +176,7 @@ function Header() {
                 mt: 2,
               }}
             >
-              <IconContext.Provider
-                value={{
-                  color: 'blue',
-                  size: 20,
-                  className: 'global-class-name',
-                }}
-              >
-                <SoftTypography variant="h5" fontWeight="medium">
-                  State &nbsp;&nbsp;&nbsp;&nbsp;
-                </SoftTypography>
-              </IconContext.Provider>
-              <SoftTypography variant="h4" fontWeight="medium">
-                <VscCircleFilled />
-                &nbsp;&nbsp;&nbsp;
-                {task.status ? getStatusText(Number(task.status)) : 'To Do'}
-              </SoftTypography>
+              <StatusDropdown task={task} />
               <SoftTypography variant="h5" fontWeight="medium">
                 Area
               </SoftTypography>
@@ -230,8 +218,14 @@ function Header() {
                 <MdDateRange />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 {task.dueDate
-                  ? new Date(task.dueDate).toDateString()
-                  : 'No Due Date'}
+    ? new Date(task.dueDate).toLocaleString(undefined, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    : 'No Due Date'}
               </SoftTypography>
             </Box>
           </Grid>

@@ -23,7 +23,7 @@ export class Task {
   description: string;
 
   @Column()
-  dueDate: Date;
+  dueDate?: Date;
 
   @OneToMany(() => Comment, (comment) => comment.task)
   comments: Comment[];

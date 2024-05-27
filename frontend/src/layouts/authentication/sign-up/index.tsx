@@ -34,6 +34,10 @@ function SignUp() {
   const handleSetAgremment = () => setAgremment(!agreement);
 
   const handleSubmit = async (e) => {
+    if (!formData.email || !formData.password || !formData.username || !formData.firstName || !formData.lastName || !agreement) {
+      alert('Please enter email and password');
+      return;
+    }
     try {
       const {
         data: { user, auth },

@@ -114,10 +114,33 @@ export class TasksController {
     });
   }
 
+  @Post('stat/:id')
+  async updatestat(@Param('id') id: string, @Body() status: TaskStatus){
+    const oldTask = await this.tasksService.findOne(id);
+    console.log(status);
+    console.log(oldTask);
+    console.log(Object.values(TaskStatus));
+
+    
+
+
+    let updatetaskDto = new UpdateTaskDto();
+    updatetaskDto.status = status['status'];
+   
+    const res = await this.tasksService.update(id, updatetaskDto);
+
+    return res;
+    
+  }
+
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
     const oldTask = await this.tasksService.findOne(id);
+   
+   console.log(updateTaskDto);
+
     const res = await this.tasksService.update(id, updateTaskDto);
+   
 
     if (oldTask.assignedTo != res.assignedTo) {
       this.eventEmitter.emit(NotificationType.taskReassignment, {
