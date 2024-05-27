@@ -37,6 +37,8 @@ function Tasks() {
   const [taskDescription, setTaskDescription] = useState('');
   const [selectedProject, setSelectedProject] = useState('');
   const [assignedTo, setAssignedTo] = useState('');
+  const [hours, setHours] = useState();
+  const [days, setDays] = useState();
   const { projectId } = useParams(); // Get projectId from URL parameters
   const navigate = useNavigate();
 
@@ -45,7 +47,9 @@ function Tasks() {
       try {
         const tasksResult = await fetchTasks(projectId); // Pass projectId to fetchTasks
         const projectsResult = await fetchProjects();
-        const teamMembersResult = await fetchTeamMembers();
+        console.log('tasks:', tasksResult);
+        const teamMembersResult = await fetchTeamMembers(projectId);
+        console.log('teamMembers:', teamMembersResult);
         setTasks(tasksResult);
         setProjects(projectsResult);
         setTeamMembers(teamMembersResult);
@@ -56,8 +60,9 @@ function Tasks() {
       }
     };
     fetchData();
-  }, [projectId]);
+  }, []);
 
+  console.log('ts:', tasks);
   const { columns: taskCols, rows: taskRows } = tasksTableData(tasks);
 
   const handleAddTask = () => {
@@ -70,15 +75,22 @@ function Tasks() {
     setTaskDescription('');
     setSelectedProject('');
     setAssignedTo('');
+    setHours(0);
+    setDays(0);
   };
 
   const handleSubmit = () => {
+    const hoursInMilliseconds = hours ? hours * 60 * 60 * 1000 : 0;
+    const daysInMilliseconds = days ? days * 24 * 60 * 60 * 1000 : 0;
+    const deadlineInMilliseconds = hoursInMilliseconds + daysInMilliseconds;
+
     // Create task object
     const newTask = {
       name: taskTitle,
       description: taskDescription,
       project: { id: selectedProject }, // Wrap projectId in an object as required by DTO
-      assignedTo: assignedTo ? { id: assignedTo } : undefined, // Wrap assignedTo in an object if defined
+      assignedTo: assignedTo ? { id: assignedTo } : undefined, 
+      DueDate: deadlineInMilliseconds
     };
 
     // Send POST request to backend
@@ -149,10 +161,24 @@ function Tasks() {
               </option>
               {teamMembers.map((member) => (
                 <option key={member.id} value={member.id}>
-                  {member.firstName} {member.lastName}
+                  {`${member.firstName} ${member.lastName}`}
                 </option>
               ))}
             </select>
+            <SoftInput
+              type="number"
+              value={hours}
+              onChange={(e) => setHours(e.target.value)}
+              placeholder="Hours"
+              fullWidth
+            />
+            <SoftInput
+              type="number"
+              value={days}
+              onChange={(e) => setDays(e.target.value)}
+              placeholder="Days"
+              fullWidth
+            />
           </SoftBox>
         </DialogContent>
         <DialogActions>

@@ -1,5 +1,6 @@
 import {
   IsDefined,
+  IsNumber,
   IsOptional,
   IsString,
   ValidateNested,
@@ -24,4 +25,7 @@ export class CreateTaskDto {
   @IsOptional()
   @IsDefined()
   assignedTo?: EntityDto;
+
+  @IsNumber()
+  DueDate: number;
 }

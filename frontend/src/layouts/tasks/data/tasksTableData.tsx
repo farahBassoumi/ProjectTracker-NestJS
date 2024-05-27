@@ -9,6 +9,7 @@ import SoftTypography from 'components/SoftTypography';
 import SoftProgress from 'components/SoftProgress';
 import { TaskDisplay } from 'interfaces/TaskDisplay';
 import { getStatusText } from 'utils/taskStatusMapping';
+import { jwtDecode } from 'jwt-decode';
 
 const Action = () => {
   return (
@@ -18,21 +19,40 @@ const Action = () => {
   );
 };
 
+const getUserIdFromToken = (): string | null => {
+  const token = localStorage.getItem('auth');
+
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const decodedToken = jwtDecode<any>(token);
+    return decodedToken.sub;
+  } catch (error) {
+    console.error('Failed to decode token:', error);
+    return null;
+  }
+};
+
 export const fetchTasks = async (projectId = null) => {
-  const url = projectId ? `/tasks/project/${projectId}` : '/tasks/findAll';
-  const response = await axiosInstance.get(url);
+  const url = `/tasks/project/${projectId}`
+  const response = await axiosInstance.get(url);  
   console.log(response.data);
   return response.data;
 };
 
 export const fetchProjects = async () => {
-  const response = await axiosInstance.get('/projects');
-  return response.data.data;
+  const response = await axiosInstance.get(`/projects/findProjectsByUserId/${getUserIdFromToken()}`);
+  console.log(response.data);
+  return response.data;
 };
 
-export const fetchTeamMembers = async () => {
-  const response = await axiosInstance.get('/users');
-  return response.data.data;
+export const fetchTeamMembers = async (projectId = null) => {
+  const response = await axiosInstance.get(`/teams/members/${projectId}`);
+  console.log('salem');
+  console.log(response.data);
+  return response.data;
 };
 
 const tasksTableData = (tasksData) => {

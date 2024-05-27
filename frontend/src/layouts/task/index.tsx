@@ -38,24 +38,14 @@ import team2 from "assets/images/team-2.jpg";
 import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
 
-function Overview() {
+function task() {
   return (
     <DashboardLayout>
       <Header />
-      <SoftBox mt={5} mb={1}>
-        <Grid>
-          <Grid item >
-            <PlatformSettings />
-          </Grid>
-          <Grid item mt={6}>
-            <Comments />
-          </Grid>
-        </Grid>
-      </SoftBox>
 
       <Footer />
     </DashboardLayout>
   );
 }
 
-export default Overview;
+export default task;

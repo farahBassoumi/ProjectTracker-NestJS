@@ -22,6 +22,9 @@ export class Task {
   @Column()
   description: string;
 
+  @Column()
+  dueDate: Date;
+
   @OneToMany(() => Comment, (comment) => comment.task)
   comments: Comment[];
 

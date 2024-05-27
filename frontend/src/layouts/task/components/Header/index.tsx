@@ -17,7 +17,8 @@ import { LuReplace } from "react-icons/lu";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftAvatar from "components/SoftAvatar";
-
+import {getUserIdFromToken} from 'utils/getuserid';
+import { getStatusText } from "utils/taskStatusMapping";
 // Soft UI Dashboard React examples
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
@@ -32,10 +33,21 @@ import breakpoints from "assets/theme/base/breakpoints";
 // Images
 import burceMars from "assets/images/bruce-mars.jpg";
 import curved0 from "assets/images/curved-images/curved0.jpg";
+import { useNavigate, useParams } from "react-router-dom";
+
+import {
+  fetchTask
+} from 'layouts/task/data/TaskListData';
+import { Icon, Menu, MenuItem } from "@mui/material";
 
 function Header() {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
+  const [task, setTask] = useState([]);
+  const { taskId } = useParams();
+  const navigate = useNavigate();
+
+
 
   useEffect(() => {
     // A function that sets the orientation state of the tabs.
@@ -57,8 +69,50 @@ function Header() {
     return () => window.removeEventListener("resize", handleTabsOrientation);
   }, [tabsOrientation]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const tasksResult = await fetchTask(taskId); // Pass projectId to fetchTasks
+        setTask(tasksResult);
+      } catch (error) {
+        if (error instanceof UnauthorizedError) {
+          navigate('/sign-in');
+        }
+      }
+    };
+    fetchData();
+  }, []);
+
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
 
+  const assignedToMe = task.assignedTo ? task.assignedTo.id === getUserIdFromToken() : false;
+
+  const [menu, setMenu] = useState(null);
+
+  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
+  const closeMenu = () => setMenu(null);
+
+  const renderMenu = (
+    <Menu
+      id="simple-menu"
+      anchorEl={menu}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "left",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={Boolean(menu)}
+      onClose={closeMenu}
+    >
+      <MenuItem onClick={closeMenu}>Action</MenuItem>
+      <MenuItem onClick={closeMenu}>Another action</MenuItem>
+      <MenuItem onClick={closeMenu}>Something else</MenuItem>
+    </Menu>
+  );
+ 
   return (
     <SoftBox position="relative">
       <DashboardNavbar absolute light />
@@ -68,16 +122,6 @@ function Header() {
         position="relative"
         minHeight="18.75rem"
         borderRadius="xl"
-        sx={{
-          backgroundImage: ({ functions: { rgba, linearGradient }, palette: { gradients } }) =>
-            `${linearGradient(
-              rgba(gradients.info.main, 0.6),
-              rgba(gradients.info.state, 0.6)
-            )}, url(${curved0})`,
-          backgroundSize: "cover",
-          backgroundPosition: "50%",
-          overflow: "hidden",
-        }}
       />
       <Card
         sx={{
@@ -95,7 +139,7 @@ function Header() {
           <Grid item>
             <SoftBox height="100%" mt={0.5} lineHeight={1}>
               <SoftTypography variant="h4" fontWeight="medium">
-                ASSIGNED TO <strong>ME</strong> 
+                ASSIGNED TO <strong>{!assignedToMe && task.assignedTo ? `${task.assignedTo.firstName} ${task.assignedTo.lastName}` : 'Me'}</strong> 
               </SoftTypography>
             </SoftBox>
           </Grid>
@@ -127,13 +171,13 @@ function Header() {
                 State &nbsp;&nbsp;&nbsp;&nbsp;
               </SoftTypography></IconContext.Provider>
               <SoftTypography variant="h4" fontWeight="medium">
-              <VscCircleFilled />&nbsp;&nbsp;&nbsp;To Do
+              <VscCircleFilled />&nbsp;&nbsp;&nbsp;{task.status ? getStatusText(Number(task.status)) : 'To Do'}
               </SoftTypography>
               <SoftTypography variant="h5" fontWeight="medium">
                 Area
               </SoftTypography>
               <SoftTypography variant="h4" fontWeight="medium">
-              <LuReplace />&nbsp;&nbsp;&nbsp;ProjectTracker/test
+              <LuReplace />&nbsp;&nbsp;&nbsp;{task.project ? task.project.name : 'project'}
               </SoftTypography>
         </Box></Grid>
         <Grid item>
@@ -143,21 +187,45 @@ function Header() {
                 Comments &nbsp;&nbsp;&nbsp;&nbsp;
               </SoftTypography></IconContext.Provider>
               <SoftTypography variant="h4" fontWeight="medium">
-              <FcSms />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0
+              <FcSms />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{task.comments ? task.comments.length : 0}
               </SoftTypography>
               <SoftTypography variant="h5" fontWeight="medium">
                 Due Date&nbsp;&nbsp;&nbsp;&nbsp;
               </SoftTypography>
               <SoftTypography variant="h4" fontWeight="medium">
-             <MdDateRange />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6/28/2024
+             <MdDateRange />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{task.dueDate ? new Date(task.dueDate).toDateString() : 'No Due Date'}
               </SoftTypography>
         </Box></Grid>
-          <Grid item  ml={27}  alignSelf="top" mt={-11}>
-          <SoftTypography variant="h6" fontWeight="medium">
-                Updated By Hedi:2 apr
-              </SoftTypography>
-          </Grid>
         </Grid> 
+      </Card>
+      <Card sx={{
+          backdropFilter: `saturate(200%) blur(30px)`,
+          backgroundColor: ({ functions: { rgba }, palette: { white } }) => rgba(white.main, 0.8),
+          boxShadow: ({ boxShadows: { navbarBoxShadow } }) => navbarBoxShadow,
+          position: "relative",
+          mt: 5,
+          mx: 3,
+          py: 2,
+          px: 2,
+        }}>
+      <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3} >
+        <SoftBox>
+          <SoftTypography variant="h6" gutterBottom>
+          <strong>Description</strong>
+          </SoftTypography>
+        </SoftBox>
+        <SoftBox color="text" px={2}>
+          <Icon sx={{ cursor: "pointer", fontWeight: "bold" }} fontSize="small" onClick={openMenu}>
+            more_vert
+          </Icon>
+        </SoftBox>
+        {renderMenu}
+      </SoftBox>
+      <SoftBox>
+        <SoftTypography variant="h6" gutterBottom p={3}>
+      {task.description ? task.description : <strong>Add Description</strong>}
+          </SoftTypography>
+      </SoftBox>
       </Card>
     </SoftBox>
   );
