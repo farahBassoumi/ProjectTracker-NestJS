@@ -16,6 +16,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { SearchDto } from '../common/dto/search.dto';
 import { Observable, filter, fromEvent, map } from 'rxjs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('events')
 export class EventsController {
@@ -24,16 +25,16 @@ export class EventsController {
     private readonly eventsService: EventsService,
   ) {}
 
-  @Sse()
+  @Sse('sse')
   sse(@Param() projectId: string): Observable<MessageEvent> {
     console.log('here');
     return fromEvent(this.eventsEmitter, `event.**`).pipe(
       filter((event: any) => {
-        console.log(event);
+        console.log('event sent', event);
         return event.recipient === projectId;
       }),
       map((event) => {
-        console.log(event);
+        console.log('even sent: ', event);
         return new MessageEvent(`event`, {
           data: event,
         });

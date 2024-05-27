@@ -30,19 +30,6 @@ function Tables() {
   const [projectDescription, setProjectDescription] = useState('');
   const navigate = useNavigate();
 
-  const eventSource = new EventSource('http://localhost:3000/events/sse');
-
-  eventSource.onmessage = function (event) {
-    const eventData = JSON.parse(event.data);
-
-    // Check if the received event is for the current project
-    if (eventData.type !== null) {
-      const newTask = eventData.data;
-      // Handle the new task event, for example, update the UI
-      console.log(newTask);
-    }
-  };
-
   useEffect(() => {
     async function fetchData() {
       const response = await axiosInstance.get(`/projects`);

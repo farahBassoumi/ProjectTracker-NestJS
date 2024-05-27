@@ -44,7 +44,6 @@ export class TasksController {
       assignedToUser = await this.UsersService.findOne(
         createTaskDto.assignedTo.id,
       );
-      console.log(assignedToUser);
       if (!assignedToUser) {
         throw new NotFoundException(
           `User with ID ${createTaskDto.assignedTo.id} not found`,
@@ -62,6 +61,8 @@ export class TasksController {
       assignedTo: assignedToUser,
     });
 
+    console.log('here 1');
+
     const newEvent: CreateEventDto = {
       description: 'Task Created',
       type: EventType.TaskCreated,
@@ -77,12 +78,15 @@ export class TasksController {
       data: res,
     } as CreateNotificationDto);
 
+    console.log('here2');
+
     this.eventEmitter.emit(EventType.TaskCreated, {
       description: `Task ${createTaskDto.name} added`,
       recipient: createTaskDto.project.id,
       data: createTaskDto,
     });
 
+    console.log('here3');
     return res;
   }
 

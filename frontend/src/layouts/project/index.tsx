@@ -39,6 +39,27 @@ function Dashboard() {
   const { projectId } = useParams(); // Get the project ID from the URL params
   const [project, setProject] = useState(null);
 
+  const auth = localStorage.getItem('auth');
+  const parsedAuth = JSON.parse(auth);
+  console.log(parsedAuth['accessToken']);
+
+  const eventSource = new EventSource('http://localhost:3000/events/sse', {
+    headers: {
+      authorizationHeader: `Bearer ${parsedAuth['accessToken']}`, // and/or any other headers you need
+    },
+  });
+
+  eventSource.onmessage = function (event) {
+    const eventData = JSON.parse(event.data);
+
+    // Check if the received event is for the current project
+    if (eventData.type !== null) {
+      const newTask = eventData.data;
+      // Handle the new task event, for example, update the UI
+      console.log(newTask);
+    }
+  };
+
   useEffect(() => {
     // Fetch project data from the backend
     const fetchProject = async () => {

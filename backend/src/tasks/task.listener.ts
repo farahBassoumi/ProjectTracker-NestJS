@@ -18,7 +18,5 @@ export class TaskListener {
   }
 
   @OnEvent('event.**')
-  async persistEvnt(payload: any) {
-    await this.eventsService.create(payload);
-  }
+  async persistEvnt() {}
 }
