@@ -6,7 +6,10 @@ export class UpdateInvitationDto {
     `^${Object.values(InvitationStatus)
       .filter((value) => value != InvitationStatus.Pending)
       .join('|')}$`,
-    'i',
+    '',
+    {
+      message: `The role must be either ${InvitationStatus.Accepted} or ${InvitationStatus.Dismissed}.`,
+    },
   )
   status: InvitationStatus;
 }
