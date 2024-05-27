@@ -15,9 +15,7 @@ export class UpdateTaskDto extends PartialType(
 ) {
   
   @IsOptional()
-  @IsEnum(TaskStatus)
+  @IsEnum(TaskStatus) 
   status?: TaskStatus;
 
-  @IsOptional()
-  statusn: number;
 }

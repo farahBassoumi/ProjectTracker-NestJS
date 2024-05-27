@@ -10,6 +10,7 @@ import axios from 'axios';
 import { VscCircleFilled } from 'react-icons/vsc';
 import { fetchTask } from 'layouts/task/data/TaskListData';
 import { c, s } from 'vite/dist/node/types.d-aGj9QkWt';
+import { Task } from 'interfaces/Task';
 
 function StatusDropdown({ task }) {
   const [status, setStatus] = useState(task.status || 'To Do');
@@ -24,11 +25,22 @@ function StatusDropdown({ task }) {
     }
   }, [task, userId]);
 
+  enum taskStatus {
+    DONE = 0,
+    IN_PROGRESS = 1,
+    REMOVED = 2,
+    TO_DO = 3,
+  }
+
   
 
 const updateTaskStatus = async (taskId, statusn) => {
   try {
-    const response = await  axiosInstance.post(`tasks/stat/${taskId}`, statusn );
+    
+    const newTask: Partial<Task> = {
+        status: statusn ,
+      };
+    const response = await  axiosInstance.post(`tasks/stat/${taskId}`, newTask );
     console.log(response.data);
     return response.data;   
   } catch (error) {
