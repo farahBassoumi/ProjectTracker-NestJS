@@ -119,6 +119,7 @@ function Tasks() {
     { name: 'action', align: 'center' },
   ];
 
+  const userId = getUserIdFromToken();
 
   const rows = tasks.map((task: TaskDisplay) => ({
     task: [<Link to={`/tasks/${task.id}`}>{task.name}</Link>],
@@ -134,16 +135,25 @@ function Tasks() {
           : 'Unassigned'}
       </SoftTypography>
     ),
-    action: <SoftBox><Icon sx={{ cursor: 'pointer', fontWeight: 'bold' }} fontSize="small" onClick={(event) => openMenu(event, task)} >
-    more_vert 
-  </Icon><Menu
-      id="simplemn"
-      open={Boolean(menu)}
-      onClose={closeMenu}
-    >
-      <MenuItem onClick={handleModify}>Modify</MenuItem>
-      <MenuItem onClick={handleDelete}>Delete</MenuItem>
-    </Menu></SoftBox> }));
+    action: <SoftBox> {task.creator.id === userId && ( // Check if the current user is the creator of the task
+    <>
+      <Icon
+        sx={{ cursor: 'pointer', fontWeight: 'bold' }}
+        fontSize="small"
+        onClick={(event) => openMenu(event, task)}
+      >
+        more_vert
+      </Icon>
+      <Menu
+        id="simplemn"
+        open={Boolean(menu)}
+        onClose={closeMenu}
+      >
+        <MenuItem onClick={handleModify}>Modify</MenuItem>
+        <MenuItem onClick={handleDelete}>Delete</MenuItem>
+      </Menu>
+    </>
+  )}</SoftBox> }));
 
   console.log('tasks:', tasks);
  
