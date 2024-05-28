@@ -39,50 +39,9 @@ import { Project } from 'interfaces/Project';
 function Dashboard() {
   const { projectId } = useParams();
   const [project, setProject] = useState<Project | null>(null);
-  const [eventSource, setEventSource] = useState<EventSource | null>(null);
 
   const { size } = typography;
   const { chart, items } = reportsBarChartData;
-
-  useEffect(() => {
-    const authString = localStorage.getItem('auth');
-
-    if (!authString) {
-      return;
-    }
-
-    const { accessToken } = JSON.parse(authString);
-
-    const eventSource = new EventSourcePolyfill(
-      `${baseURL}/events/sse/${projectId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          ['Keep-Alive']: 'timeout=3600, max=0',
-        },
-      },
-    );
-
-    eventSource.onmessage = function (event) {
-      console.log('sse event: ', event);
-
-      const eventData = JSON.parse(event.data);
-      console.log(eventData);
-
-      // Check if the received event is for the current project
-      if (eventData.type !== null) {
-        const newTask = eventData.data;
-        // Handle the new task event, for example, update the UI
-        console.log(newTask);
-      }
-
-      eventSource.onerror = (event) => {
-        console.error('sse error:', event);
-      };
-    };
-
-    setEventSource(eventSource);
-  }, [projectId]);
 
   useEffect(() => {
     // Fetch project data from the backend

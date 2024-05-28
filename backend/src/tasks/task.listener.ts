@@ -18,5 +18,7 @@ export class TaskListener {
   }
 
   @OnEvent('event.**')
-  async persistEvnt() {}
+  async persistEvnt() {
+    console.log("event here")
+  }
 }

@@ -18,10 +18,7 @@ export class Event {
   type: EventType;
 
   @Column()
-  userId: string;
-
-  @Column()
-  projectId: string;
+  userName: string;
 
   @CreateDateColumn()
   createdAt: Date;

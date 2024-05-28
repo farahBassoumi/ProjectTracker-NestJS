@@ -64,11 +64,10 @@ export class TasksController {
     const newEvent: CreateEventDto = {
       description: 'Task Created',
       type: EventType.TaskCreated,
-      userId: user.id,
-      projectId: createTaskDto.project.id,
+      userName: user.firstName,
     };
 
-    await this.eventService.create(newEvent);
+    const event = await this.eventService.create(newEvent);
 
     this.eventEmitter.emit(NotificationType.taskAssignment, {
       user: createTaskDto.assignedTo,
@@ -76,11 +75,13 @@ export class TasksController {
       data: res,
     } as CreateNotificationDto);
 
+    console.log('emitting...');
     this.eventEmitter.emit(EventType.TaskCreated, {
       description: `Task ${createTaskDto.name} added`,
       recipient: createTaskDto.project.id,
-      data: createTaskDto,
+      data: event,
     });
+    console.log('emitted');
 
     return res;
   }
@@ -110,32 +111,27 @@ export class TasksController {
   }
 
   @Post('stat/:id')
-  async updatestat(@Param('id') id: string, @Body() status: TaskStatus){
+  async updatestat(@Param('id') id: string, @Body() status: TaskStatus) {
     const oldTask = await this.tasksService.findOne(id);
     console.log(status);
     console.log(oldTask);
     console.log(Object.values(TaskStatus));
 
-    
-
-
     let updatetaskDto = new UpdateTaskDto();
     updatetaskDto.status = status['status'];
-   
+
     const res = await this.tasksService.update(id, updatetaskDto);
 
     return res;
-    
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
     const oldTask = await this.tasksService.findOne(id);
-   
-   console.log(updateTaskDto);
+
+    console.log(updateTaskDto);
 
     const res = await this.tasksService.update(id, updateTaskDto);
-   
 
     if (oldTask.assignedTo != res.assignedTo) {
       this.eventEmitter.emit(NotificationType.taskReassignment, {

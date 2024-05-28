@@ -24,16 +24,16 @@ export class EventsController {
     private readonly eventsService: EventsService,
   ) {}
 
-  @Sse('sse/:projectId')
+  @Sse('sse')
   sse(@Param('projectId') projectId: string): Observable<MessageEvent> {
     return fromEvent(this.eventsEmitter, `event.**`).pipe(
       filter((event: any) => {
         console.log('event sent', event);
-        return event.recipient === projectId;
+        return true === true;
       }),
       map((event) => {
         console.log('event sent: ', event);
-        return new MessageEvent(`event`, {
+        return new MessageEvent(`message`, {
           data: event,
         });
       }),
