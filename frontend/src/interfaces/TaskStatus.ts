@@ -1,8 +1,8 @@
 // src/enums/TaskStatus.js
 
 export enum TaskStatus {
-  TO_DO,
-  DONE,
-  IN_PROGRESS,
-  REMOVED,
+  DONE = 0 ,
+  IN_PROGRESS = 1,
+  REMOVED = 2,
+  TO_DO = 3,
 }

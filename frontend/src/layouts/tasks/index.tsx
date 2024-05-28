@@ -7,6 +7,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import { axiosInstance, handleError } from 'utils';
+import { TaskDisplay } from 'interfaces/TaskDisplay';
+import { getStatusText } from 'utils/taskStatusMapping';
+import { jwtDecode } from 'jwt-decode';
+import {getUserIdFromToken} from 'utils/getuserid';
+
 
 // Soft UI Dashboard React components
 import SoftBox from 'components/SoftBox';
@@ -27,6 +32,11 @@ import tasksTableData, {
   fetchTeamMembers,
 } from 'layouts/tasks/data/tasksTableData';
 import { UnauthorizedError } from 'errors/UnauthorizedError';
+import { Icon, Menu, MenuItem } from '@mui/material';
+
+
+
+
 
 function Tasks() {
   const [showForm, setShowForm] = useState(false);
@@ -41,6 +51,14 @@ function Tasks() {
   const [days, setDays] = useState();
   const { projectId } = useParams(); // Get projectId from URL parameters
   const navigate = useNavigate();
+  const [currentTask, setCurrentTask] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [taskDetails, setTaskDetails] = useState({});
+  const [menu, setMenu] = useState(null);
+  
+
+
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,10 +78,84 @@ function Tasks() {
     fetchData();
   }, []);
 
+  const openMenu = (event, task) => {
+    setMenu(event.currentTarget);
+    setCurrentTask(task);
+  };
+  const closeMenu = () => setMenu(null);
+
+  const handleModify = () => {
+    if (currentTask) {
+      setTaskTitle(currentTask.name);
+      setTaskDescription(currentTask.description);
+      setSelectedProject(currentTask.project.id);
+      setAssignedTo(currentTask.assignedTo ? currentTask.assignedTo.id : '');
+      setShowForm(true);
+      closeMenu();
+    }
+  };
+
+  const handleDelete = async () => {
+    if (currentTask) {
+      try {
+      console.log('deleting task:', currentTask);
+      const response = await axiosInstance.delete(`/tasks/${currentTask.id}`);
+      setTasks(tasks.filter(task => task.id !== currentTask.id));
+      console.log('response:', response);
+      closeMenu();}
+      catch (error) {
+        console.log('error deleting task:', error);
+      }
+    }
+    else {
+      console.log('no task selected');
+    }
+  };  
+ 
+  const columns = [
+    { name: 'task', align: 'left' },
+    { name: 'status', align: 'left' },
+    { name: 'assigned_to', align: 'center' },
+    { name: 'action', align: 'center' },
+  ];
+
+
+  const rows = tasks.map((task: TaskDisplay) => ({
+    task: [<Link to={`/tasks/${task.id}`}>{task.name}</Link>],
+    status: (
+      <SoftTypography variant="caption" color="text" fontWeight="medium">
+        {getStatusText(Number(task.status))}
+      </SoftTypography>
+    ),
+    assigned_to: (
+      <SoftTypography variant="caption" color="text" fontWeight="medium">
+        {task.assignedTo
+          ? `${task.assignedTo.firstName} ${task.assignedTo.lastName}`
+          : 'Unassigned'}
+      </SoftTypography>
+    ),
+    action: <SoftBox><Icon sx={{ cursor: 'pointer', fontWeight: 'bold' }} fontSize="small" onClick={(event) => openMenu(event, task)} >
+    more_vert 
+  </Icon><Menu
+      id="simplemn"
+      open={Boolean(menu)}
+      onClose={closeMenu}
+    >
+      <MenuItem onClick={handleModify}>Modify</MenuItem>
+      <MenuItem onClick={handleDelete}>Delete</MenuItem>
+    </Menu></SoftBox> }));
+
   console.log('tasks:', tasks);
-  const { columns: taskCols, rows: taskRows } = tasksTableData(tasks);
+ 
 
   const handleAddTask = () => {
+    setCurrentTask(null);
+    setTaskTitle('');
+    setTaskDescription('');
+    setSelectedProject('');
+    setAssignedTo('');
+    setHours('');
+    setDays('');
     setShowForm(true);
   };
 
@@ -73,8 +165,8 @@ function Tasks() {
     setTaskDescription('');
     setSelectedProject('');
     setAssignedTo('');
-    setHours(0);
-    setDays(0);
+    setHours('');
+    setDays('');
   };
 
   const handleSubmit = () => {
@@ -83,31 +175,42 @@ function Tasks() {
     const deadlineInMilliseconds = hoursInMilliseconds + daysInMilliseconds;
 
     // Create task object
-    const newTask = {
+    const taskData = {
       name: taskTitle,
       description: taskDescription,
       project: { id: selectedProject }, // Wrap projectId in an object as required by DTO
       assignedTo: assignedTo ? { id: assignedTo } : undefined,
-      dueDate: deadlineInMilliseconds,
+      duedate: deadlineInMilliseconds,
     };
 
-    // Send POST request to backend
-    axiosInstance
-      .post('/tasks', newTask)
-      .then((response) => {
-        console.log('Task created successfully:', response.data); // Check response structure here
-        if (response.data) {
-          setTasks([...tasks, response.data]);
-          handleClose();
-        } else {
-          console.error('Unexpected response structure:', response);
+    try {
+      if (currentTask)  {
+        axiosInstance.patch(`/tasks/${currentTask.id}`, taskData).then((response) => {
+          console.log('Task updated successfully:', response.data); // Check response structure here
+          if (response.data) {
+            setTasks(tasks.map(task => task.id === currentTask.id ? response.data : task));
+          } else {
+            console.error('Unexpected response structure:', response);
+          }})
         }
-      })
-      .catch((error) => {
-        console.error('Error creating task:', error);
-        // Handle error, if needed
-      });
-  };
+       else {{
+        axiosInstance.post('/tasks', taskData).then((response) => {
+          console.log('Task created successfully:', response.data); // Check response structure here
+          if (response.data) {
+            setTasks([...tasks, response.data]);
+          } else {
+            console.error('Unexpected response structure:', response);
+          }})
+        }
+      }
+      handleClose();
+    } catch (error) {
+      console.log('error:', error);
+    }
+   };
+    
+    // Send POST request to backend
+    
 
   return (
     <DashboardLayout>
@@ -116,7 +219,7 @@ function Tasks() {
         <SoftButton onClick={handleAddTask}>Add a new task!</SoftButton>
       </SoftBox>
       <Dialog open={showForm} onClose={handleClose}>
-        <DialogTitle>Add a New Task</DialogTitle>
+        <DialogTitle>{currentTask ? 'Modify Task' : 'Add a New Task'}</DialogTitle>
         <DialogContent>
           <SoftInput
             type="text"
@@ -182,7 +285,7 @@ function Tasks() {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleSubmit} color="primary">
-            Submit
+            {currentTask ? 'Update' : 'Submit'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -206,7 +309,8 @@ function Tasks() {
               },
             }}
           >
-            <Table columns={taskCols} rows={taskRows} />
+            <Table columns={columns} rows={rows}  />
+            
           </SoftBox>
         </Card>
       </SoftBox>

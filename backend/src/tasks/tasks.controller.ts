@@ -51,7 +51,9 @@ export class TasksController {
       }
     }
     const dueDate = new Date();
-    dueDate.setTime(dueDate.getTime() + createTaskDto.dueDate);
+    dueDate.setTime(dueDate.getTime() + createTaskDto.duedate);
+
+    
 
     const res = await this.tasksService.create({
       ...createTaskDto,
@@ -110,28 +112,21 @@ export class TasksController {
     });
   }
 
-  @Post('stat/:id')
-  async updatestat(@Param('id') id: string, @Body() status: TaskStatus) {
-    const oldTask = await this.tasksService.findOne(id);
-    console.log(status);
-    console.log(oldTask);
-    console.log(Object.values(TaskStatus));
-
-    let updatetaskDto = new UpdateTaskDto();
-    updatetaskDto.status = status['status'];
-
-    const res = await this.tasksService.update(id, updatetaskDto);
-
-    return res;
-  }
+ 
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    const oldTask = await this.tasksService.findOne(id);
+    const oldTask = await this.tasksService.findOne(id , {project: true, assignedTo: true});
 
-    console.log(updateTaskDto);
+    if (updateTaskDto.duedate) {
 
+    const dueDate = new Date();
+    dueDate.setTime(oldTask.dueDate.getTime() + updateTaskDto.duedate);
+
+    updateTaskDto.dueDate = dueDate ;
+  }
     const res = await this.tasksService.update(id, updateTaskDto);
+    const res2 = await this.tasksService.findOne(id, {project: true, assignedTo: true});
 
     if (oldTask.assignedTo != res.assignedTo) {
       this.eventEmitter.emit(NotificationType.taskReassignment, {
@@ -141,7 +136,7 @@ export class TasksController {
       } as CreateNotificationDto);
 
       this.eventEmitter.emit(NotificationType.taskReassignment, {
-        user: res.assignedTo,
+        user: res2.assignedTo,
         type: NotificationType.taskReassignment,
         data: res,
       } as CreateNotificationDto);
@@ -150,22 +145,23 @@ export class TasksController {
     if (res.status == TaskStatus.DONE) {
       this.eventEmitter.emit(EventType.TaskDone, {
         description: `Task ${res.name} completed`,
-        recipient: res.project.id,
+        recipient: res2.project.id,
         data: res,
       });
     } else if (res.status == TaskStatus.IN_PROGRESS) {
       this.eventEmitter.emit(EventType.TaskStarted, {
         description: `Task ${res.name} is in progress`,
-        recipient: res.project.id,
+        recipient: res2.project.id,
         data: res,
       });
     }
-    return res;
+    return res2;
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    const task = await this.tasksService.findOne(id);
+    const task = await this.tasksService.findOne(id, {project: true, assignedTo: true});
+
 
     this.eventEmitter.emit(NotificationType.taskDeletion, {
       user: task.assignedTo,

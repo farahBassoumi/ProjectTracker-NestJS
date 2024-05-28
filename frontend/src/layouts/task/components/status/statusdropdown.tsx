@@ -11,6 +11,8 @@ import { VscCircleFilled } from 'react-icons/vsc';
 import { fetchTask } from 'layouts/task/data/TaskListData';
 import { c, s } from 'vite/dist/node/types.d-aGj9QkWt';
 import { Task } from 'interfaces/Task';
+import { GoCheck } from "react-icons/go";
+import { TaskStatus } from 'interfaces/TaskStatus';
 
 function StatusDropdown({ task }) {
   const [status, setStatus] = useState(task.status || 'To Do');
@@ -25,22 +27,24 @@ function StatusDropdown({ task }) {
     }
   }, [task, userId]);
 
-  enum taskStatus {
-    DONE = 0,
-    IN_PROGRESS = 1,
-    REMOVED = 2,
-    TO_DO = 3,
-  }
-
   
+
+  useEffect(() => {
+    setStatus(task.status);
+  }, [task.status]);
+
+  const handleStatusSelectChange = (event) => {
+    setStatus(event.target.value);
+    handleStatusChange(event);
+  };
+
 
 const updateTaskStatus = async (taskId, statusn) => {
   try {
-    
     const newTask: Partial<Task> = {
         status: statusn ,
       };
-    const response = await  axiosInstance.post(`tasks/stat/${taskId}`, newTask );
+    const response = await  axiosInstance.patch(`tasks/${taskId}`, newTask );
     console.log(response.data);
     return response.data;   
   } catch (error) {
@@ -64,27 +68,41 @@ const updateTaskStatus = async (taskId, statusn) => {
         State &nbsp;&nbsp;&nbsp;&nbsp;
       </SoftTypography>
       {isAssignedUserOrPM ? (
-        <FormControl>
-          <Select
-            value={status}
-            onChange={handleStatusChange}
-            displayEmpty
-            inputProps={{ 'aria-label': 'Without label' }}
-            disabled={!editing}
-          >
-            <MenuItem value="3">To Do</MenuItem>
-            <MenuItem value="1">In Progress</MenuItem>
-            <MenuItem value="0">Done</MenuItem>
-          </Select>
-          <IconButton onClick={() => setEditing(!editing)}>
-            <MdEdit />
-          </IconButton>
-        </FormControl>
+        <Box display="flex" alignItems="center">
+          {!editing ? (
+            <Box display="flex" alignItems="center">
+              <SoftTypography variant="h4" fontWeight="medium">
+                <VscCircleFilled />
+                &nbsp;&nbsp;&nbsp;
+                {getStatusText(Number(status))}
+              </SoftTypography>
+              <IconButton onClick={() => setEditing(true)}>
+                <MdEdit />
+              </IconButton>
+            </Box>
+          ) : (
+            <FormControl variant="outlined" size="small">
+              <Select
+                value={status}
+                onChange={handleStatusSelectChange}
+                displayEmpty
+                inputProps={{ 'aria-label': 'Without label' }}
+              >
+                <MenuItem value="3">To Do</MenuItem>
+                <MenuItem value="1">In Progress</MenuItem>
+                <MenuItem value="0">Done</MenuItem>
+              </Select>
+              <IconButton onClick={() => setEditing(false)}>
+              <GoCheck />
+              </IconButton>
+            </FormControl>
+          )}
+        </Box>
       ) : (
         <SoftTypography variant="h4" fontWeight="medium">
           <VscCircleFilled />
           &nbsp;&nbsp;&nbsp;
-          {getStatusText(Number(status))}
+          {getStatusText(Number(task.status))}
         </SoftTypography>
       )}
     </>

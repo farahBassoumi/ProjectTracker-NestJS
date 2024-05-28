@@ -11,13 +11,7 @@ import SoftProgress from 'components/SoftProgress';
 import { TaskDisplay } from 'interfaces/TaskDisplay';
 import { getStatusText } from 'utils/taskStatusMapping';
 
-const Action = () => {
-  return (
-    <Icon sx={{ cursor: 'pointer', fontWeight: 'bold' }} fontSize="small">
-      more_vert
-    </Icon>
-  );
-};
+
 
 export const fetchTask = async (taskId = null) => {
   const url = `/tasks/${taskId}`;

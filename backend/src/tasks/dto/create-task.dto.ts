@@ -30,5 +30,5 @@ export class CreateTaskDto {
   assignedTo?: EntityDto;
 
   @IsNumber()
-  dueDate: number;
+  duedate: number;
 }
